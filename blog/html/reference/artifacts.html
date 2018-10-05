@@ -1,0 +1,1984 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Linux.Applications.Chrome.Extensions &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../_static/plugins.js"></script>
+<script src="../_static/main.js"></script>
+<link rel="search" title="Search" href="../search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../_static/underscore.js"></script><script type="text/javascript" src="../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="#">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article">
+    <p>This page displays information about the Velociraptor built in
+artifacts. There are 34 artifacts in total. Use the navigation menu
+to the right to quickly skip to the right artifact
+definition. Definitions may be expanded to view the VQL source.</p>
+<div class="section" id="linux-applications-chrome-extensions">
+<h1>Linux.Applications.Chrome.Extensions</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Applications_Chrome_ExtensionsDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Applications_Chrome_ExtensionsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Fetch Chrome extensions.</p>
+<p>Chrome extensions are installed into the user’s home directory.  We
+search for manifest.json files in a known path within each system
+user’s home directory. We then parse the manifest file as JSON.</p>
+<p>Many extensions use locale packs to resolve strings like name and
+description. In this case we detect the default locale and load
+those locale files. We then resolve the extension’s name and
+description from there.</p>
+<div class="collapse" id="Linux_Applications_Chrome_ExtensionsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Applications.Chrome.Extensions</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Fetch Chrome extensions.</span>
+
+  <span class="no">Chrome extensions are installed into the user&#39;s home directory.  We</span>
+  <span class="no">search for manifest.json files in a known path within each system</span>
+  <span class="no">user&#39;s home directory. We then parse the manifest file as JSON.</span>
+
+  <span class="no">Many extensions use locale packs to resolve strings like name and</span>
+  <span class="no">description. In this case we detect the default locale and load</span>
+  <span class="no">those locale files. We then resolve the extension&#39;s name and</span>
+  <span class="no">description from there.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">extensionGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/.config/google-chrome/*/Extensions/*/*/manifest.json</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* For each user on the system, search for extension manifests</span>
+           <span class="no">in their home directory. */</span>
+        <span class="no">LET extension_manifests = SELECT * from foreach(</span>
+          <span class="no">row={</span>
+             <span class="no">SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, User, Uid from glob(</span>
+               <span class="no">globs=Homedir + &#39;/&#39; + extensionGlobs)</span>
+          <span class="no">})</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* If the Manifest declares a default_locale then we</span>
+           <span class="no">load and parse the messages file. In this case the</span>
+           <span class="no">messages are actually stored in the locale file</span>
+           <span class="no">instead of the main manifest.json file.</span>
+        <span class="no">*/</span>
+        <span class="no">LET maybe_read_locale_file =</span>
+           <span class="no">SELECT * from if(</span>
+              <span class="no">condition={</span>
+                 <span class="no">select * from scope() where Manifest.default_locale</span>
+              <span class="no">},</span>
+              <span class="no">then={</span>
+                 <span class="no">SELECT Manifest,</span>
+                        <span class="no">Uid, User,</span>
+                        <span class="no">Filename as LocaleFilename,</span>
+                        <span class="no">ManifestFilename,</span>
+                        <span class="no">parse_json(data=Data) AS LocaleManifest</span>
+                 <span class="no">FROM read_file(</span>
+                         <span class="no">-- Munge the filename to get the messages.json path.</span>
+                         <span class="no">filenames=regex_replace(</span>
+                           <span class="no">source=ManifestFilename,</span>
+                           <span class="no">replace=&quot;/_locales/&quot; + Manifest.default_locale +</span>
+                                   <span class="no">&quot;/messages.json&quot;,</span>
+                           <span class="no">re=&quot;/manifest.json$&quot;))</span>
+              <span class="no">},</span>
+              <span class="no">else={</span>
+                  <span class="no">-- Just fill in empty Locale results.</span>
+                  <span class="no">SELECT Manifest,</span>
+                         <span class="no">Uid, User,</span>
+                         <span class="no">&quot;&quot; AS LocaleFilename,</span>
+                         <span class="no">&quot;&quot; AS ManifestFilename,</span>
+                         <span class="no">&quot;&quot; AS LocaleManifest</span>
+                  <span class="no">FROM scope()</span>
+              <span class="no">})</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET parse_json_files = SELECT * from foreach(</span>
+           <span class="no">row={</span>
+             <span class="no">SELECT Filename as ManifestFilename,</span>
+                    <span class="no">Uid, User,</span>
+                    <span class="no">parse_json(data=Data) as Manifest</span>
+             <span class="no">FROM read_file(filenames=FullPath)</span>
+           <span class="no">},</span>
+           <span class="no">query=maybe_read_locale_file)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET parsed_manifest_files = SELECT * from foreach(</span>
+          <span class="no">row=extension_manifests,</span>
+          <span class="no">query=parse_json_files)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Uid, User,</span>
+
+               <span class="no">/* If the manifest name contains __MSG_ then the real</span>
+                  <span class="no">name is stored in the locale manifest. This condition</span>
+                  <span class="no">resolves the Name column either to the main manifest or</span>
+                  <span class="no">the locale manifest.</span>
+               <span class="no">*/</span>
+               <span class="no">if(condition=&quot;__MSG_&quot; in Manifest.name,</span>
+                  <span class="no">then=get(item=LocaleManifest,</span>
+                     <span class="no">member=regex_replace(</span>
+                        <span class="no">source=Manifest.name,</span>
+                        <span class="no">replace=&quot;$1&quot;,</span>
+                        <span class="no">re=&quot;(?:__MSG_(.+)__)&quot;)).message,</span>
+                  <span class="no">else=Manifest.name) as Name,</span>
+
+               <span class="no">if(condition=&quot;__MSG_&quot; in Manifest.description,</span>
+                  <span class="no">then=get(item=LocaleManifest,</span>
+                     <span class="no">member=regex_replace(</span>
+                        <span class="no">source=Manifest.description,</span>
+                        <span class="no">replace=&quot;$1&quot;,</span>
+                        <span class="no">re=&quot;(?:__MSG_(.+)__)&quot;)).message,</span>
+                  <span class="no">else=Manifest.description) as Description,</span>
+
+               <span class="no">/* Get the Identifier and Version from the manifest filename */</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$1&quot;,</span>
+                 <span class="no">re=&quot;(?:.+Extensions/([^/]+)/([^/]+)/manifest.json)$&quot;) AS Identifier,</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$2&quot;,</span>
+                 <span class="no">re=&quot;(?:.+Extensions/([^/]+)/([^/]+)/manifest.json)$&quot;) AS Version,</span>
+
+               <span class="no">Manifest.author as Author,</span>
+               <span class="no">Manifest.background.persistent AS Persistent,</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$1&quot;,</span>
+                 <span class="no">re=&quot;(.+Extensions/.+/)manifest.json$&quot;) AS Path,</span>
+
+               <span class="no">Manifest.oauth2.scopes as Scopes,</span>
+               <span class="no">Manifest.permissions as Permissions,</span>
+               <span class="no">Manifest.key as Key</span>
+
+        <span class="no">FROM parsed_manifest_files</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-applications-chrome-extensions-upload">
+<h1>Linux.Applications.Chrome.Extensions.Upload</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Applications_Chrome_Extensions_UploadDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Applications_Chrome_Extensions_UploadDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Upload all users chrome extension.</p>
+<p>We dont bother actually parsing anything here, we just grab all the
+extension files in user’s home directory.</p>
+<div class="collapse" id="Linux_Applications_Chrome_Extensions_UploadDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Applications.Chrome.Extensions.Upload</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Upload all users chrome extension.</span>
+
+  <span class="no">We dont bother actually parsing anything here, we just grab all the</span>
+  <span class="no">extension files in user&#39;s home directory.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">extensionGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/.config/google-chrome/*/Extensions/**</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* For each user on the system, search for extension files</span>
+           <span class="no">in their home directory and upload them. */</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row={</span>
+             <span class="no">SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, User, Uid,</span>
+                    <span class="no">upload(file=FullPath) as Upload</span>
+             <span class="no">FROM glob(globs=Homedir + &#39;/&#39; + extensionGlobs)</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-applications-docker-info">
+<h1>Linux.Applications.Docker.Info</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Applications_Docker_InfoDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Applications_Docker_InfoDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Get Dockers info by connecting to its socket.</p>
+<div class="collapse" id="Linux_Applications_Docker_InfoDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Applications.Docker.Info</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Get Dockers info by connecting to its socket.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">dockerSocket</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">Docker server socket. You will normally need to be root to connect.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET data = SELECT parse_json(data=Content) as JSON</span>
+        <span class="no">FROM http_client(url=dockerSocket + &quot;:unix/info&quot;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT JSON.ID as ID,</span>
+               <span class="no">JSON.Containers as Containers,</span>
+               <span class="no">JSON.ContainersRunning as ContainersRunning,</span>
+               <span class="no">JSON.ContainersPaused as ContainersPaused,</span>
+               <span class="no">JSON.ContainersStopped as ContainersStopped,</span>
+               <span class="no">JSON.Images as Images,</span>
+               <span class="no">JSON.Driver as Driver,</span>
+               <span class="no">JSON.MemoryLimit as MemoryLimit,</span>
+               <span class="no">JSON.SwapLimit as SwapLimit,</span>
+               <span class="no">JSON.KernelMemory as KernelMemory,</span>
+               <span class="no">JSON.CpuCfsPeriod as CpuCfsPeriod,</span>
+               <span class="no">JSON.CpuCfsQuota as CpuCfsQuota,</span>
+               <span class="no">JSON.CPUShares as CPUShares,</span>
+               <span class="no">JSON.CPUSet as CPUSet,</span>
+               <span class="no">JSON.IPv4Forwarding as IPv4Forwarding,</span>
+               <span class="no">JSON.BridgeNfIptables as BridgeNfIptables,</span>
+               <span class="no">JSON.BridgeNfIp6tables as BridgeNfIp6tables,</span>
+               <span class="no">JSON.OomKillDisable as OomKillDisable,</span>
+               <span class="no">JSON.LoggingDriver as LoggingDriver,</span>
+               <span class="no">JSON.CgroupDriver as CgroupDriver,</span>
+               <span class="no">JSON.KernelVersion as KernelVersion,</span>
+               <span class="no">JSON.OperatingSystem as OperatingSystem,</span>
+               <span class="no">JSON.OSType as OSType,</span>
+               <span class="no">JSON.Architecture as Architecture,</span>
+               <span class="no">JSON.NCPU as NCPU,</span>
+               <span class="no">JSON.MemTotal as MemTotal,</span>
+               <span class="no">JSON.HttpProxy as HttpProxy,</span>
+               <span class="no">JSON.HttpsProxy as HttpsProxy,</span>
+               <span class="no">JSON.NoProxy as NoProxy,</span>
+               <span class="no">JSON.Name as Name,</span>
+               <span class="no">JSON.ServerVersion as ServerVersion,</span>
+               <span class="no">JSON.DockerRootDir as DockerRootDir</span>
+        <span class="no">FROM data</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-applications-docker-version">
+<h1>Linux.Applications.Docker.Version</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Applications_Docker_VersionDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Applications_Docker_VersionDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Get Dockers version by connecting to its socket.</p>
+<div class="collapse" id="Linux_Applications_Docker_VersionDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Applications.Docker.Version</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Get Dockers version by connecting to its socket.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">dockerSocket</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">Docker server socket. You will normally need to be root to connect.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/run/docker.sock</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET data = SELECT parse_json(data=Content) as JSON</span>
+        <span class="no">FROM http_client(url=dockerSocket + &quot;:unix/version&quot;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT JSON.Version as Version,</span>
+               <span class="no">JSON.ApiVersion as ApiVersion,</span>
+               <span class="no">JSON.MinAPIVersion as MinAPIVersion,</span>
+               <span class="no">JSON.GitCommit as GitCommit,</span>
+               <span class="no">JSON.GoVersion as GoVersion,</span>
+               <span class="no">JSON.Os as Os,</span>
+               <span class="no">JSON.Arch as Arch,</span>
+               <span class="no">JSON.KernelVersion as KernelVersion,</span>
+               <span class="no">JSON.BuildTime as BuildTime</span>
+        <span class="no">FROM data</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-debian-aptsources">
+<h1>Linux.Debian.AptSources</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Debian_AptSourcesDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Debian_AptSourcesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Parse Debian apt sources.</p>
+<p>We first search for *.list files which contain lines of the form</p>
+<div class="code console highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">deb</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">us</span><span class="p">.</span><span class="n">archive</span><span class="p">.</span><span class="n">ubuntu</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">/</span> <span class="n">bionic</span> <span class="n">main</span> <span class="n">restricted</span>
+</pre></div>
+</div>
+<p>For each line we construct the cache file by spliting off the
+section (last component) and replacing / and ” ” with _.</p>
+<p>We then try to open the file. If the file exists we parse some
+metadata from it. If not we leave those columns empty.</p>
+<div class="collapse" id="Linux_Debian_AptSourcesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Debian.AptSources</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Parse Debian apt sources.</span>
+
+  <span class="no">We first search for \*.list files which contain lines of the form</span>
+
+  <span class="no">.. code:: console</span>
+
+     <span class="no">deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted</span>
+
+  <span class="no">For each line we construct the cache file by spliting off the</span>
+  <span class="no">section (last component) and replacing / and &quot; &quot; with _.</span>
+
+  <span class="no">We then try to open the file. If the file exists we parse some</span>
+  <span class="no">metadata from it. If not we leave those columns empty.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="s">&quot;https://osquery.io/schema/3.2.6#apt_sources&quot;</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">linuxAptSourcesGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Globs to find apt source *.list files.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/apt/sources.list,/etc/apt/sources.list.d/*.list</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">aptCacheDirectory</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Location of the apt cache directory.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/lib/apt/lists/</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">/* Search for files which may contain apt sources. The user can</span>
+            <span class="no">pass new globs here. */</span>
+         <span class="no">LET files = SELECT FullPath from glob(</span>
+           <span class="no">globs=split(string=linuxAptSourcesGlobs, sep=&quot;,&quot;))</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">/* Read each line in the sources which is not commented.</span>
+            <span class="no">Deb lines look like:</span>
+            <span class="no">deb [arch=amd64] http://dl.google.com/linux/chrome-remote-desktop/deb/ stable main</span>
+            <span class="no">Contains URL, base_uri and components.</span>
+         <span class="no">*/</span>
+         <span class="no">LET deb_sources = SELECT *</span>
+           <span class="no">FROM parse_records_with_regex(</span>
+             <span class="no">file=files.FullPath,</span>
+             <span class="no">regex=&quot;(?m)^ *(?P&lt;Type&gt;deb(-src)?) (?:\\[arch=(?P&lt;Arch&gt;[^\\]]+)\\] )?&quot; +</span>
+                  <span class="no">&quot;(?P&lt;URL&gt;https?://(?P&lt;base_uri&gt;[^ ]+))&quot; +</span>
+                  <span class="no">&quot; +(?P&lt;components&gt;.+)&quot;)</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">/* We try to get at the Release file in /var/lib/apt/ by munging</span>
+           <span class="no">the components and URL.</span>
+           <span class="no">Strip the last component off, convert / and space to _ and</span>
+           <span class="no">add _Release to get the filename.</span>
+         <span class="no">*/</span>
+         <span class="no">LET parsed_apt_lines = SELECT Arch, URL,</span>
+            <span class="no">base_uri + &quot; &quot; + components as Name, Type,</span>
+            <span class="no">FullPath as Source, aptCacheDirectory + regex_replace(</span>
+              <span class="no">replace=&quot;_&quot;,</span>
+              <span class="no">re=&quot;_+&quot;,</span>
+              <span class="no">source=regex_replace(</span>
+                <span class="no">replace=&quot;_&quot;, re=&quot;[ /]&quot;,</span>
+                <span class="no">source=base_uri + &quot;_dists_&quot; + regex_replace(</span>
+                   <span class="no">source=components,</span>
+                   <span class="no">replace=&quot;&quot;, re=&quot; +[^ ]+$&quot;)) + &quot;_Release&quot;</span>
+              <span class="no">)  as cache_file</span>
+         <span class="no">FROM deb_sources</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">/* This runs if the file was found. Read the entire file into</span>
+            <span class="no">memory and parse the same record using multiple RegExps.</span>
+         <span class="no">*/</span>
+         <span class="no">LET parsed_cache_files = SELECT Name, Arch, URL, Type,</span>
+           <span class="no">Source, parse_string_with_regex(</span>
+                <span class="no">string=Record,</span>
+                <span class="no">regex=[&quot;Codename: (?P&lt;Release&gt;[^\\s]+)&quot;,</span>
+                       <span class="no">&quot;Version: (?P&lt;Version&gt;[^\\s]+)&quot;,</span>
+                       <span class="no">&quot;Origin: (?P&lt;Maintainer&gt;[^\\s]+)&quot;,</span>
+                       <span class="no">&quot;Architectures: (?P&lt;Architectures&gt;[^\\s]+)&quot;,</span>
+                       <span class="no">&quot;Components: (?P&lt;Components&gt;[^\\s]+)&quot;]) as Record</span>
+           <span class="no">FROM parse_records_with_regex(file=cache_file, regex=&quot;(?sm)(?P&lt;Record&gt;.+)&quot;)</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">// Foreach row in the parsed cache file, collect the FileInfo too.</span>
+         <span class="no">LET add_stat_to_parsed_cache_file = SELECT * from foreach(</span>
+           <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, Atime, Record, Type,</span>
+               <span class="no">Name, Arch, URL, Source from stat(filename=cache_file)</span>
+           <span class="no">}, row=parsed_cache_files)</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">/* For each row in the parsed file, run the appropriate query</span>
+            <span class="no">depending on if the cache file exists.</span>
+            <span class="no">If the cache file is not found, we just copy the lines we</span>
+            <span class="no">parsed from the source file and fill in empty values for</span>
+            <span class="no">stat.</span>
+         <span class="no">*/</span>
+         <span class="no">LET parse_cache_or_pass = SELECT * from if(</span>
+           <span class="no">condition={</span>
+              <span class="no">SELECT * from stat(filename=cache_file)</span>
+           <span class="no">},</span>
+           <span class="no">then=add_stat_to_parsed_cache_file,</span>
+           <span class="no">else={</span>
+             <span class="no">SELECT Source, dict() as Mtime, dict() as Ctime,</span>
+               <span class="no">dict() as Atime, Type,</span>
+               <span class="no">dict() as Record, Arch, URL, Name from scope()</span>
+           <span class="no">})</span>
+
+       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+         <span class="no">-- For each parsed apt .list file line produce some output.</span>
+         <span class="no">SELECT * from foreach(</span>
+             <span class="no">row=parsed_apt_lines,</span>
+             <span class="no">query=parse_cache_or_pass)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-debian-packages">
+<h1>Linux.Debian.Packages</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Debian_PackagesDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Debian_PackagesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Parse dpkg status file.</p>
+<div class="collapse" id="Linux_Debian_PackagesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Debian.Packages</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Parse dpkg status file.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">linuxDpkgStatus</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/lib/dpkg/status</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* First pass - split file into records start with</span>
+           <span class="no">Package and end with \n\n.</span>
+
+           <span class="no">Then parse each record using multiple RegExs.</span>
+        <span class="no">*/</span>
+        <span class="no">LET packages = SELECT parse_string_with_regex(</span>
+            <span class="no">string=Record,</span>
+            <span class="no">regex=[&#39;Package:\\s(?P&lt;Package&gt;.+)&#39;,</span>
+                   <span class="no">&#39;Installed-Size:\\s(?P&lt;InstalledSize&gt;.+)&#39;,</span>
+                   <span class="no">&#39;Version:\\s(?P&lt;Version&gt;.+)&#39;,</span>
+                   <span class="no">&#39;Source:\\s(?P&lt;Source&gt;.+)&#39;,</span>
+                   <span class="no">&#39;Architecture:\\s(?P&lt;Architecture&gt;.+)&#39;]) as Record</span>
+            <span class="no">FROM parse_records_with_regex(</span>
+                   <span class="no">file=linuxDpkgStatus,</span>
+                   <span class="no">regex=&#39;(?sm)^(?P&lt;Record&gt;Package:.+?)\\n\\n&#39;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Record.Package as Package,</span>
+               <span class="no">Record.InstalledSize as InstalledSize,</span>
+               <span class="no">Record.Version as Version,</span>
+               <span class="no">Record.Source as Source,</span>
+               <span class="no">Record.Architecture as Architecture from packages</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-mounts">
+<h1>Linux.Mounts</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_MountsDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_MountsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> List mounted filesystems by reading /proc/mounts</p>
+<div class="collapse" id="Linux_MountsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Mounts</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">List mounted filesystems by reading /proc/mounts</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ProcMounts</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/proc/mounts</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Device, Mount, FSType, split(string=Opts, sep=&quot;,&quot;) As Options</span>
+               <span class="no">FROM parse_records_with_regex(</span>
+                   <span class="no">file=ProcMounts,</span>
+                   <span class="no">regex=&#39;(?m)^(?P&lt;Device&gt;[^ ]+) (?P&lt;Mount&gt;[^ ]+) (?P&lt;FSType&gt;[^ ]+) &#39;+</span>
+                         <span class="no">&#39;(?P&lt;Opts&gt;[^ ]+)&#39;)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-proc-arp">
+<h1>Linux.Proc.Arp</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Proc_ArpDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Proc_ArpDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> ARP table via /proc/net/arp.</p>
+<div class="collapse" id="Linux_Proc_ArpDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Proc.Arp</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ARP table via /proc/net/arp.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ProcNetArp</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/proc/net/arp</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from split_records(</span>
+           <span class="no">filenames=ProcNetArp,</span>
+           <span class="no">regex=&#39;\\s{3,20}&#39;,</span>
+           <span class="no">first_row_is_headers=true)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-proc-modules">
+<h1>Linux.Proc.Modules</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Proc_ModulesDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Proc_ModulesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Module listing via /proc/modules.</p>
+<div class="collapse" id="Linux_Proc_ModulesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Proc.Modules</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Module listing via /proc/modules.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ProcModules</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/proc/modules</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from split_records(</span>
+           <span class="no">filenames=ProcModules,</span>
+           <span class="no">regex=&#39;\\s+&#39;,</span>
+           <span class="no">columns=[&#39;Name&#39;, &#39;Size&#39;, &#39;UseCount&#39;, &#39;UsedBy&#39;, &#39;Status&#39;, &#39;Address&#39;])</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-ssh-authorizedkeys">
+<h1>Linux.Ssh.AuthorizedKeys</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Ssh_AuthorizedKeysDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Ssh_AuthorizedKeysDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Find and parse ssh authorized keys files.</p>
+<div class="collapse" id="Linux_Ssh_AuthorizedKeysDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Ssh.AuthorizedKeys</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Find and parse ssh authorized keys files.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sshKeyFiles</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&#39;.ssh/authorized_keys*&#39;</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// For each user on the system, search for authorized_keys files.</span>
+        <span class="no">LET authorized_keys = SELECT * from foreach(</span>
+          <span class="no">row={</span>
+             <span class="no">SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, User, Uid from glob(</span>
+               <span class="no">globs=Homedir + &#39;/&#39; + sshKeyFiles)</span>
+          <span class="no">})</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// For each authorized keys file, extract each line on a different row.</span>
+        <span class="no">// Note: This duplicates the path, user and uid on each key line.</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row=authorized_keys,</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT Uid, User, FullPath, Key from split_records(</span>
+               <span class="no">filenames=FullPath, regex=&quot;\n&quot;, columns=[&quot;Key&quot;])</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-ssh-knownhosts">
+<h1>Linux.Ssh.KnownHosts</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Ssh_KnownHostsDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Ssh_KnownHostsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Find and parse ssh known hosts files.</p>
+<div class="collapse" id="Linux_Ssh_KnownHostsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Ssh.KnownHosts</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Find and parse ssh known hosts files.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sshKnownHostsFiles</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&#39;.ssh/known_hosts*&#39;</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// For each user on the system, search for known_hosts files.</span>
+        <span class="no">LET authorized_keys = SELECT * from foreach(</span>
+          <span class="no">row={</span>
+             <span class="no">SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, User, Uid from glob(</span>
+               <span class="no">globs=Homedir + &#39;/&#39; + sshKnownHostsFiles)</span>
+          <span class="no">})</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// For each known_hosts file, extract each line on a different row.</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row=authorized_keys,</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT Uid, User, FullPath, Line from split_records(</span>
+               <span class="no">filenames=FullPath, regex=&quot;\n&quot;, columns=[&quot;Line&quot;])</span>
+            <span class="no">/* Ignore comment lines. */</span>
+            <span class="no">WHERE not Line =~ &quot;^[^#]+#&quot;</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-sys-acpitables">
+<h1>Linux.Sys.ACPITables</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Sys_ACPITablesDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Sys_ACPITablesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Firmware ACPI functional table common metadata and content.</p>
+<div class="collapse" id="Linux_Sys_ACPITablesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Sys.ACPITables</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Firmware ACPI functional table common metadata and content.</span>
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://osquery.io/schema/3.2.6#acpi_tables</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">kLinuxACPIPath</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/sys/firmware/acpi/tables</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET hashes = SELECT Name, Size, hash(path=FullPath) as Hash</span>
+                     <span class="no">FROM glob(globs=kLinuxACPIPath + &#39;/*&#39;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Name, Size, Hash.MD5, Hash.SHA1, Hash.SHA256 from hashes</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-sys-cputime">
+<h1>Linux.Sys.CPUTime</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Sys_CPUTimeDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Sys_CPUTimeDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Displays information from /proc/stat file about the time the cpu
+cores spent in different parts of the system.</p>
+<div class="collapse" id="Linux_Sys_CPUTimeDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Sys.CPUTime</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Displays information from /proc/stat file about the time the cpu</span>
+  <span class="no">cores spent in different parts of the system.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">procStat</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/proc/stat</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET raw = SELECT * FROM split_records(</span>
+           <span class="no">filenames=procStat,</span>
+           <span class="no">regex=&#39; +&#39;,</span>
+           <span class="no">columns=[&#39;core&#39;, &#39;user&#39;, &#39;nice&#39;, &#39;system&#39;,</span>
+                    <span class="no">&#39;idle&#39;, &#39;iowait&#39;, &#39;irq&#39;, &#39;softirq&#39;,</span>
+                    <span class="no">&#39;steal&#39;, &#39;guest&#39;, &#39;guest_nice&#39;])</span>
+        <span class="no">WHERE core =~ &#39;cpu.+&#39;</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT core AS Core,</span>
+               <span class="no">atoi(string=user) as User,</span>
+               <span class="no">atoi(string=nice) as Nice,</span>
+               <span class="no">atoi(string=system) as System,</span>
+               <span class="no">atoi(string=idle) as Idle,</span>
+               <span class="no">atoi(string=iowait) as IOWait,</span>
+               <span class="no">atoi(string=irq) as IRQ,</span>
+               <span class="no">atoi(string=softirq) as SoftIRQ,</span>
+               <span class="no">atoi(string=steal) as Steal,</span>
+               <span class="no">atoi(string=guest) as Guest,</span>
+               <span class="no">atoi(string=guest_nice) as GuestNice FROM raw</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-sys-crontab">
+<h1>Linux.Sys.Crontab</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Sys_CrontabDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Sys_CrontabDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Displays parsed information from crontab.</p>
+<div class="collapse" id="Linux_Sys_CrontabDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Sys.Crontab</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Displays parsed information from crontab.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cronTabGlob</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/crontab,/etc/cron.d/**,/var/at/tabs/**,/var/spool/cron/**,/var/spool/cron/crontabs/**</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET raw = SELECT * FROM foreach(</span>
+          <span class="no">row={</span>
+            <span class="no">SELECT FullPath from glob(globs=split(string=cronTabGlob, sep=&quot;,&quot;))</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT FullPath, data, parse_string_with_regex(</span>
+              <span class="no">string=data,</span>
+              <span class="no">regex=[</span>
+                 <span class="no">/* Regex for event (Starts with @) */</span>
+                 <span class="no">&quot;^(?P&lt;Event&gt;@[a-zA-Z]+)\\s+(?P&lt;Command&gt;.+)&quot;,</span>
+
+                 <span class="no">/* Regex for regular command. */</span>
+                 <span class="no">&quot;^(?P&lt;Minute&gt;[^\\s]+)\\s+&quot;+</span>
+                 <span class="no">&quot;(?P&lt;Hour&gt;[^\\s]+)\\s+&quot;+</span>
+                 <span class="no">&quot;(?P&lt;DayOfMonth&gt;[^\\s]+)\\s+&quot;+</span>
+                 <span class="no">&quot;(?P&lt;Month&gt;[^\\s]+)\\s+&quot;+</span>
+                 <span class="no">&quot;(?P&lt;DayOfWeek&gt;[^\\s]+)\\s+&quot;+</span>
+                 <span class="no">&quot;(?P&lt;Command&gt;.+)$&quot;]) as Record</span>
+
+            <span class="no">/* Read lines from the file and filter ones that start with &quot;#&quot; */</span>
+            <span class="no">FROM split_records(</span>
+               <span class="no">filenames=FullPath,</span>
+               <span class="no">regex=&quot;\n&quot;, columns=[&quot;data&quot;]) WHERE not data =~ &quot;^\\s*#&quot;</span>
+            <span class="no">}) WHERE Record.Command</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Record.Event AS Event,</span>
+               <span class="no">Record.Minute AS Minute,</span>
+               <span class="no">Record.Hour AS Hour,</span>
+               <span class="no">Record.DayOfMonth AS DayOfMonth,</span>
+               <span class="no">Record.Month AS Month,</span>
+               <span class="no">Record.DayOfWeek AS DayOfWeek,</span>
+               <span class="no">Record.Command AS Command,</span>
+               <span class="no">FullPath AS Path</span>
+        <span class="no">FROM raw</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-sys-lastuserlogin">
+<h1>Linux.Sys.LastUserLogin</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Sys_LastUserLoginDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Sys_LastUserLoginDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Find and parse system wtmp files. This indicate when the user last logged in.</p>
+<div class="collapse" id="Linux_Sys_LastUserLoginDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Sys.LastUserLogin</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Find and parse system wtmp files. This indicate when the</span>
+             <span class="l l-Scalar l-Scalar-Plain">user last logged in.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wtmpGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log/wtmp*</span>
+
+    <span class="c1"># This is automatically generated from dwarf symbols by Rekall:</span>
+    <span class="c1"># gcc -c -g -o /tmp/test.o /tmp/1.c</span>
+    <span class="c1"># rekall dwarfparser /tmp/test.o</span>
+
+    <span class="c1"># And 1.c is:</span>
+    <span class="c1"># #include &quot;utmp.h&quot;</span>
+    <span class="c1"># struct utmp x;</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wtmpProfile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+       <span class="no">{</span>
+         <span class="no">&quot;timeval&quot;: [8, {</span>
+          <span class="no">&quot;tv_sec&quot;: [0, [&quot;int&quot;]],</span>
+          <span class="no">&quot;tv_usec&quot;: [4, [&quot;int&quot;]]</span>
+         <span class="no">}],</span>
+         <span class="no">&quot;exit_status&quot;: [4, {</span>
+          <span class="no">&quot;e_exit&quot;: [2, [&quot;short int&quot;]],</span>
+          <span class="no">&quot;e_termination&quot;: [0, [&quot;short int&quot;]]</span>
+         <span class="no">}],</span>
+         <span class="no">&quot;timezone&quot;: [8, {</span>
+          <span class="no">&quot;tz_dsttime&quot;: [4, [&quot;int&quot;]],</span>
+          <span class="no">&quot;tz_minuteswest&quot;: [0, [&quot;int&quot;]]</span>
+         <span class="no">}],</span>
+         <span class="no">&quot;utmp&quot;: [384, {</span>
+          <span class="no">&quot;__glibc_reserved&quot;: [364, [&quot;Array&quot;, {</span>
+           <span class="no">&quot;count&quot;: 20,</span>
+           <span class="no">&quot;target&quot;: &quot;char&quot;,</span>
+           <span class="no">&quot;target_args&quot;: null</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_addr_v6&quot;: [348, [&quot;Array&quot;, {</span>
+           <span class="no">&quot;count&quot;: 4,</span>
+           <span class="no">&quot;target&quot;: &quot;int&quot;,</span>
+           <span class="no">&quot;target_args&quot;: null</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_exit&quot;: [332, [&quot;exit_status&quot;]],</span>
+          <span class="no">&quot;ut_host&quot;: [76, [&quot;String&quot;, {</span>
+           <span class="no">&quot;length&quot;: 256</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_id&quot;: [40, [&quot;String&quot;, {</span>
+           <span class="no">&quot;length&quot;: 4</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_line&quot;: [8, [&quot;String&quot;, {</span>
+           <span class="no">&quot;length&quot;: 32</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_pid&quot;: [4, [&quot;int&quot;]],</span>
+          <span class="no">&quot;ut_session&quot;: [336, [&quot;int&quot;]],</span>
+          <span class="no">&quot;ut_tv&quot;: [340, [&quot;timeval&quot;]],</span>
+          <span class="no">&quot;ut_type&quot;: [0, [&quot;Enumeration&quot;, {</span>
+            <span class="no">&quot;target&quot;: &quot;short int&quot;,</span>
+            <span class="no">&quot;choices&quot;: {</span>
+               <span class="no">&quot;0&quot;: &quot;EMPTY&quot;,</span>
+               <span class="no">&quot;1&quot;: &quot;RUN_LVL&quot;,</span>
+               <span class="no">&quot;2&quot;: &quot;BOOT_TIME&quot;,</span>
+               <span class="no">&quot;5&quot;: &quot;INIT_PROCESS&quot;,</span>
+               <span class="no">&quot;6&quot;: &quot;LOGIN_PROCESS&quot;,</span>
+               <span class="no">&quot;7&quot;: &quot;USER_PROCESS&quot;,</span>
+               <span class="no">&quot;8&quot;: &quot;DEAD_PROCESS&quot;</span>
+             <span class="no">}</span>
+          <span class="no">}]],</span>
+          <span class="no">&quot;ut_user&quot;: [44, [&quot;String&quot;, {</span>
+           <span class="no">&quot;length&quot;: 32</span>
+          <span class="no">}]]</span>
+         <span class="no">}]</span>
+       <span class="no">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row={</span>
+            <span class="no">SELECT FullPath from glob(globs=split(string=wtmpGlobs, sep=&quot;,&quot;))</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT ut_type, ut_id, ut_host as Host,</span>
+                   <span class="no">ut_user as User,</span>
+                  <span class="no">timestamp(epoch=ut_tv.tv_sec) as login_time</span>
+            <span class="no">FROM binary_parse(</span>
+                   <span class="no">file=FullPath,</span>
+                   <span class="no">profile=wtmpProfile,</span>
+                   <span class="no">target=&quot;Array&quot;,</span>
+                   <span class="no">args=dict(Target=&quot;utmp&quot;)</span>
+                 <span class="no">)</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="linux-sys-users">
+<h1>Linux.Sys.Users</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Linux_Sys_UsersDetails" role="button"
+   aria-expanded="false" aria-controls="Linux_Sys_UsersDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Get User specific information like homedir, group etc from /etc/passwd.</p>
+<div class="collapse" id="Linux_Sys_UsersDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Linux.Sys.Users</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Get User specific information like homedir, group etc from /etc/passwd.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">PasswordFile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/passwd</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The location of the password file.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;linux&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT User, Description, Uid, Gid, Homedir, Shell</span>
+          <span class="no">FROM parse_records_with_regex(</span>
+            <span class="no">file=PasswordFile,</span>
+            <span class="no">regex=&#39;(?m)^(?P&lt;User&gt;[^:]+):([^:]+):&#39; +</span>
+                  <span class="no">&#39;(?P&lt;Uid&gt;[^:]+):(?P&lt;Gid&gt;[^:]+):(?P&lt;Description&gt;[^:]*):&#39; +</span>
+                  <span class="no">&#39;(?P&lt;Homedir&gt;[^:]+):(?P&lt;Shell&gt;[^:\\s]+)&#39;)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="network-externalipaddress">
+<h1>Network.ExternalIpAddress</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Network_ExternalIpAddressDetails" role="button"
+   aria-expanded="false" aria-controls="Network_ExternalIpAddressDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Detect the external ip address of the end point.</p>
+<div class="collapse" id="Network_ExternalIpAddressDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Network.ExternalIpAddress</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Detect the external ip address of the end point.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">externalUrl</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http://www.myexternalip.com/raw</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The URL of the external IP detection site.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * from info()</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT Content as IP from http_client(url=externalUrl)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-applications-chocolateypackages">
+<h1>Windows.Applications.ChocolateyPackages</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Applications_ChocolateyPackagesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Applications_ChocolateyPackagesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Chocolatey packages installed in a system.</p>
+<div class="collapse" id="Windows_Applications_ChocolateyPackagesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Applications.ChocolateyPackages</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Chocolatey packages installed in a system.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ChocolateyInstall</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&quot;&quot;</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET files =</span>
+          <span class="no">SELECT FullPath, parse_xml(file=FullPath) AS Metadata</span>
+          <span class="no">-- Use the ChocolateyInstall parameter if it is set.</span>
+          <span class="no">FROM glob(globs=if(</span>
+             <span class="no">condition=ChocolateyInstall,</span>
+             <span class="no">then=ChocolateyInstall,</span>
+             <span class="no">-- Otherwise just use the environment.</span>
+             <span class="no">else=environ(var=&#39;ChocolateyInstall&#39;)) + &#39;/lib/*/*.nuspec&#39;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * FROM if(</span>
+        <span class="no">condition={</span>
+            <span class="no">SELECT * FROM if(</span>
+               <span class="no">condition=ChocolateyInstall,</span>
+               <span class="no">then=ChocolateyInstall,</span>
+               <span class="no">else=environ(var=&quot;ChocolateyInstall&quot;))</span>
+          <span class="no">},</span>
+        <span class="no">then={</span>
+            <span class="no">SELECT FullPath,</span>
+                   <span class="no">Metadata.package.metadata.id as Name,</span>
+                   <span class="no">Metadata.package.metadata.version as Version,</span>
+                   <span class="no">Metadata.package.metadata.summary as Summary,</span>
+                   <span class="no">Metadata.package.metadata.authors as Authors,</span>
+                   <span class="no">Metadata.package.metadata.licenseUrl as License</span>
+            <span class="no">FROM files</span>
+        <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-applications-chrome-extensions">
+<h1>Windows.Applications.Chrome.Extensions</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Applications_Chrome_ExtensionsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Applications_Chrome_ExtensionsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Fetch Chrome extensions.</p>
+<p>Chrome extensions are installed into the user’s home directory.  We
+search for manifest.json files in a known path within each system
+user’s home directory. We then parse the manifest file as JSON.</p>
+<p>Many extensions use locale packs to resolve strings like name and
+description. In this case we detect the default locale and load
+those locale files. We then resolve the extension’s name and
+description from there.</p>
+<div class="collapse" id="Windows_Applications_Chrome_ExtensionsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Applications.Chrome.Extensions</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Fetch Chrome extensions.</span>
+
+  <span class="no">Chrome extensions are installed into the user&#39;s home directory.  We</span>
+  <span class="no">search for manifest.json files in a known path within each system</span>
+  <span class="no">user&#39;s home directory. We then parse the manifest file as JSON.</span>
+
+  <span class="no">Many extensions use locale packs to resolve strings like name and</span>
+  <span class="no">description. In this case we detect the default locale and load</span>
+  <span class="no">those locale files. We then resolve the extension&#39;s name and</span>
+  <span class="no">description from there.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">extensionGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">\AppData\Local\Google\Chrome\User Data\*\Extensions\*\*\manifest.json</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* For each user on the system, search for extension manifests</span>
+           <span class="no">in their home directory. */</span>
+        <span class="no">LET extension_manifests = SELECT * from foreach(</span>
+          <span class="no">row={</span>
+             <span class="no">SELECT Uid, Name AS User, Directory from Artifact.Windows.Sys.Users()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT FullPath, Mtime, Ctime, User, Uid from glob(</span>
+               <span class="no">globs=Directory + extensionGlobs)</span>
+          <span class="no">})</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* If the Manifest declares a default_locale then we</span>
+           <span class="no">load and parse the messages file. In this case the</span>
+           <span class="no">messages are actually stored in the locale file</span>
+           <span class="no">instead of the main manifest.json file.</span>
+        <span class="no">*/</span>
+        <span class="no">LET maybe_read_locale_file =</span>
+           <span class="no">SELECT * from if(</span>
+              <span class="no">condition={</span>
+                 <span class="no">select * from scope() where Manifest.default_locale</span>
+              <span class="no">},</span>
+              <span class="no">then={</span>
+                 <span class="no">SELECT Manifest,</span>
+                        <span class="no">Uid, User,</span>
+                        <span class="no">Filename as LocaleFilename,</span>
+                        <span class="no">ManifestFilename,</span>
+                        <span class="no">parse_json(data=Data) AS LocaleManifest</span>
+                 <span class="no">FROM read_file(</span>
+                         <span class="no">-- Munge the filename to get the messages.json path.</span>
+                         <span class="no">filenames=regex_replace(</span>
+                           <span class="no">source=ManifestFilename,</span>
+                           <span class="no">replace=&quot;\\_locales\\&quot; + Manifest.default_locale +</span>
+                                   <span class="no">&quot;\\messages.json&quot;,</span>
+                           <span class="no">re=&quot;\\\\manifest.json$&quot;))</span>
+              <span class="no">},</span>
+              <span class="no">else={</span>
+                  <span class="no">-- Just fill in empty Locale results.</span>
+                  <span class="no">SELECT Manifest,</span>
+                         <span class="no">Uid, User,</span>
+                         <span class="no">&quot;&quot; AS LocaleFilename,</span>
+                         <span class="no">&quot;&quot; AS ManifestFilename,</span>
+                         <span class="no">&quot;&quot; AS LocaleManifest</span>
+                  <span class="no">FROM scope()</span>
+              <span class="no">})</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET parse_json_files = SELECT * from foreach(</span>
+           <span class="no">row={</span>
+             <span class="no">SELECT Filename as ManifestFilename,</span>
+                    <span class="no">Uid, User,</span>
+                    <span class="no">parse_json(data=Data) as Manifest</span>
+             <span class="no">FROM read_file(filenames=FullPath)</span>
+           <span class="no">},</span>
+           <span class="no">query=maybe_read_locale_file)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET parsed_manifest_files = SELECT * from foreach(</span>
+          <span class="no">row=extension_manifests,</span>
+          <span class="no">query=parse_json_files)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Uid, User,</span>
+
+               <span class="no">/* If the manifest name contains __MSG_ then the real</span>
+                  <span class="no">name is stored in the locale manifest. This condition</span>
+                  <span class="no">resolves the Name column either to the main manifest or</span>
+                  <span class="no">the locale manifest.</span>
+               <span class="no">*/</span>
+               <span class="no">if(condition=&quot;__MSG_&quot; in Manifest.name,</span>
+                  <span class="no">then=get(item=LocaleManifest,</span>
+                     <span class="no">member=regex_replace(</span>
+                        <span class="no">source=Manifest.name,</span>
+                        <span class="no">replace=&quot;$1&quot;,</span>
+                        <span class="no">re=&quot;(?:__MSG_(.+)__)&quot;)).message,</span>
+                  <span class="no">else=Manifest.name) as Name,</span>
+
+               <span class="no">if(condition=&quot;__MSG_&quot; in Manifest.description,</span>
+                  <span class="no">then=get(item=LocaleManifest,</span>
+                     <span class="no">member=regex_replace(</span>
+                        <span class="no">source=Manifest.description,</span>
+                        <span class="no">replace=&quot;$1&quot;,</span>
+                        <span class="no">re=&quot;(?:__MSG_(.+)__)&quot;)).message,</span>
+                  <span class="no">else=Manifest.description) as Description,</span>
+
+               <span class="no">/* Get the Identifier and Version from the manifest filename */</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$1&quot;,</span>
+                 <span class="no">re=&quot;(?:.+Extensions\\\\([^\\\\]+)\\\\([^\\\\]+)\\\\manifest.json)$&quot;) AS Identifier,</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$2&quot;,</span>
+                 <span class="no">re=&quot;(?:.+Extensions\\\\([^\\\\]+)\\\\([^\\\\]+)\\\\manifest.json)$&quot;) AS Version,</span>
+
+               <span class="no">Manifest.author as Author,</span>
+               <span class="no">Manifest.background.persistent AS Persistent,</span>
+               <span class="no">regex_replace(</span>
+                 <span class="no">source=ManifestFilename,</span>
+                 <span class="no">replace=&quot;$1&quot;,</span>
+                 <span class="no">re=&quot;(.+Extensions\\\\.+\\\\)manifest.json$&quot;) AS Path,</span>
+
+               <span class="no">Manifest.oauth2.scopes as Scopes,</span>
+               <span class="no">Manifest.permissions as Permissions,</span>
+               <span class="no">Manifest.key as Key</span>
+
+        <span class="no">FROM parsed_manifest_files</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-network-arpcache">
+<h1>Windows.Network.ArpCache</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Network_ArpCacheDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Network_ArpCacheDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Address resolution cache, both static and dynamic (from ARP, NDP).</p>
+<div class="collapse" id="Windows_Network_ArpCacheDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Network.ArpCache</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Address resolution cache, both static and dynamic (from ARP, NDP).</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wmiQuery</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT AddressFamily, Store, State, InterfaceIndex, IPAddress,</span>
+             <span class="no">InterfaceAlias, LinkLayerAddress</span>
+      <span class="no">from MSFT_NetNeighbor</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wmiNamespace</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">ROOT\StandardCimv2</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">kMapOfState</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+     <span class="no">{</span>
+      <span class="no">&quot;0&quot;: &quot;Unreachable&quot;,</span>
+      <span class="no">&quot;1&quot;: &quot;Incomplete&quot;,</span>
+      <span class="no">&quot;2&quot;: &quot;Probe&quot;,</span>
+      <span class="no">&quot;3&quot;: &quot;Delay&quot;,</span>
+      <span class="no">&quot;4&quot;: &quot;Stale&quot;,</span>
+      <span class="no">&quot;5&quot;: &quot;Reachable&quot;,</span>
+      <span class="no">&quot;6&quot;: &quot;Permanent&quot;,</span>
+      <span class="no">&quot;7&quot;: &quot;TBD&quot;</span>
+     <span class="no">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET interfaces &lt;=</span>
+          <span class="no">SELECT Index, HardwareAddr, IP</span>
+          <span class="no">FROM Artifact.Windows.Network.InterfaceAddresses()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET arp_cache = SELECT if(condition=AddressFamily=23,</span>
+                    <span class="no">then=&quot;IPv6&quot;,</span>
+                  <span class="no">else=if(condition=AddressFamily=2,</span>
+                    <span class="no">then=&quot;IPv4&quot;,</span>
+                  <span class="no">else=AddressFamily)) as AddressFamily,</span>
+
+               <span class="no">if(condition=Store=0,</span>
+                    <span class="no">then=&quot;Persistent&quot;,</span>
+                  <span class="no">else=if(condition=(Store=1),</span>
+                    <span class="no">then=&quot;Active&quot;,</span>
+                  <span class="no">else=&quot;?&quot;)) as Store,</span>
+
+               <span class="no">get(item=parse_json(data=kMapOfState),</span>
+                   <span class="no">member=encode(string=State, type=&#39;string&#39;)) AS State,</span>
+               <span class="no">InterfaceIndex, IPAddress,</span>
+               <span class="no">InterfaceAlias, LinkLayerAddress</span>
+            <span class="no">FROM wmi(query=wmiQuery, namespace=wmiNamespace)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * FROM foreach(</span>
+          <span class="no">row=arp_cache,</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT AddressFamily, Store, State, InterfaceIndex,</span>
+                    <span class="no">IP AS LocalAddress, HardwareAddr, IPAddress as RemoteAddress,</span>
+                    <span class="no">InterfaceAlias, LinkLayerAddress AS RemoteMACAddress</span>
+             <span class="no">FROM interfaces</span>
+             <span class="no">WHERE InterfaceIndex = Index</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-network-interfaceaddresses">
+<h1>Windows.Network.InterfaceAddresses</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Network_InterfaceAddressesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Network_InterfaceAddressesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Network interfaces and relevant metadata.</p>
+<div class="collapse" id="Windows_Network_InterfaceAddressesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Network.InterfaceAddresses</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Network interfaces and relevant metadata.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET interface_address =</span>
+           <span class="no">SELECT Index, MTU, Name, HardwareAddr, Flags, Addrs</span>
+           <span class="no">from interfaces()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Index, MTU, Name, HardwareAddr,</span>
+           <span class="no">Flags, Addrs.IP as IP, Addrs.Mask as Mask</span>
+        <span class="no">FROM flatten(query=interface_address)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-network-listeningports">
+<h1>Windows.Network.ListeningPorts</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Network_ListeningPortsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Network_ListeningPortsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Processes with listening (bound) network sockets/ports.</p>
+<div class="collapse" id="Windows_Network_ListeningPortsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Network.ListeningPorts</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Processes with listening (bound) network sockets/ports.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET process &lt;= SELECT Name, Pid from pslist()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row={</span>
+            <span class="no">SELECT Pid AS PortPid, Laddr.Port AS Port,</span>
+                   <span class="no">TypeString as Protocol, FamilyString as Family,</span>
+                   <span class="no">Laddr.IP as Address</span>
+            <span class="no">FROM netstat()</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT Pid, Name, Port, Protocol, Family, Address</span>
+            <span class="no">FROM process where Pid = PortPid</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-network-netstat">
+<h1>Windows.Network.Netstat</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Network_NetstatDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Network_NetstatDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Show information about open sockets. On windows the time when the
+socket was first bound is also shown.</p>
+<div class="collapse" id="Windows_Network_NetstatDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Network.Netstat</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Show information about open sockets. On windows the time when the</span>
+  <span class="no">socket was first bound is also shown.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Pid, FamilyString as Family,</span>
+               <span class="no">TypeString as Type,</span>
+               <span class="no">Status,</span>
+               <span class="no">Laddr.IP, Laddr.Port,</span>
+               <span class="no">Raddr.IP, Raddr.Port,</span>
+               <span class="no">Timestamp</span>
+               <span class="no">FROM netstat()</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-packs-autoexec">
+<h1>Windows.Packs.Autoexec</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Packs_AutoexecDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Packs_AutoexecDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Aggregate of executables that will automatically execute on the
+target machine. This is an amalgamation of other tables like
+services, scheduled_tasks, startup_items and more.</p>
+<div class="collapse" id="Windows_Packs_AutoexecDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Packs.Autoexec</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Aggregate of executables that will automatically execute on the</span>
+  <span class="no">target machine. This is an amalgamation of other tables like</span>
+  <span class="no">services, scheduled_tasks, startup_items and more.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from chain(</span>
+          <span class="no">q1={</span>
+            <span class="no">SELECT Name, Command AS Path, &quot;StartupItems&quot; as Source</span>
+            <span class="no">FROM Artifact.Windows.Sys.StartupItems()</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-persistence-powershellregistry">
+<h1>Windows.Persistence.PowershellRegistry</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Persistence_PowershellRegistryDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Persistence_PowershellRegistryDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> A common way of persistence is to install a hook into a user profile
+registry hive, using powershell. When the user logs in, the
+powershell script downloads a payload and executes it.</p>
+<p>This artifact searches the user’s profile registry hive for
+signatures related to general Powershell execution. We use a yara
+signature specifically targeting the user’s profile which we extract
+using raw NTFS parsing (in case the user is currently logged on and
+the registry hive is locked).</p>
+<div class="collapse" id="Windows_Persistence_PowershellRegistryDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Persistence.PowershellRegistry</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">A common way of persistence is to install a hook into a user profile</span>
+  <span class="no">registry hive, using powershell. When the user logs in, the</span>
+  <span class="no">powershell script downloads a payload and executes it.</span>
+
+  <span class="no">This artifact searches the user&#39;s profile registry hive for</span>
+  <span class="no">signatures related to general Powershell execution. We use a yara</span>
+  <span class="no">signature specifically targeting the user&#39;s profile which we extract</span>
+  <span class="no">using raw NTFS parsing (in case the user is currently logged on and</span>
+  <span class="no">the registry hive is locked).</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yaraRule</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">rule PowerShell {</span>
+        <span class="no">strings:</span>
+          <span class="no">$a = /ActiveXObject.{,500}eval/ wide nocase</span>
+
+        <span class="no">condition:</span>
+          <span class="no">any of them</span>
+      <span class="no">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from foreach(</span>
+        <span class="no">row={</span>
+          <span class="no">SELECT Name, Directory as HomeDir from Artifact.Windows.Sys.Users()</span>
+          <span class="no">WHERE Directory and Gid</span>
+        <span class="no">},</span>
+        <span class="no">query={</span>
+          <span class="no">SELECT File.FullPath As FullPath,</span>
+                 <span class="no">Strings.Offset AS Off,</span>
+                 <span class="no">Strings.HexData As Hex,</span>
+                 <span class="no">upload(file=File.FullPath, accessor=&quot;ntfs&quot;) AS Upload</span>
+              <span class="no">FROM yara(</span>
+              <span class="no">files=&quot;\\\\.\\&quot; + HomeDir + &quot;\\ntuser.dat&quot;,</span>
+              <span class="no">accessor=&quot;ntfs&quot;,</span>
+              <span class="no">rules=yaraRule, context=50)</span>
+        <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-appcompatshims">
+<h1>Windows.Sys.AppcompatShims</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_AppcompatShimsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_AppcompatShimsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Application Compatibility shims are a way to persist malware. This
+table presents the AppCompat Shim information from the registry in a
+nice format.</p>
+<div class="collapse" id="Windows_Sys_AppcompatShimsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.AppcompatShims</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Application Compatibility shims are a way to persist malware. This</span>
+  <span class="no">table presents the AppCompat Shim information from the registry in a</span>
+  <span class="no">nice format.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">http://files.brucon.org/2015/Tomczak_and_Ballenthin_Shims_for_the_Win.pdf</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">shimKeys</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;-</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\InstalledSDB\*</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">customKeys</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;-</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Custom\*\*</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET installed_sdb &lt;=</span>
+           <span class="no">SELECT Key, Key.Name as SdbGUID, DatabasePath,</span>
+                  <span class="no">DatabaseType, DatabaseDescription,</span>
+                  <span class="no">-- Convert windows file time to unix epoch.</span>
+                  <span class="no">(DatabaseInstallTimeStamp / 10000000) - 11644473600 AS DatabaseInstallTimeStamp</span>
+           <span class="no">FROM read_reg_key(</span>
+             <span class="no">globs=split(string=shimKeys, sep=&quot;,[\\s]*&quot;),</span>
+             <span class="no">accessor=&quot;reg&quot;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET result = SELECT * from foreach(</span>
+          <span class="no">row={</span>
+            <span class="no">SELECT regex_replace(</span>
+               <span class="no">source=FullPath,</span>
+               <span class="no">replace=&quot;$1&quot;,</span>
+               <span class="no">re=&quot;^.+\\\\([^\\\\]+)\\\\[^\\\\]+$&quot;) as Executable,</span>
+              <span class="no">regex_replace(</span>
+               <span class="no">source=Name,</span>
+               <span class="no">replace=&quot;$1&quot;,</span>
+               <span class="no">re=&quot;(\\{[^}]+\\}).*$&quot;) as SdbGUIDRef,</span>
+               <span class="no">Name as ExeName from glob(</span>
+              <span class="no">globs=split(string=customKeys, sep=&quot;,[\\s]*&quot;),</span>
+              <span class="no">accessor=&quot;reg&quot;)</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT Executable, DatabasePath, DatabaseType,</span>
+                   <span class="no">DatabaseDescription, DatabaseInstallTimeStamp, SdbGUID</span>
+            <span class="no">FROM installed_sdb</span>
+            <span class="no">WHERE SdbGUID = SdbGUIDRef</span>
+          <span class="no">})</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from result</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-certificateauthorities">
+<h1>Windows.Sys.CertificateAuthorities</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_CertificateAuthoritiesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_CertificateAuthoritiesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Certificate Authorities installed in Keychains/ca-bundles.</p>
+<div class="collapse" id="Windows_Sys_CertificateAuthoritiesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.CertificateAuthorities</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Certificate Authorities installed in Keychains/ca-bundles.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">select Store, IsCA, Subject,</span>
+               <span class="no">encode(string=SubjectKeyId, type=&#39;hex&#39;) AS SubjectKeyId,</span>
+               <span class="no">encode(string=AuthorityKeyId, type=&#39;hex&#39;) AS AuthorityKeyId,</span>
+               <span class="no">Issuer, KeyUsageString,</span>
+               <span class="no">IsSelfSigned, SHA1, SignatureAlgorithm, PublicKeyAlgorithm, KeyStrength,</span>
+               <span class="no">NotBefore, NotAfter, HexSerialNumber</span>
+               <span class="no">from certificates()</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-diskinfo">
+<h1>Windows.Sys.DiskInfo</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_DiskInfoDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_DiskInfoDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Retrieve basic information about the physical disks of a system.</p>
+<div class="collapse" id="Windows_Sys_DiskInfoDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.DiskInfo</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Retrieve basic information about the physical disks of a system.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Partitions,</span>
+               <span class="no">Index as DiskIndex,</span>
+               <span class="no">InterfaceType as Type,</span>
+               <span class="no">PNPDeviceID,</span>
+               <span class="no">DeviceID,</span>
+               <span class="no">Size,</span>
+               <span class="no">Manufacturer,</span>
+               <span class="no">Model,</span>
+               <span class="no">Name,</span>
+               <span class="no">SerialNumber,</span>
+               <span class="no">Description</span>
+        <span class="no">FROM wmi(</span>
+           <span class="no">query=&quot;SELECT * from Win32_DiskDrive&quot;,</span>
+           <span class="no">namespace=&quot;ROOT\\CIMV2&quot;)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-drivers">
+<h1>Windows.Sys.Drivers</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_DriversDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_DriversDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Details for in-use Windows device drivers. This does not display installed but unused drivers.</p>
+<div class="collapse" id="Windows_Sys_DriversDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.Drivers</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Details for in-use Windows device drivers. This does not display installed but unused drivers.</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from wmi(</span>
+            <span class="no">query=&quot;select * from Win32_PnPSignedDriver&quot;,</span>
+            <span class="no">namespace=&quot;ROOT\\CIMV2&quot;)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-firewallrules">
+<h1>Windows.Sys.FirewallRules</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_FirewallRulesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_FirewallRulesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> List windows firewall rules.</p>
+<div class="collapse" id="Windows_Sys_FirewallRulesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.FirewallRules</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">List windows firewall rules.</span>
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">https://social.technet.microsoft.com/Forums/azure/en-US/aaed9c6a-fb8b-4d43-8b69-9f4e0f619a8c/how-to-check-the-windows-firewall-settings-from-netsh-command?forum=winserverGP</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">regKey</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\**\FirewallRules\*</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET rules = SELECT Name as Value,</span>
+               <span class="no">parse_string_with_regex(string=Data,</span>
+                 <span class="no">regex=[&quot;Action=(?P&lt;Action&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;Active=(?P&lt;Active&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;Dir=(?P&lt;Dir&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;Protocol=(?P&lt;Protocol&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;LPort=(?P&lt;LPort&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;Name=(?P&lt;Name&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;Desc=(?P&lt;Desc&gt;[^|]+)&quot;,</span>
+                        <span class="no">&quot;App=(?P&lt;App&gt;[^|]+)&quot;]) as Record,</span>
+               <span class="no">Data,</span>
+               <span class="no">FullPath</span>
+        <span class="no">FROM glob(globs=regKey, accessor=&quot;reg&quot;)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Value,</span>
+               <span class="no">Record.Action as Action,</span>
+               <span class="no">Record.Name as Name,</span>
+               <span class="no">Record.Desc as Desc,</span>
+               <span class="no">Record.App as App,</span>
+               <span class="no">Record.Action as Action,</span>
+               <span class="no">Record.Dir as Dir,</span>
+               <span class="no">if(condition=Record.Protocol = &quot;6&quot;,</span>
+                  <span class="no">then=&quot;TCP&quot;,</span>
+                  <span class="no">else=if(condition=Record.Protocol = &quot;17&quot;,</span>
+                          <span class="no">then=&quot;UDP&quot;,</span>
+                          <span class="no">else=Record.Protocol)) as Protocol,</span>
+               <span class="no">if(condition=Record.LPort = NULL,</span>
+                  <span class="no">then=&quot;Any&quot;,</span>
+                  <span class="no">else=Record.LPort) as LPort,</span>
+               <span class="no">Record.Name as Name</span>
+        <span class="no">FROM rules</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-physicalmemoryranges">
+<h1>Windows.Sys.PhysicalMemoryRanges</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_PhysicalMemoryRangesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_PhysicalMemoryRangesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> List Windows physical memory ranges.</p>
+<div class="collapse" id="Windows_Sys_PhysicalMemoryRangesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.PhysicalMemoryRanges</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">List Windows physical memory ranges.</span>
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/wdm/ns-wdm-_cm_resource_list</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">physicalMemoryKey</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">HKEY_LOCAL_MACHINE\HARDWARE\RESOURCEMAP\System Resources\Physical Memory\.Translated</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Profile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">{</span>
+        <span class="no">&quot;CM_RESOURCE_LIST&quot;: [0, {</span>
+          <span class="no">&quot;Count&quot;: [0, [&quot;uint32&quot;]],</span>
+          <span class="no">&quot;List&quot;: [4, [&quot;CM_FULL_RESOURCE_DESCRIPTOR&quot;]]</span>
+         <span class="no">}],</span>
+         <span class="no">&quot;CM_FULL_RESOURCE_DESCRIPTOR&quot;: [0, {</span>
+           <span class="no">&quot;PartialResourceList&quot;: [8, [&quot;CM_PARTIAL_RESOURCE_LIST&quot;]]</span>
+         <span class="no">}],</span>
+
+         <span class="no">&quot;CM_PARTIAL_RESOURCE_LIST&quot;: [0, {</span>
+           <span class="no">&quot;Version&quot;: [0, [&quot;uint16&quot;]],</span>
+           <span class="no">&quot;Revision&quot;: [2, [&quot;uint16&quot;]],</span>
+           <span class="no">&quot;Count&quot;: [4, [&quot;uint32&quot;]],</span>
+           <span class="no">&quot;PartialDescriptors&quot;: [8, [&quot;Array&quot;, {</span>
+              <span class="no">&quot;Target&quot;: &quot;CM_PARTIAL_RESOURCE_DESCRIPTOR&quot;</span>
+           <span class="no">}]]</span>
+         <span class="no">}],</span>
+
+         <span class="no">&quot;CM_PARTIAL_RESOURCE_DESCRIPTOR&quot;: [20, {</span>
+           <span class="no">&quot;Type&quot;: [0, [&quot;char&quot;]],</span>
+           <span class="no">&quot;ShareDisposition&quot;: [1, [&quot;char&quot;]],</span>
+           <span class="no">&quot;Flags&quot;: [2, [&quot;uint16&quot;]],</span>
+           <span class="no">&quot;Start&quot;: [4, [&quot;int64&quot;]],</span>
+           <span class="no">&quot;Length&quot;: [12, [&quot;int32&quot;]]</span>
+         <span class="no">}]</span>
+      <span class="no">}</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Type,</span>
+               <span class="no">format(format=&quot;%#0x&quot;, args=Start.AsInteger) as Start,</span>
+               <span class="no">format(format=&quot;%#0x&quot;, args=Length.AsInteger) as Length</span>
+        <span class="no">FROM foreach(</span>
+          <span class="no">row={</span>
+            <span class="no">SELECT Data</span>
+              <span class="no">FROM stat(filename=physicalMemoryKey, accessor=&#39;reg&#39;)</span>
+          <span class="no">},</span>
+          <span class="no">query={</span>
+            <span class="no">SELECT * FROM binary_parse(</span>
+              <span class="no">string=Data,</span>
+              <span class="no">profile=Profile,</span>
+              <span class="no">target=&quot;CM_RESOURCE_LIST&quot;,</span>
+              <span class="no">start=&quot;List.PartialResourceList.PartialDescriptors&quot;)</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-programs">
+<h1>Windows.Sys.Programs</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_ProgramsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_ProgramsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Represents products as they are installed by Windows Installer. A product generally
+correlates to one installation package on Windows. Some fields may be blank as Windows
+installation details are left to the discretion of the product author.</p>
+<div class="collapse" id="Windows_Sys_ProgramsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.Programs</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Represents products as they are installed by Windows Installer. A product generally</span>
+  <span class="no">correlates to one installation package on Windows. Some fields may be blank as Windows</span>
+  <span class="no">installation details are left to the discretion of the product author.</span>
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/facebook/osquery/blob/master/specs/windows/programs.table</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">programKeys</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;-</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*,</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*,</span>
+      <span class="no">HKEY_USERS\*\Software\Microsoft\Windows\CurrentVersion\Uninstall\*</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Key.Name as Name,</span>
+               <span class="no">DisplayName,</span>
+               <span class="no">DisplayVersion,</span>
+               <span class="no">InstallLocation,</span>
+               <span class="no">InstallSource,</span>
+               <span class="no">Language,</span>
+               <span class="no">Publisher,</span>
+               <span class="no">UninstallString,</span>
+               <span class="no">InstallDate</span>
+        <span class="no">FROM read_reg_key(globs=split(string=programKeys, sep=&#39;,[\\s]*&#39;))</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-startupitems">
+<h1>Windows.Sys.StartupItems</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_StartupItemsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_StartupItemsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Applications that will be started up from the various run key locations.</p>
+<div class="collapse" id="Windows_Sys_StartupItemsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.StartupItems</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Applications that will be started up from the various run key locations.</span>
+<span class="l l-Scalar l-Scalar-Plain">reference</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">https://docs.microsoft.com/en-us/windows/desktop/setupapi/run-and-runonce-registry-keys</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">runKeyGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run*\*,</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run*\*,</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run*\*</span>
+      <span class="no">HKEY_USERS\*\SOFTWARE\Microsoft\Windows\CurrentVersion\Run*\*,</span>
+      <span class="no">HKEY_USERS\*\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run*\*,</span>
+      <span class="no">HKEY_USERS\*\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run*\*</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">startupApprovedGlobs</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;</span>
+      <span class="no">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\**,</span>
+      <span class="no">HKEY_USERS\*\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\**</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">startupFolderDirectories</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;</span>
+      <span class="no">C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Startup/**,</span>
+      <span class="no">C:/Users/*/AppData/Roaming/Microsoft/Windows/StartMenu/Programs/Startup/**</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* We need to search this multiple times so we materialize it</span>
+           <span class="no">into a variable (using the &lt;= operator)</span>
+         <span class="no">*/</span>
+        <span class="no">LET approved &lt;=</span>
+           <span class="no">SELECT Name as ApprovedName,</span>
+                  <span class="no">encode(string=Data, type=&quot;hex&quot;) as Enabled</span>
+           <span class="no">FROM glob(globs=split(</span>
+                     <span class="no">string=startupApprovedGlobs, sep=&quot;[, ]+&quot;),</span>
+                     <span class="no">accessor=&quot;reg&quot;)</span>
+           <span class="no">WHERE Enabled =~ &quot;^0[0-9]0+$&quot;</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET registry_runners = SELECT Name,</span>
+          <span class="no">FullPath, Data.value as Command,</span>
+          <span class="no">if(</span>
+           <span class="no">condition={</span>
+                <span class="no">SELECT Enabled from approved</span>
+                <span class="no">WHERE Name = ApprovedName</span>
+           <span class="no">},</span>
+           <span class="no">then=&quot;enabled&quot;, else=&quot;disabled&quot;) as Enabled</span>
+          <span class="no">FROM glob(</span>
+           <span class="no">globs=split(string=runKeyGlobs, sep=&quot;[, ]+&quot;),</span>
+           <span class="no">accessor=&quot;reg&quot;)</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET file_runners = SELECT * FROM foreach(</span>
+           <span class="no">row={</span>
+              <span class="no">SELECT Name, FullPath</span>
+              <span class="no">FROM glob(</span>
+                 <span class="no">globs=split(string=startupFolderDirectories,</span>
+                 <span class="no">sep=&quot;,\\s*&quot;))</span>
+           <span class="no">}, query={</span>
+              <span class="no">SELECT Name, FullPath, &quot;enable&quot; as Enabled,</span>
+                  <span class="no">encode(string=Data, type=&#39;utf16&#39;) as Command</span>
+              <span class="no">FROM read_file(filenames=FullPath)</span>
+           <span class="no">})</span>
+
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * from chain(</span>
+           <span class="l l-Scalar l-Scalar-Plain">first=registry_runners,</span>
+           <span class="l l-Scalar l-Scalar-Plain">second=file_runners)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-sys-users">
+<h1>Windows.Sys.Users</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Sys_UsersDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Sys_UsersDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> List User accounts. We combine two data sources - the output from
+the NetUserEnum() call and the list of SIDs in the registry.</p>
+<div class="collapse" id="Windows_Sys_UsersDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Sys.Users</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">List User accounts. We combine two data sources - the output from</span>
+  <span class="no">the NetUserEnum() call and the list of SIDs in the registry.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">remoteRegKey</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\*</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET roaming_users &lt;=</span>
+           <span class="no">SELECT &quot;&quot; as Uid, &quot;&quot; as Gid,</span>
+               <span class="no">lookupSID(</span>
+                 <span class="no">sid=basename(path=Key.FullPath)</span>
+               <span class="no">) as Name,</span>
+               <span class="no">Key.FullPath as Description,</span>
+               <span class="no">ProfileImagePath.value as Directory,</span>
+               <span class="no">basename(path=Key.FullPath) as UUID, &quot;roaming&quot; as Type</span>
+           <span class="no">FROM read_reg_key(globs=remoteRegKey, accessor=&quot;reg&quot;)</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET local_users &lt;= select User_id as Uid, Primary_group_id as Gid, Name,</span>
+               <span class="no">Comment as Description, {</span>
+                 <span class="no">SELECT Directory from roaming_users WHERE User_sid = UUID</span>
+               <span class="no">} as Directory, User_sid as UUID, &quot;local&quot; AS Type</span>
+        <span class="no">FROM users()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from chain(</span>
+         <span class="no">q1=local_users,</span>
+         <span class="no">q2={</span>
+           <span class="no">-- Only show users not already shown in the local_users above.</span>
+           <span class="no">SELECT * from roaming_users</span>
+           <span class="no">where not UUID in local_users.UUID</span>
+         <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+
+    <div class="postmeta">
+        
+        
+        
+        </div>
+    </article><aside class="sidebar"><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Linux.Applications.Chrome.Extensions</a></li>
+<li><a class="reference internal" href="#linux-applications-chrome-extensions-upload">Linux.Applications.Chrome.Extensions.Upload</a></li>
+<li><a class="reference internal" href="#linux-applications-docker-info">Linux.Applications.Docker.Info</a></li>
+<li><a class="reference internal" href="#linux-applications-docker-version">Linux.Applications.Docker.Version</a></li>
+<li><a class="reference internal" href="#linux-debian-aptsources">Linux.Debian.AptSources</a></li>
+<li><a class="reference internal" href="#linux-debian-packages">Linux.Debian.Packages</a></li>
+<li><a class="reference internal" href="#linux-mounts">Linux.Mounts</a></li>
+<li><a class="reference internal" href="#linux-proc-arp">Linux.Proc.Arp</a></li>
+<li><a class="reference internal" href="#linux-proc-modules">Linux.Proc.Modules</a></li>
+<li><a class="reference internal" href="#linux-ssh-authorizedkeys">Linux.Ssh.AuthorizedKeys</a></li>
+<li><a class="reference internal" href="#linux-ssh-knownhosts">Linux.Ssh.KnownHosts</a></li>
+<li><a class="reference internal" href="#linux-sys-acpitables">Linux.Sys.ACPITables</a></li>
+<li><a class="reference internal" href="#linux-sys-cputime">Linux.Sys.CPUTime</a></li>
+<li><a class="reference internal" href="#linux-sys-crontab">Linux.Sys.Crontab</a></li>
+<li><a class="reference internal" href="#linux-sys-lastuserlogin">Linux.Sys.LastUserLogin</a></li>
+<li><a class="reference internal" href="#linux-sys-users">Linux.Sys.Users</a></li>
+<li><a class="reference internal" href="#network-externalipaddress">Network.ExternalIpAddress</a></li>
+<li><a class="reference internal" href="#windows-applications-chocolateypackages">Windows.Applications.ChocolateyPackages</a></li>
+<li><a class="reference internal" href="#windows-applications-chrome-extensions">Windows.Applications.Chrome.Extensions</a></li>
+<li><a class="reference internal" href="#windows-network-arpcache">Windows.Network.ArpCache</a></li>
+<li><a class="reference internal" href="#windows-network-interfaceaddresses">Windows.Network.InterfaceAddresses</a></li>
+<li><a class="reference internal" href="#windows-network-listeningports">Windows.Network.ListeningPorts</a></li>
+<li><a class="reference internal" href="#windows-network-netstat">Windows.Network.Netstat</a></li>
+<li><a class="reference internal" href="#windows-packs-autoexec">Windows.Packs.Autoexec</a></li>
+<li><a class="reference internal" href="#windows-persistence-powershellregistry">Windows.Persistence.PowershellRegistry</a></li>
+<li><a class="reference internal" href="#windows-sys-appcompatshims">Windows.Sys.AppcompatShims</a></li>
+<li><a class="reference internal" href="#windows-sys-certificateauthorities">Windows.Sys.CertificateAuthorities</a></li>
+<li><a class="reference internal" href="#windows-sys-diskinfo">Windows.Sys.DiskInfo</a></li>
+<li><a class="reference internal" href="#windows-sys-drivers">Windows.Sys.Drivers</a></li>
+<li><a class="reference internal" href="#windows-sys-firewallrules">Windows.Sys.FirewallRules</a></li>
+<li><a class="reference internal" href="#windows-sys-physicalmemoryranges">Windows.Sys.PhysicalMemoryRanges</a></li>
+<li><a class="reference internal" href="#windows-sys-programs">Windows.Sys.Programs</a></li>
+<li><a class="reference internal" href="#windows-sys-startupitems">Windows.Sys.StartupItems</a></li>
+<li><a class="reference internal" href="#windows-sys-users">Windows.Sys.Users</a></li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

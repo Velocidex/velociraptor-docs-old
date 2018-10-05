@@ -1,6 +1,16 @@
 
 {%- extends "dark/layout.html" -%}
 
+{%- block headjs -%}
+<!-- Load modernizr and JQuery -->
+<script src="{{ pathto('_static/vendor/modernizr-2.6.2.min.js', 1) }}"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="{{ pathto('_static/vendor/jquery-1.8.2.min.js', 1) }}"><\/script>')</script>
+<script src="{{ pathto('_static/plugins.js', 1) }}"></script>
+<script src="{{ pathto('_static/main.js', 1) }}"></script>
+{% endblock %}
+
+
 
 {%- block header -%}
 
@@ -22,6 +32,11 @@
           <a href="{{ pathto(page[0]) }}">{{ page[1]|e }}</a>
         </li>
         {% endfor -%}
+
+        <li class="main-nav">
+          <a href="{{ pathto('reference/artifacts') }}">Artifacts</a>
+        </li>
+
         {%- block quicklinks -%}
         {%- if rss_in_page_nav -%}
         <li class="quicklink">{{ rss_link() }}</li>

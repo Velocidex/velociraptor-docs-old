@@ -16,5 +16,4 @@ Sitemap
    2018/08/10/design_differences_between_velociraptor_and_grr
    2018/08/10/the_velocidex_query_language
    2018/08/10/introducing_velociraptor
-   pages/about
-
+   Artifacts <reference/artifacts>

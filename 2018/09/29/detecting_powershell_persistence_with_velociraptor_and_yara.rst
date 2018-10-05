@@ -2,7 +2,7 @@ Detecting powershell persistence with Velociraptor and Yara
 ===========================================================
 
 I was watching the SANS DFIR Summit 2018 videos on youtube and came
-across Mari DeGrazia's talk titled `"Finding and Decoding Malicious Powershell Scripts" <https://www.youtube.com/watch?v%3DJWC7fzhvAY8>`_.
+across Mari DeGrazia's talk titled `"Finding and Decoding Malicious Powershell Scripts" <https://www.youtube.com/watch?v=JWC7fzhvAY8>`_.
 This is an excellent talk and it really contains
 a wealth of information. It seems that Powershell is really popular
 these days, allowing attacker to "live off the land" by installing

@@ -110,9 +110,11 @@ html_logo = "_static/velo.png"
 html_css_files = [
     "velo.css",
     "https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css",
+    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
 ]
 
 html_sidebars = {
-    '**': ['fancybox.html', "searchbox.html"],
+    '**': ['fancybox.html', "localtoc.html"],
     'index': ['recent.html', 'searchbox.html'],
+    'reference/artifacts': ['localtoc.html'],
 }

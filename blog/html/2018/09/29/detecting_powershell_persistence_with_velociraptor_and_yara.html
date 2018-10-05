@@ -22,13 +22,13 @@
             <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
             <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
-        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="../../../_static/plugins.js"></script>
-        <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velorciraptor’s filesystem’s accessors" href="../30/velorciraptor_s_filesystem_s_accessors.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velorciraptor’s filesystem’s accessors" href="../30/velorciraptor_s_filesystem_s_accessors.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.1',
@@ -79,9 +79,8 @@
           <a href="../../../index.html">Home</a>
         </li>
         <li class="main-nav">
-          <a href="../../../pages/about.html">About</a>
-        </li>
-        <li class="quicklink"><div class="rss">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
         <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
     </div></li><li class="main-nav">
             <a href="https://github.com/Velocidex/velociraptor">
@@ -102,7 +101,7 @@
     <div class="section" id="detecting-powershell-persistence-with-velociraptor-and-yara">
 <h1>Detecting powershell persistence with Velociraptor and Yara</h1>
 <p>I was watching the SANS DFIR Summit 2018 videos on youtube and came
-across Mari DeGrazia’s talk titled <a class="reference external" href="https://www.youtube.com/watch?v%3DJWC7fzhvAY8">“Finding and Decoding Malicious Powershell Scripts”</a>.
+across Mari DeGrazia’s talk titled <a class="reference external" href="https://www.youtube.com/watch?v=JWC7fzhvAY8">“Finding and Decoding Malicious Powershell Scripts”</a>.
 This is an excellent talk and it really contains
 a wealth of information. It seems that Powershell is really popular
 these days, allowing attacker to “live off the land” by installing
@@ -499,13 +498,52 @@ retrieve those files for further analysis.</p>
        arrows: true, 
     });
 });
-</script></section><section><div class="widget" id="searchbox" role="search">
-    <h1><a href="#searchbox">Search</a></h1>
-    <form action="../../../search.html" method="get">
-        <input type="text" name="q" />
-        <button type="submit"><span class="fa fa-search"></span></button>
-    </form>
-</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Detecting powershell persistence with Velociraptor and Yara</a><ul>
+<li><a class="reference internal" href="#preparation">Preparation</a></li>
+<li><a class="reference internal" href="#defining-the-artifact">Defining the Artifact.</a></li>
+<li><a class="reference internal" href="#testing-the-artifact">Testing the artifact</a></li>
+<li><a class="reference internal" href="#but-wait-there-is-a-problem">But wait! There is a problem!</a><ul>
+<li><a class="reference internal" href="#how-does-hkey-users-hive-work">How does HKEY_USERS hive work?</a></li>
+<li><a class="reference internal" href="#how-to-fix-this">How to fix this?</a></li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
