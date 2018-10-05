@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
         <meta name="viewport" content="width=device-width">
-        <title>Search &mdash; Velociraptor</title>
+        <title>Page 2 &mdash; Velociraptor</title>
             <link rel="stylesheet" href="_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="search" title="Search" href="#" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="search.html" /><link rel="prev" title="Newer" href="index.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.7.1',
@@ -37,10 +37,7 @@
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script><script type="text/javascript" src="_static/searchtools.js"></script><script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -59,9 +56,7 @@
                 $(document).scrollTop(documentwrapper.offsetTop - 44);
             }
         });
-    </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script></head>
+    </script></head>
     <body role="document">
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
@@ -98,21 +93,69 @@
   </header>
 </div>
 
-<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><h1 id="search-documentation">Search</h1>
-  <div id="fallback" class="admonition warning">
-  <script type="text/javascript">$('#fallback').hide();</script>
-  <p>Please activate JavaScript to enable the search
-    functionality.</p>
-  </div>
-  <p>From here you can search these documents. Enter your search
-    words into the box below and click "search". Note that the search
-    function will automatically search for all of the words. Pages
-    containing fewer words won't appear in the result list.</p>
-  <form action="" method="get">
-    <input type="text" name="q" value="" />
-    <input type="submit" value="search" />
-    <span id="search-progress" style="padding-left: 10px"></span>
-  </form><div id="search-results"></div></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="index.html">Newer</a></li>
+            <li class="right"></li>
+        </ul><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/the_velocidex_query_language.html">Velocidex Query Language (VQL)</a></h1>
+<p>Velociraptor is powered by VQL and VQL is the killer feature which
+makes it so powerful. But what exactly is VQL? This section is a quick
+overview of VQL.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/the_velocidex_query_language.html#more">Read more...</a></p> 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/design.html">Design</a></span>
+        </div>
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/the_velocidex_query_language.html#disqus_thread" data-disqus-identifier="2018/08/10/the_velocidex_query_language">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a></h1>
+<div class="section" id="hunting-and-responding-like-a-raptor">
+<h2>Hunting and responding like a raptor!</h2>
+<p>At Velocidex we have been running open source endpoint monitoring
+tools for our clients in order to detect and respond to incidents.
+One of our favorite tools is GRR, developed by Google internally and
+then released as open source. GRR is a very powerful tool, with a
+polished UI and good documentation.</p>
+<p>Unfortunately the open source version released by Google suffers from
+some shortcomings and so we have decided to develop a new project,
+built on the shoulders of giants called Velociraptor.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/introducing_velociraptor.html#more">Read more...</a></p> 
+ 
+ 
+ 
+</div>
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/introducing_velociraptor.html#disqus_thread" data-disqus-identifier="2018/08/10/introducing_velociraptor">Leave a comment</a>
+        </div></div><div class="archive_link">
+        <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
+    </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="index.html">Newer</a></li>
+            <li class="right"></li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
 
 <script>
   $(document).ready(function() {
@@ -129,7 +172,7 @@
 });
 </script></section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
-    <form action="#" method="get">
+    <form action="search.html" method="get">
         <input type="text" name="q" />
         <button type="submit"><span class="fa fa-search"></span></button>
     </form>

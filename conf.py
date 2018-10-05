@@ -25,7 +25,7 @@ author = 'Michael Cohen'
 copyright = '2018 Velocidex Innovations'
 
 # Change this to your blog root URL (required for RSS feed)
-website = 'http://127.0.0.1/blog/html/'
+website = 'https://docs.velociraptor.velocidex.com/blog/html/'
 
 # **************************************************************
 # More tweaks you can do
@@ -116,4 +116,3 @@ html_sidebars = {
     '**': ['fancybox.html', "searchbox.html"],
     'index': ['recent.html', 'searchbox.html'],
 }
-

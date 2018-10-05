@@ -12,25 +12,30 @@
     </div>
     <div class="logo">
       <img src="{{ pathto('_static/' + logo, 1) }}"
-	   alt="Log" class="logo"/>
-    
+           alt="Log" class="logo"/>
+
     </div>
-    <nav {%- if pages|count > 2 %} class="big_nav"{%- endif %} role="navigation">
+    <nav class="big_nav" role="navigation">
       <ul>
-	{% for page in pages -%}
-	<li class="main-nav">
-	  <a href="{{ pathto(page[0]) }}">{{ page[1]|e }}</a>
-	</li>
-	{% endfor -%}
-	{%- block quicklinks -%}
-	{%- if rss_in_page_nav -%}
-	<li class="quicklink">{{ rss_link() }}</li>
-	{%- endif -%}
-	{%- endblock -%}
+        {% for page in pages -%}
+        <li class="main-nav">
+          <a href="{{ pathto(page[0]) }}">{{ page[1]|e }}</a>
+        </li>
+        {% endfor -%}
+        {%- block quicklinks -%}
+        {%- if rss_in_page_nav -%}
+        <li class="quicklink">{{ rss_link() }}</li>
+        {%- endif -%}
+        {%- endblock -%}
+
+        <li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
       </ul>
     </nav>
   </header>
 </div>
 
 {% endblock -%}
-

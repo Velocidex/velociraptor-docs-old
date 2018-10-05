@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="search.html" /><link rel="next" title="Older" href="page2.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.7.1',
@@ -70,25 +70,124 @@
     </div>
     <div class="logo">
       <img src="_static/velo.png"
-	   alt="Log" class="logo"/>
-    
+           alt="Log" class="logo"/>
+
     </div>
-    <nav role="navigation">
+    <nav class="big_nav" role="navigation">
       <ul>
-	<li class="main-nav">
-	  <a href="#">Home</a>
-	</li>
-	<li class="main-nav">
-	  <a href="pages/about.html">About</a>
-	</li>
-	<li class="quicklink"><div class="rss">
+        <li class="main-nav">
+          <a href="#">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="pages/about.html">About</a>
+        </li>
+        <li class="quicklink"><div class="rss">
         <a href="rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
-    </div></li></ul>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
     </nav>
   </header>
 </div>
 
-<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><div class="timestamp postmeta">
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="page2.html">Older</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>September 29, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a></h1>
+<p>I was watching the SANS DFIR Summit 2018 videos on youtube and came
+across Mari DeGrazia’s talk titled <a class="reference external" href="https://www.youtube.com/watch?v%3DJWC7fzhvAY8">“Finding and Decoding Malicious Powershell Scripts”</a>.
+This is an excellent talk and it really contains
+a wealth of information. It seems that Powershell is really popular
+these days, allowing attacker to “live off the land” by installing
+fully functional reverse shells and backdoors, in a few lines of
+obfuscated scripts.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html#disqus_thread" data-disqus-identifier="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 30, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/30/velorciraptor_s_filesystem_s_accessors.html">Velorciraptor’s filesystem’s accessors</a></h1>
+<p>The latest release of Velociraptor introduces the ability to access
+raw NTFS volumes, allowing users to read files which are normally
+locked by the operating system such as registry hives, pagefile and
+other locked files. In addition, Velociraptor can now also read
+<a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/vss/volume-shadow-copy-service-portal">Volume Shadow Copy</a>
+snapshots. The gives a kind of time-machine ability to allow the
+investigator to look through the drive content at a previous point in
+the past.</p>
+<p>This blog post introduces the new features and describe how
+Velociraptor’s filesystem accessors work to provide data from multiple
+sources to VQL queries.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/30/velorciraptor_s_filesystem_s_accessors.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/30/velorciraptor_s_filesystem_s_accessors.html#disqus_thread" data-disqus-identifier="2018/09/30/velorciraptor_s_filesystem_s_accessors">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 03, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/03/velociraptor_walk_through_and_demo.html">Velociraptor walk through and demo</a></h1>
+<p>I just uploaded a screencast of the latest Velociraptor - check it out
+and play with it, and please provide feedback at
+<a class="reference external" href="mailto:velociraptor-discuss%40googlegroups.com">velociraptor-discuss<span>@</span>googlegroups<span>.</span>com</a></p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/03/velociraptor_walk_through_and_demo.html#more">Read more...</a></p>
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/03/velociraptor_walk_through_and_demo.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_walk_through_and_demo">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 03, 2018</span>
         </div>
         <div class="section">
@@ -111,7 +210,7 @@ communication.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/09/03/velociraptor_s_client_communications.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_s_client_communications">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/03/velociraptor_s_client_communications.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_s_client_communications">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 20, 2018</span>
         </div>
@@ -148,7 +247,7 @@ how can you use them.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/20/velociraptor_artifacts.html#disqus_thread" data-disqus-identifier="2018/08/20/velociraptor_artifacts">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/20/velociraptor_artifacts.html#disqus_thread" data-disqus-identifier="2018/08/20/velociraptor_artifacts">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 10, 2018</span>
         </div>
@@ -177,7 +276,7 @@ is now the FileBasedDataStore which stores all data in flat files.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/files_files_everything_is_just_a_file.html#disqus_thread" data-disqus-identifier="2018/08/10/files_files_everything_is_just_a_file">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/files_files_everything_is_just_a_file.html#disqus_thread" data-disqus-identifier="2018/08/10/files_files_everything_is_just_a_file">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 10, 2018</span>
         </div>
@@ -201,7 +300,7 @@ way that the VFS is stored in the datastore.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/browsing_around_the_filesystem.html#disqus_thread" data-disqus-identifier="2018/08/10/browsing_around_the_filesystem">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/browsing_around_the_filesystem.html#disqus_thread" data-disqus-identifier="2018/08/10/browsing_around_the_filesystem">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 10, 2018</span>
         </div>
@@ -230,7 +329,7 @@ processing efficiency.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/hunting_what_velociraptors_do_best.html#disqus_thread" data-disqus-identifier="2018/08/10/hunting_what_velociraptors_do_best">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/hunting_what_velociraptors_do_best.html#disqus_thread" data-disqus-identifier="2018/08/10/hunting_what_velociraptors_do_best">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 10, 2018</span>
         </div>
@@ -254,7 +353,7 @@ favor of a much simpler data model.</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html#disqus_thread" data-disqus-identifier="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html#disqus_thread" data-disqus-identifier="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows">Leave a comment</a>
         </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 10, 2018</span>
         </div>
@@ -277,66 +376,21 @@ and leaving behind a fast, lean and mean raptor!</p>
         
         
         <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/design_differences_between_velociraptor_and_grr.html#disqus_thread" data-disqus-identifier="2018/08/10/design_differences_between_velociraptor_and_grr">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 10, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/08/10/the_velocidex_query_language.html">Velocidex Query Language (VQL)</a></h1>
-<p>Velociraptor is powered by VQL and VQL is the killer feature which
-makes it so powerful. But what exactly is VQL? This section is a quick
-overview of VQL.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/08/10/the_velocidex_query_language.html#more">Read more...</a></p> 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        <div class="categories">
-            <span>
-                Filed under:
-                <a href="categories/design.html">Design</a></span>
-        </div>
-        
-        <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/the_velocidex_query_language.html#disqus_thread" data-disqus-identifier="2018/08/10/the_velocidex_query_language">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 10, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a></h1>
-<div class="section" id="hunting-and-responding-like-a-raptor">
-<h2>Hunting and responding like a raptor!</h2>
-<p>At Velocidex we have been running open source endpoint monitoring
-tools for our clients in order to detect and respond to incidents.
-One of our favorite tools is GRR, developed by Google internally and
-then released as open source. GRR is a very powerful tool, with a
-polished UI and good documentation.</p>
-<p>Unfortunately the open source version released by Google suffers from
-some shortcomings and so we have decided to develop a new project,
-built on the shoulders of giants called Velociraptor.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/08/10/introducing_velociraptor.html#more">Read more...</a></p> 
- 
- 
- 
-</div>
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        <div class="comments">
-            <a href="http://127.0.0.1/blog/html/2018/08/10/introducing_velociraptor.html#disqus_thread" data-disqus-identifier="2018/08/10/introducing_velociraptor">Leave a comment</a>
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/design_differences_between_velociraptor_and_grr.html#disqus_thread" data-disqus-identifier="2018/08/10/design_differences_between_velociraptor_and_grr">Leave a comment</a>
         </div></div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
-    </div></article><aside class="sidebar"><section><div class="widget">
+    </div><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="page2.html">Older</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a>
+        </li><li>
+            <a href="2018/09/30/velorciraptor_s_filesystem_s_accessors.html">Velorciraptor’s filesystem’s accessors</a>
+        </li><li>
+            <a href="2018/09/03/velociraptor_walk_through_and_demo.html">Velociraptor walk through and demo</a>
+        </li><li>
             <a href="2018/09/03/velociraptor_s_client_communications.html">Velociraptor’s client communications</a>
         </li><li>
             <a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a>
@@ -350,10 +404,6 @@ built on the shoulders of giants called Velociraptor.</p>
             <a href="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html">Interrogation - Make the endpoint tell us what it knows!</a>
         </li><li>
             <a href="2018/08/10/design_differences_between_velociraptor_and_grr.html">Design differences between Velociraptor and GRR</a>
-        </li><li>
-            <a href="2018/08/10/the_velocidex_query_language.html">Velocidex Query Language (VQL)</a>
-        </li><li>
-            <a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">
