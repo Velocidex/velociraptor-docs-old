@@ -1958,6 +1958,12 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
   if (scroll > 150) {
       var item = $("aside");
       var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
       item.addClass("fixed");
 
       if (offset) {

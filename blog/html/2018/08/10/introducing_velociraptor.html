@@ -332,14 +332,14 @@ towards VQL.</li>
 <script>
   $(document).ready(function() {
     $.each($(".section img"), function() {
-       var a = $("<a>").attr('href', $(this).attr('src'));
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
        $(this).wrap(a);
     });
-    
-    $('.section a').fancybox({
+
+    $('.section a.img').fancybox({
        closeExisting: true,
        loop: true,
-       arrows: true, 
+       arrows: true,
     });
 });
 </script></section><section>
@@ -374,6 +374,12 @@ towards VQL.</li>
   if (scroll > 150) {
       var item = $("aside");
       var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
       item.addClass("fixed");
 
       if (offset) {

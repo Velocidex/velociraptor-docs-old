@@ -114,7 +114,8 @@ html_css_files = [
 ]
 
 html_sidebars = {
-    '**': ['fancybox.html', "localtoc.html"],
+    '20**': ['fancybox.html', "localtoc.html"],
     'index': ['recent.html', 'searchbox.html'],
+    'page**': ['recent.html', 'searchbox.html'],
     'reference/artifacts': ['localtoc.html'],
 }

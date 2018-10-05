@@ -3,14 +3,14 @@
 <script>
   $(document).ready(function() {
     $.each($(".section img"), function() {
-       var a = $("<a>").attr('href', $(this).attr('src'));
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
        $(this).wrap(a);
     });
-    
-    $('.section a').fancybox({
+
+    $('.section a.img').fancybox({
        closeExisting: true,
        loop: true,
-       arrows: true, 
+       arrows: true,
     });
 });
 </script>
