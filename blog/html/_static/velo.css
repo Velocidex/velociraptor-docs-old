@@ -1,0 +1,25 @@
+img.logo {
+    height: 80px;
+    margin-right: 20px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+div.logo {
+    display: inline;
+    margin-left: 20px;
+}
+
+pre {
+    white-space: pre;
+    overflow: auto;
+}
+
+.section img {
+    max-width: 100%;
+}
+
+.fancybox-image {
+    background-color: white !important;
+}

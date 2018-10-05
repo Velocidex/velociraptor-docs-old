@@ -1,0 +1,294 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Files, files everything is just a file! &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Browsing around the filesystem." href="browsing_around_the_filesystem.html" /><link rel="prev" title="Velociraptor Artifacts" href="../20/velociraptor_artifacts.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav role="navigation">
+      <ul>
+	<li class="main-nav">
+	  <a href="../../../index.html">Home</a>
+	</li>
+	<li class="main-nav">
+	  <a href="../../../pages/about.html">About</a>
+	</li>
+	<li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li></ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../20/velociraptor_artifacts.html">Velociraptor Artifacts</a></li>
+            <li class="right"><a href="browsing_around_the_filesystem.html">Browsing around the filesystem.</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+    <div class="section" id="files-files-everything-is-just-a-file">
+<h1>Files, files everything is just a file!</h1>
+<p>GRR’s original design abstracted the data storage to a simple
+key/value store originally based around Bigtable. For open source
+deployments various key value stores were used starting from MongoDB,
+to SQLite and finally MySQL. Although the original idea was to use a
+simple key/value implementation, due to locking requirements the data
+store implementation became very complex.</p>
+<p>As Velociraptor introduced a major redesign of the underlying data
+store architecture, we are now able to relax our demands of the
+datastore and use a true key/value model (since we have no
+requirements for locking and synchronization). The default data store
+is now the FileBasedDataStore which stores all data in flat files.</p>
+<div id="more"> </div><p>Using flat files over a database has many advantages, including ease
+of deployment, and simplification of the data model. Having flat files
+allows one to use standard tools to visualize Velociraptor’s
+data structures (e.g. with less), archive old data (e.g. with tar/zip)
+and clean up old data (e.g. with find/rm). Velociraptor also includes
+an inspect command which allows users to decode the stored files and
+provides context as to what these files actually mean. This simplicity
+increases the transparency in the system and makes it more accessible
+for deployers, while increasing reliability, stability and speed.</p>
+<p>In the following section we examine some of the files in the datastore
+and see how they relate to the features we discuss elsewhere in this
+document.</p>
+<div class="section" id="file-organization">
+<h2>File organization</h2>
+<p>The Velociraptor data store needs to provide only two types of
+operations: Read and Write complete files and list files in a
+directory. Using only these primitives we can implement the entire
+filestore. Most modern file systems provide very fast file creation,
+reading and deletion, as well as fast directory listing, even when
+containing millions of files. Modern file systems also provide
+advanced features like caching, journaling and rollbacks so it is not
+such a crazy idea to use the file systems themselves as a data store.</p>
+<p>Let’s begin by listing the files in a typical Velociraptor file store
+using the find command. We then use the velociraptor inspect command
+to view the file’s content.</p>
+<div class="section" id="searching">
+<h3>Searching</h3>
+<p>Searching for clients is implemented by simply creating empty files in
+directories based on the search term. For example in order to retrieve
+all clients which have the user “mic”, we simply list the directory
+“client_index/user%3Amic”:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"> $</span> find ./client_index/
+<span class="go">./client_index/c.84216c7aab97557d</span>
+<span class="go">./client_index/c.84216c7aab97557d/C.84216c7aab97557d.db./client_index/user%3Amic</span>
+<span class="go">./client_index/user%3Amic/C.84216c7aab97557d.db</span>
+<span class="go">./client_index/user%3Amic/C.1b0cddfffbfe40f5.db./client_index/all</span>
+<span class="go">./client_index/all/C.84216c7aab97557d.db</span>
+<span class="go">./client_index/all/C.1b0cddfffbfe40f5.db</span>
+</pre></div>
+</div>
+<p>Modern file systems can hold many thousands of files in the same
+directory and list these very quickly. This feature is only really
+used in the GUI’s search box but can also be used to script or post
+process collected data.</p>
+</div>
+<div class="section" id="client-information">
+<h3>Client information</h3>
+<p>Information about each client is kept in a directory based on the
+client’s ID:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./C.0fc63b45671af1a6/ping.db                   &lt;- Last ping stats.</span>
+<span class="go">./C.0fc63b45671af1a6/key.db                    &lt;- Client&#39;s public key</span>
+<span class="go">./C.0fc63b45671af1a6/flows</span>
+<span class="go">./C.0fc63b45671af1a6/flows/F.a8787c26.db       &lt;- Flows running on this client.</span>
+<span class="go">./C.0fc63b45671af1a6/flows/F.e05952ff.db</span>
+<span class="go">./C.0fc63b45671af1a6/tasks</span>
+<span class="go">./C.0fc63b45671af1a6/tasks/1533517805834284.db &lt;- Client messages waiting to be collected.</span>
+<span class="go">./C.0fc63b45671af1a6/tasks/1533517805834283.db</span>
+<span class="go">./C.0fc63b45671af1a6/tasks/1533517206859989.db</span>
+<span class="go">./C.0fc63b45671af1a6/tasks/1533517206860477.db</span>
+<span class="go">./C.84216c7aab97557d.db                        &lt;- Client information (from Interrogate).</span>
+</pre></div>
+</div>
+<p>Each piece of data is kept in its own file as an encoded
+protobuf. Files all have their names end with “.db”. Velociraptor has
+an inspect command which decodes the protobuf and displays it in a
+human friendly way. For example let us see what information we keep
+about each s last poll:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config server.yaml inspect /tmp/velociraptor/C.2d406f47d80f5583/ping.db
+{
+  &quot;ipAddress&quot;: &quot;127.0.0.1:33600&quot;,&quot;ping&quot;: &quot;1533517053018582&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-flow-s-results">
+<h3>The Flow’s results.</h3>
+<p>Velociraptor’s flows typically only produce VQL results. As described
+above, the VQL results are typically split into parts by the client
+(by default 10000 rows per part), and Velociraptor simply writes these
+in the flow’s directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./C.1b0cddfffbfe40f5/flows/F.a31255a1</span>
+<span class="go">./C.1b0cddfffbfe40f5/flows/F.a31255a1/results</span>
+<span class="go">./C.1b0cddfffbfe40f5/flows/F.a31255a1/results/0.db   &lt;- VQL result part 1.</span>
+<span class="go">./C.1b0cddfffbfe40f5/flows/F.a31255a1.db             &lt;- Flow information.</span>
+</pre></div>
+</div>
+<p>Velociraptor’s inspect command understands that VQL collections
+represent a table of results, and so it displays these in a more
+friendly way.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> velociraptor --config server.yaml inspect /tmp/velociraptor/C.1b0cddfffbfe40f5/flows/F.a31255a1/results/0.db
+<span class="go">+-------+----------------+---------+------+-----------------------------+----------------------------+</span>
+<span class="go">| ISDIR |    FULLPATH    |  SIZE   | MODE |            MTIME            |            ATIME           |</span>
+<span class="go">+-------+----------------+---------+------+-----------------------------+----------------------------+</span>
+<span class="go">| false |  /bin/bash     | 1037528 |  493 |  2017-05-16T22:49:55+10:00  |  2018-01-22T12:47:25+10:00 |</span>
+<span class="go">| false |  /bin/busybox  | 1964536 |  493 |  2015-08-19T22:07:39+10:00  |  2018-01-23T15:41:46+10:00 |</span>
+<span class="go">+-------+----------------+---------+------+-----------------------------+----------------------------+</span>
+<span class="go">File Finder Response: SELECT IsDir , FullPath , Size , Mode , mtime , atime , ctime,</span>
+<span class="go">   upload(file=FullPath)as Upload FROM files</span>
+</pre></div>
+</div>
+<p>We can also see the original VQL query which was run to produce this
+output. The bottom line, though, is that the entire flow’s result is
+just a flat JSON encoded file. You can easily decode the data using
+any programming language and post process it in whatever way is
+appropriate (e.g. export the results to BigQuery or
+ElasticSearch). Velociraptor does not really do anything with the
+result other than just store it on disk.</p>
+</div>
+<div class="section" id="the-virtual-file-system">
+<h3>The Virtual File System</h3>
+<p>As described above, Velociraptor’s VFS consists of VQL tables
+for each directory on the client, listing the entire directory
+content:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/gir1.2-freedesktop.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/libdatrie1.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/dh-strip-nondeterminism.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/libcap2-bin.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/libsoup2.4-1.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/libgphoto2-port12.db</span>
+<span class="go">./C.1b0cddfffbfe40f5/vfs/usr/share/doc/libsodium18.db</span>
+</pre></div>
+</div>
+<p>Inspecting each of these shows it is just a simple VQL table. This
+particular VFS entry was produced from a recursive directory listing
+of /usr (of depth 5).</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> velociraptor --config server.yaml inspect .../vfs/usr/share/doc/libcap2-bin.db
+<span class="go">+-------+--------------------------------+---------------------+------+-----------+--------------------</span>
+<span class="go">| ISDIR |            FULLPATH            |        NAME         | SIZE |   MODE    |           MTIME</span>
+<span class="go">+-------+--------------------------------+---------------------+------+-----------+--------------------</span>
+<span class="go">| false | /usr/share/doc/libcap2-bin/REA | README.Debian       | 1149 |       420 | 2015-10-02T23:34:07</span>
+<span class="go">|       | DME.Debian                     |                     |      |           |</span>
+<span class="go">| false | /usr/share/doc/libcap2-bin/cha | changelog.Debian.gz |   30 | 134218239 | 2015-10-24T07:11:34</span>
+<span class="go">|       | ngelog.Debian.gz               |                     |      |           |</span>
+<span class="go">| false | /usr/share/doc/libcap2-bin/cop | copyright           | 4367 |       420 | 2015-10-02T23:34:07</span>
+<span class="go">|       | yright                         |                     |      |           |</span>
+<span class="go">+-------+--------------------------------+---------------------+------+-----------+--------------------</span>
+<span class="go">/usr: SELECT IsDir, FullPath as _FullPath, Name, Size, Mode, timestamp(epoch=Sys.Mtim.Sec) as mtime,</span>
+<span class="go">  timestamp(epoch=Sys.Atim.Sec) as ys.Ctim.Sec) as ctime FROM glob(globs=path + &#39;/**5&#39;)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/08/10/files_files_everything_is_just_a_file";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../20/velociraptor_artifacts.html">Velociraptor Artifacts</a></li>
+            <li class="right"><a href="browsing_around_the_filesystem.html">Browsing around the filesystem.</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+    
+    $('.section a').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true, 
+    });
+});
+</script></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

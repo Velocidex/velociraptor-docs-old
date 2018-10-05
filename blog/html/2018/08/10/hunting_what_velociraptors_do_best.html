@@ -1,0 +1,235 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Hunting - What Velociraptors do best! &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Interrogation - Make the endpoint tell us what it knows!" href="interrogation_make_the_endpoint_tell_us_what_it_knows.html" /><link rel="prev" title="Browsing around the filesystem." href="browsing_around_the_filesystem.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav role="navigation">
+      <ul>
+	<li class="main-nav">
+	  <a href="../../../index.html">Home</a>
+	</li>
+	<li class="main-nav">
+	  <a href="../../../pages/about.html">About</a>
+	</li>
+	<li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li></ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="browsing_around_the_filesystem.html">Browsing around the filesystem.</a></li>
+            <li class="right"><a href="interrogation_make_the_endpoint_tell_us_what_it_knows.html">Interrogation - Make the endpoint tell us what it knows!</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+    <div class="section" id="hunting-what-velociraptors-do-best">
+<h1>Hunting - What Velociraptors do best!</h1>
+<p>A hunt is a feature where a single flow may be run on multiple clients
+at the same time. Typically a hunt looks for a particular indicator of
+compromise across the entire deployment, or maybe collect the same
+files from every deployed agent. By their nature, hunts cause multiple
+flows to run simultaneously and so this creates a large contention of
+shared state.</p>
+<p>Velociraptor has completely redesigned the way that hunts are
+implemented in order to avoid database locking and increase hunt
+processing efficiency.</p>
+<div id="more"> </div><p>Now we hunt like this:</p>
+<img alt="../../../_images/image4.jpg" class="align-center" src="../../../_images/image4.jpg" />
+<div class="section" id="how-are-hunts-scheduled">
+<h2>How are hunts scheduled?</h2>
+<p>GRR allows hunts to be scheduled by a few client properties such as OS
+type, label, users etc. This works because GRR has an extensive data
+model of endpoint properties. However, this requires that the data
+model be refreshed periodically to be kept accurate. For example, to
+run a hunt of all machines with a suspected compromised user account
+we can schedule the run on all machines where the user has logged in,
+but because GRR uses its data model to decide if a machine should be
+issued the hunt, the data model may be out of date and GRR will not
+schedule the hunt on machines which have only recently been logged
+into. For this reason we typically run the Interrogate hunt very
+frequently causing a lot of extra load on the system and clients
+hoping to minimize the time window where the data model is out of date
+with reality.</p>
+<p>Velociraptor’s approach is different - since Velociraptor does not
+really maintain a data model server side, we check the client’s
+information for every hunt, before we even decide if the hunt should
+be scheduled for this client. This is done by issuing a VQL query to
+the client.</p>
+<p>Sometimes we don’t necessarily want the client to know exactly why we
+are scheduling the hunt (e.g. in the compromised user account case we
+don’t want to advertise the exact username we are looking for). In
+these cases we run another VQL query on the server side.</p>
+<p>So hunt selection is managed by two different VQL queries - a client
+side one and a server side on.</p>
+<p>The default client side VQL queries simply collects the usual facts
+like OS version, Username etc, while the server side query filters the
+results with more specific conditions. This approach does not reveal
+to the client the hunt’s condition:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">Client</span> <span class="n">side</span> <span class="n">VQL</span><span class="p">:</span>
+    <span class="k">SELECT</span> <span class="n">OS</span><span class="p">,</span> <span class="n">Architecture</span><span class="p">,</span> <span class="n">Fqdn</span><span class="p">,</span> <span class="n">Platform</span><span class="p">,</span>
+      <span class="n">config</span><span class="p">.</span><span class="n">Client_labels</span> <span class="k">AS</span> <span class="n">Labels</span>
+      <span class="k">FROM</span> <span class="n">info</span><span class="p">()</span>
+
+<span class="n">Server</span> <span class="n">side</span> <span class="n">VQL</span><span class="p">:</span>
+    <span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="k">rows</span>
+      <span class="k">WHERE</span> <span class="n">Fqdn</span> <span class="o">=~</span> <span class="s1">&#39;(?i)myhostname.+&#39;</span> <span class="k">AND</span> <span class="s1">&#39;MY_LABEL&#39;</span> <span class="k">IN</span> <span class="n">Labels</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-hunt-s-life-cycle">
+<h2>The hunt’s life cycle</h2>
+<p>When the hunt is started, the server updates its in-memory list of
+active hunts managed by the Foreman. Clients then poll the foreman for
+new hunts they should participate in. Clients remember the last hunt
+they participated in and so they present this hunt’s timestamp to the
+foreman. If a new hunt is available, the foreman can immediately
+launch the CheckHuntCondition flow on the client.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The clients themselves are actively keeping track of the hunts they
+participated in. This avoids the server having to check the
+client’s DB record.</p>
+</div>
+<p>The CheckHuntCondition flow issues the client side VQL queries and
+then runs the server side query on the results. If the query matches
+(i.e. the hunt should be scheduled for this client), the client’s
+record is written into the hunt’s “pending” queue.</p>
+</div>
+<div class="section" id="the-hunt-manager">
+<h2>The hunt manager</h2>
+<p>Each hunt specifies its own client recruitment rate (i.e. how many
+clients will be started per minute). The hunt manager is a component
+which periodically reads all hunts and schedules flows for these hunts
+if the hunts’ client rate allows for more clients to be scheduled. It
+does this by moving clients from the pending queue to the running
+queue and starting respective flows for them.</p>
+<p>Once each of those flows completes, the record is moved from the
+running queue to the completed queue or the results queue if the flow
+produced any results. We can observe how many clients exist in each
+queue using the GUI.</p>
+<img alt="../../../_images/image2.png" src="../../../_images/image2.png" />
+<p>The flows that hunts launch arn the client. However, when they
+complete, a small record is made in the hunts’s results queue pointing
+to the flow. It is therefore possible to retrieve all results from the
+hunt from all client’s. For example, the GUI allows downloading a zip
+file of all the results and files uploaded:</p>
+<img alt="../../../_images/image7.png" src="../../../_images/image7.png" />
+<p>Since hunts invoke regular flows, and Velociraptor flows are much
+lighter than GRR’s flows, hunts are much cheaper to run in terms of
+resources consumed.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/08/10/hunting_what_velociraptors_do_best";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="browsing_around_the_filesystem.html">Browsing around the filesystem.</a></li>
+            <li class="right"><a href="interrogation_make_the_endpoint_tell_us_what_it_knows.html">Interrogation - Make the endpoint tell us what it knows!</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+    
+    $('.section a').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true, 
+    });
+});
+</script></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

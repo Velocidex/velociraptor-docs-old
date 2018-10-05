@@ -1,0 +1,251 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Browsing around the filesystem. &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Hunting - What Velociraptors do best!" href="hunting_what_velociraptors_do_best.html" /><link rel="prev" title="Files, files everything is just a file!" href="files_files_everything_is_just_a_file.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav role="navigation">
+      <ul>
+	<li class="main-nav">
+	  <a href="../../../index.html">Home</a>
+	</li>
+	<li class="main-nav">
+	  <a href="../../../pages/about.html">About</a>
+	</li>
+	<li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li></ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a></li>
+            <li class="right"><a href="hunting_what_velociraptors_do_best.html">Hunting - What Velociraptors do best!</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+    <div class="section" id="browsing-around-the-filesystem">
+<h1>Browsing around the filesystem.</h1>
+<p>Browsing the client’s filesystem is probably the first thing
+responders do. Both GRR and Velociraptor have a nice VFS abstraction
+that allows users to browse files interactively. However, in order to
+make Velociraptor much faster we made some tradeoffs and improved the
+way that the VFS is stored in the datastore.</p>
+<div id="more"> </div><div class="section" id="the-virtual-file-system">
+<h2>The Virtual File System</h2>
+<p>Like GRR, Velociraptor also maintains a virtual file system view (VFS)
+of the client’s filesystem. GRR’s VFS view is generated by adding a
+row for each file into the database. In order to refresh the view of a
+certain directory, GRR issues a ListDirectory request and updates the
+database by storing each newly discovered file in its own row.</p>
+<p>Velociraptor models the client’s VFS as a per-directory VQL query. In
+order to refresh the view of a certain directory, a new VQL query is
+issued to the client, essentially collecting the glob information for
+that directory in a single VQL response table. The VQL result is then
+stored in a single database row. Therefore Velociraptor stores a
+single row per directory (as compared to GRR’s single row per file
+approach).  This leads to a huge reduction in database rows.</p>
+<p>The tradeoff however, is that the Velociraptor VFS view can only show
+the state of the entire directory listing at a single point in
+time. GRR’s VFS viewer can show old files (which have been removed)
+mixed in with current files because it can merge the output of
+different ListDirectory operations that occurred in different
+times. We decided this feature was not often useful and sometimes
+actually led to confusion since files that are removed from a
+directory are shown together with files currently
+present. Velociraptor therefore shows the VFS directory at the latest
+timestamp the entire directory was fetched.</p>
+</div>
+<div class="section" id="recursive-vfs-refresh">
+<h2>Recursive VFS refresh</h2>
+<p>Users who are more familiar with traditional forensic tools (or GUI
+file managers like Windows Explorer) usually attempt to browse the
+client’s VFS view interactively, searching for files and directories
+relevant to the case. However, since the VFS view is only a cached
+database view of the real client’s file system, we need to go to the
+client to refresh the cache whenever we try to view a directory in the
+VFS which had not yet been fetched from the client.</p>
+<p>Since clients are not always online, some users attempt to just
+recursively refresh the entire VFS view (i.e. recursively list all
+client directories from the root). This is however, an expensive
+operation (This is at least as expensive as running a recursive “find
+/ -ls” command on the commandline). Due to GRR’s extensive data model
+and complex multi-round trip flow model, performing a recursive VFS
+refresh with GRR is unlikely to work in any reasonable time (typically
+the flow will run for a while then hang due to race conditions in the
+frontend).</p>
+<p>On the other hand, Velociraptor issues a single VQL request as a
+recursive directory glob and stores the entire directory content in a
+single VQL response taken at an instance in time. The response is
+streamed back to the server. The server simply splits the response
+table into directory specific tables, and then stores a single VQL
+response table for each directory in the database.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The VQL glob() plugin is guaranteed to generate results in breadth
+first order. This means that it emits information about all files
+in the same directory first, before recursing into sub
+directories. This feature makes it simple to split the result table
+into directory specific sub-tables by simply watching the FullPath
+column and noting when its directory changes.</p>
+</div>
+<img alt="../../../_images/image9.png" src="../../../_images/image9.png" />
+</div>
+<div class="section" id="very-large-vql-queries">
+<h2>Very large VQL queries</h2>
+<p>While we claimed above that Velociraptor simply issues a single VQL
+query and stores its result in a single database row, this was an
+oversimplification. If the VQL query generates too many rows, the
+Velociraptor client splits the response into parts (by default 10000
+rows per part). This allows data to be uploaded immediately to the
+server and processed while the query is still executing on the client.</p>
+<p>Consider the VFSListDirectoryflow was issued with a glob of <cite>/**10</cite>
+(i.e. refresh the entire VFS view from the root directory, recursively
+into a depth of 10 directories). The VQL query executed was:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">FullPath</span> <span class="k">AS</span> <span class="n">_FullPath</span><span class="p">,</span>
+    <span class="n">Name</span><span class="p">,</span> <span class="k">Size</span><span class="p">,</span> <span class="k">Mode</span><span class="p">,</span>
+    <span class="k">timestamp</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">Sys</span><span class="p">.</span><span class="n">Mtim</span><span class="p">.</span><span class="n">Sec</span><span class="p">)</span> <span class="k">AS</span> <span class="n">mtime</span><span class="p">,</span>
+    <span class="k">timestamp</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">Sys</span><span class="p">.</span><span class="n">Atim</span><span class="p">.</span><span class="n">Sec</span><span class="p">)</span> <span class="k">AS</span> <span class="n">atime</span><span class="p">,</span>
+    <span class="k">timestamp</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">Sys</span><span class="p">.</span><span class="n">Ctim</span><span class="p">.</span><span class="n">Sec</span><span class="p">)</span> <span class="k">AS</span> <span class="n">ctime</span>
+<span class="k">FROM</span> <span class="n">glob</span><span class="p">(</span><span class="n">globs</span><span class="o">=</span><span class="s1">&#39;/**10&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The query was issued to a Velociraptor client running on a
+Chromebook. This particular system has approximately 500k files in its
+root filesystem, and so the response consists of 500k rows. However,
+as the query executes, the response is split into multiple parts, each
+being 10k rows, and uploaded (each part is about 3mb in total).</p>
+<img alt="../../../_images/image3.png" src="../../../_images/image3.png" />
+<p>Total execution time for this query is about 4 minutes and consists of
+about 50 parts (around 2.5mb each). It is still an expensive query,
+but depending on the urgency of the case, it may well be warranted.</p>
+<p>It is very convenient to just take a snapshot of the entire
+filesystem, especially when the client is offline. We can issue the
+flow and then when the client comes back online we can review all the
+files.</p>
+</div>
+<div class="section" id="file-uploads">
+<h2>File uploads</h2>
+<p>The VFS view is just a local cache in the data store of what is really
+going on the client. While we can see the file in each directory we
+cant transfer all the file content. Velociraptor represents downloaded
+files differently from just listed files. Files with the floppy disk
+next to them represent files that we have a local cache for. We can
+view the Hexview or just download them.</p>
+<p>You can always initiate a download of a VFS file by selecting the
+Download tab. Unlike GRR, Velociraptor does not keep previous versions
+of files - a re-download will overwrite the previous file.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/08/10/browsing_around_the_filesystem";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a></li>
+            <li class="right"><a href="hunting_what_velociraptors_do_best.html">Hunting - What Velociraptors do best!</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+    
+    $('.section a').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true, 
+    });
+});
+</script></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

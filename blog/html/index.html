@@ -1,0 +1,374 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Home &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="_static/main.css" type="text/css">
+            <link rel="stylesheet" href="_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="_static/favicon.png" /><!-- Load modernizr and JQuery -->
+        <script src="_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="_static/plugins.js"></script>
+        <script src="_static/main.js"></script>
+        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="#">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="_static/velo.png"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav role="navigation">
+      <ul>
+	<li class="main-nav">
+	  <a href="#">Home</a>
+	</li>
+	<li class="main-nav">
+	  <a href="pages/about.html">About</a>
+	</li>
+	<li class="quicklink"><div class="rss">
+        <a href="rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li></ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><div class="timestamp postmeta">
+            <span>September 03, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/03/velociraptor_s_client_communications.html">Velociraptor’s client communications</a></h1>
+<p>In the latest point release of the Velociraptor IR tool (0.2.3) we
+have improved upon GRR’s client communications protocol to deliver a
+fast and efficient, yet extremely responsive client
+communication. This post explains the design of the client
+communication and how it solves the problems with the old GRR’s client
+communication.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/03/velociraptor_s_client_communications.html#more">Read more...</a></p> 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/09/03/velociraptor_s_client_communications.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_s_client_communications">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 20, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a></h1>
+<p>We are super excited to introduce this point release of Velociraptor
+(0.2.2) which introduces the concept of Velociraptor Artifacts for the
+first time. This post is about what artifacts are, what they do and
+how can you use them.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/20/velociraptor_artifacts.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/20/velociraptor_artifacts.html#disqus_thread" data-disqus-identifier="2018/08/20/velociraptor_artifacts">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a></h1>
+<p>GRR’s original design abstracted the data storage to a simple
+key/value store originally based around Bigtable. For open source
+deployments various key value stores were used starting from MongoDB,
+to SQLite and finally MySQL. Although the original idea was to use a
+simple key/value implementation, due to locking requirements the data
+store implementation became very complex.</p>
+<p>As Velociraptor introduced a major redesign of the underlying data
+store architecture, we are now able to relax our demands of the
+datastore and use a true key/value model (since we have no
+requirements for locking and synchronization). The default data store
+is now the FileBasedDataStore which stores all data in flat files.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/files_files_everything_is_just_a_file.html#more">Read more...</a></p> 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/files_files_everything_is_just_a_file.html#disqus_thread" data-disqus-identifier="2018/08/10/files_files_everything_is_just_a_file">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/browsing_around_the_filesystem.html">Browsing around the filesystem.</a></h1>
+<p>Browsing the client’s filesystem is probably the first thing
+responders do. Both GRR and Velociraptor have a nice VFS abstraction
+that allows users to browse files interactively. However, in order to
+make Velociraptor much faster we made some tradeoffs and improved the
+way that the VFS is stored in the datastore.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/browsing_around_the_filesystem.html#more">Read more...</a></p> 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/browsing_around_the_filesystem.html#disqus_thread" data-disqus-identifier="2018/08/10/browsing_around_the_filesystem">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/hunting_what_velociraptors_do_best.html">Hunting - What Velociraptors do best!</a></h1>
+<p>A hunt is a feature where a single flow may be run on multiple clients
+at the same time. Typically a hunt looks for a particular indicator of
+compromise across the entire deployment, or maybe collect the same
+files from every deployed agent. By their nature, hunts cause multiple
+flows to run simultaneously and so this creates a large contention of
+shared state.</p>
+<p>Velociraptor has completely redesigned the way that hunts are
+implemented in order to avoid database locking and increase hunt
+processing efficiency.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/hunting_what_velociraptors_do_best.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/hunting_what_velociraptors_do_best.html#disqus_thread" data-disqus-identifier="2018/08/10/hunting_what_velociraptors_do_best">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html">Interrogation - Make the endpoint tell us what it knows!</a></h1>
+<p>Interrogation is the process of learning general information about the
+endpoint we are monitoring. Each endpoint is automatically
+interrogated when it first joins the Velociraptor server, and the GUI
+shows this general information about each client.</p>
+<p>When writing Velociraptor we decided to keep things very simple - we
+did away with a lot of the information gathered during interrogate in
+favor of a much simpler data model.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html#more">Read more...</a></p> 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html#disqus_thread" data-disqus-identifier="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/design_differences_between_velociraptor_and_grr.html">Design differences between Velociraptor and GRR</a></h1>
+<p>One of the main motivators for developing Velociraptor is the
+opportunity to try different approaches than GRR. Velociraptor has a
+number of fundamental design differences in contrast with the GRR
+design which improve overall performance and scalability.  We tried to
+keep it light weight cutting out the features we think we did not need
+and leaving behind a fast, lean and mean raptor!</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/design_differences_between_velociraptor_and_grr.html#more">Read more...</a></p> 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/design_differences_between_velociraptor_and_grr.html#disqus_thread" data-disqus-identifier="2018/08/10/design_differences_between_velociraptor_and_grr">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/the_velocidex_query_language.html">Velocidex Query Language (VQL)</a></h1>
+<p>Velociraptor is powered by VQL and VQL is the killer feature which
+makes it so powerful. But what exactly is VQL? This section is a quick
+overview of VQL.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/the_velocidex_query_language.html#more">Read more...</a></p> 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/design.html">Design</a></span>
+        </div>
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/the_velocidex_query_language.html#disqus_thread" data-disqus-identifier="2018/08/10/the_velocidex_query_language">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a></h1>
+<div class="section" id="hunting-and-responding-like-a-raptor">
+<h2>Hunting and responding like a raptor!</h2>
+<p>At Velocidex we have been running open source endpoint monitoring
+tools for our clients in order to detect and respond to incidents.
+One of our favorite tools is GRR, developed by Google internally and
+then released as open source. GRR is a very powerful tool, with a
+polished UI and good documentation.</p>
+<p>Unfortunately the open source version released by Google suffers from
+some shortcomings and so we have decided to develop a new project,
+built on the shoulders of giants called Velociraptor.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/08/10/introducing_velociraptor.html#more">Read more...</a></p> 
+ 
+ 
+ 
+</div>
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="http://127.0.0.1/blog/html/2018/08/10/introducing_velociraptor.html#disqus_thread" data-disqus-identifier="2018/08/10/introducing_velociraptor">Leave a comment</a>
+        </div></div><div class="archive_link">
+        <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
+    </div></article><aside class="sidebar"><section><div class="widget">
+    <h1>Recent Posts</h1>
+    <ul><li>
+            <a href="2018/09/03/velociraptor_s_client_communications.html">Velociraptor’s client communications</a>
+        </li><li>
+            <a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a>
+        </li><li>
+            <a href="2018/08/10/files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a>
+        </li><li>
+            <a href="2018/08/10/browsing_around_the_filesystem.html">Browsing around the filesystem.</a>
+        </li><li>
+            <a href="2018/08/10/hunting_what_velociraptors_do_best.html">Hunting - What Velociraptors do best!</a>
+        </li><li>
+            <a href="2018/08/10/interrogation_make_the_endpoint_tell_us_what_it_knows.html">Interrogation - Make the endpoint tell us what it knows!</a>
+        </li><li>
+            <a href="2018/08/10/design_differences_between_velociraptor_and_grr.html">Design differences between Velociraptor and GRR</a>
+        </li><li>
+            <a href="2018/08/10/the_velocidex_query_language.html">Velocidex Query Language (VQL)</a>
+        </li><li>
+            <a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    disqus_count();</script><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

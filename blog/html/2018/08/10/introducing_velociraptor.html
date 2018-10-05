@@ -1,0 +1,356 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Introducing Velociraptor &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="prev" title="Velocidex Query Language (VQL)" href="the_velocidex_query_language.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav role="navigation">
+      <ul>
+	<li class="main-nav">
+	  <a href="../../../index.html">Home</a>
+	</li>
+	<li class="main-nav">
+	  <a href="../../../pages/about.html">About</a>
+	</li>
+	<li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li></ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="the_velocidex_query_language.html">Velocidex Query Language (VQL)</a></li>
+            <li class="right"></li>
+        </ul><div class="timestamp postmeta">
+            <span>August 10, 2018</span>
+        </div>
+    <div class="section" id="introducing-velociraptor">
+<h1>Introducing Velociraptor</h1>
+<div class="section" id="hunting-and-responding-like-a-raptor">
+<h2>Hunting and responding like a raptor!</h2>
+<p>At Velocidex we have been running open source endpoint monitoring
+tools for our clients in order to detect and respond to incidents.
+One of our favorite tools is GRR, developed by Google internally and
+then released as open source. GRR is a very powerful tool, with a
+polished UI and good documentation.</p>
+<p>Unfortunately the open source version released by Google suffers from
+some shortcomings and so we have decided to develop a new project,
+built on the shoulders of giants called Velociraptor.</p>
+<div id="more"> </div><p>These are Velociraptor’s design goals:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Focus on data collection. Velociraptor’s primary use case is to
+collect data and export it to other systems. Velociraptor does no
+analysis itself and therefore has no need for a complex data model.</li>
+<li>Flexibility - Velociraptor can adapt easily to new requirements
+without needing to redeploy either clients or servers. Using VQL
+(Velocidex Query Language) provides flexibility in the type and
+number of queries that are used to rapidly adapt to changing
+requirements. VQL allows us to collect just the information needed
+and no more in an adaptive way.</li>
+<li>Remove abstractions. Velociraptor aims to be as simple to
+understand as possible. The default data store simply stores files
+in the file system which may be easily inspected by the user. No
+special tooling is required to script or manage Velociraptor.
+Reduce demand on the data store. Rather than increase the data
+store requirements, we want to simplify the design to the point
+that requirements on the data store are so low, one can run a
+medium to large sized deployment with very few resources (down to
+perhaps a single server machine). In fact the default data store
+does not even use a database, but simply uses flat files.</li>
+<li>Simplify everything!  Velociraptor aims to be very simple to run
+and administer. We remove a lot of the GRR functionality that we
+dont find we use often. Velociraptor ships as a single, statically
+linked executable which can perform all actions necessary for
+deployers.</li>
+</ul>
+</div></blockquote>
+<p>In short we really wanted something like this:</p>
+<img alt="../../../_images/image5.png" class="align-center" src="../../../_images/image5.png" />
+</div>
+<div class="section" id="quick-start">
+<h2>Quick Start</h2>
+<p>In this section we go through a typical deployment scenario of
+Velociraptor.</p>
+<div class="section" id="download-the-binary">
+<h3>Download the binary</h3>
+<p>Velociraptor ships as a single statically compiled binary. It has no
+external dependencies and does not require installing as a
+package. Simply download the binary from the release page for the OS
+you will be deploying on. The same binary is used for the client and
+the server.</p>
+</div>
+<div class="section" id="generate-a-configuration-file">
+<h3>Generate a configuration file</h3>
+<p>Velociraptor needs a configuration file to start serving requests. You
+can generate a new configuration file using the velociraptor config
+generate command. Note that this prints a new configuration into
+stdout so you might want to redirect it into a new file (NOTE: The
+file contains key material so ensure it has appropriate
+permissions). Below we highlight the parameters you will probably want
+to change:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">$ velociraptor config generate | tee /etc/velociraptor.config.yaml</span>
+<span class="l l-Scalar l-Scalar-Plain">Client</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">server_urls</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">http://localhost:8000/</span>
+  <span class="l l-Scalar l-Scalar-Plain">writeback_linux</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/velociraptor.writeback.yaml</span>
+  <span class="l l-Scalar l-Scalar-Plain">writeback_windows</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/Program Files/Velociraptor/velociraptor.writeback.yaml</span>
+<span class="l l-Scalar l-Scalar-Plain">Datastore</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">filestore_directory</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/tmp/velociraptor</span>
+  <span class="l l-Scalar l-Scalar-Plain">implementation</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">FileBaseDataStore</span>
+  <span class="l l-Scalar l-Scalar-Plain">location</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/tmp/velociraptor</span>
+<span class="l l-Scalar l-Scalar-Plain">Frontend</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">8000</span>
+<span class="l l-Scalar l-Scalar-Plain">GUI</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">8889</span>
+</pre></div>
+</div>
+<p>The configuration file contains default values for most settings and
+new keys for cryptographic material so it is expected that you edit
+the file to customize it for your local deployment. The config file is
+divided into sections. Here is a quick overview:</p>
+<ul class="simple">
+<li>The Client section is used to configure clients.<ul>
+<li>Server_urls is a list of URLs the client will attempt to connect
+to. If a connection to one fails it will try the others
+repeatedly. It is wise to include several URLs here or at least a
+DNS name so the server may be easily t just use a single IP
+address here). This will usually be different from Frontend bind
+address in a proper deployment but for testing it may be the same.</li>
+<li>Writeback: The writeback path is where clients will write their
+local persistent state (for example, their private keys). You can
+specify a different location for windows, osx and linux clients.</li>
+</ul>
+</li>
+<li>The Datastore section specifies where to store the data for the
+server. Be sure to update the location to a more permanent
+path. The filestore_location is a path that receives uploaded
+files which may be large.</li>
+<li>The Frontend is the server component which receives poll messages
+from clients. It should be exposed to the internet on a public
+interface so clients may reach it. This section also contains the
+server’s certificate as signed by the CA (you can rotate server keys
+using the velociraptor config rotate_keys command.</li>
+<li>The GUI is the Velociraptor web admin UI. Do not expose this on a
+public interface without enabling TLS! We recommend to only enable
+it on the loopback interface and use SSH tunneling to access it over
+HTTP.server</li>
+</ul>
+</div>
+<div class="section" id="client-configuration">
+<h3>Client configuration</h3>
+<p>Clients receive a subset of the complete configuration which enables
+them to connect to the server. You can extract the client’s
+configuration using the <cite>velociraptor config client</cite> command.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">$ velociraptor --config /etc/velociraptor.config.yaml config client</span>
+<span class="l l-Scalar l-Scalar-Plain">Client</span><span class="p p-Indicator">:</span>
+ <span class="l l-Scalar l-Scalar-Plain">ca_certificate</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">-----BEGIN CERTIFICATE-----</span>
+   <span class="no">MIIDIDCCAgigAwIBAgIQEPaF6CPMLOlixEmpgHhvsTANBgkqhkiG9w0BAQsFADAa</span>
+   <span class="no">abIwLMojhIxVFXZOZ0p2ZhYkeKJwNGbiA9rBJR2iKxeJOa0B</span>
+   <span class="no">-----END CERTIFICATE-----</span>
+
+ <span class="l l-Scalar l-Scalar-Plain">nonce</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">UwtTRfezXIU=</span>
+  <span class="l l-Scalar l-Scalar-Plain">server_urls</span><span class="p p-Indicator">:</span>
+ <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">http://localhost:8000/</span>
+  <span class="l l-Scalar l-Scalar-Plain">writeback_linux</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/velociraptor.writeback.yaml</span>
+ <span class=" -Error"> </span><span class="l l-Scalar l-Scalar-Plain">writeback_windows</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/Program Files/Velociraptor/velociraptor.writeback.yaml</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-server">
+<h3>Running the server</h3>
+<p>Start the server using the frontend command:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config velociraptor.config.yaml frontend
+
+INFO:2018/08/08 <span class="m">15</span>:39:09 Launched gRPC API server on <span class="m">127</span>.0.0.1:8888
+INFO:2018/08/08 <span class="m">15</span>:39:09 GUI is ready to handle requests at <span class="m">127</span>.0.0.1:8889
+INFO:2018/08/08 <span class="m">15</span>:39:09 Frontend is ready to handle client requests at <span class="m">127</span>.0.0.1:8000
+</pre></div>
+</div>
+<p>You can now verify the server is working by connecting to the GUI with
+a web browser:</p>
+<img alt="../../../_images/image10.png" src="../../../_images/image10.png" />
+</div>
+<div class="section" id="running-the-client">
+<h3>Running the client</h3>
+<p>The client is run using the s configuration</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config /etc/velociraptor.client.config.yaml client
+velociraptor: error: Unable to load writeback file: open /etc/velociraptor.writeback.yaml: no such file or directory
+Genering new private key....
+Wrote new config file  /etc/velocirpator.writeback.yaml
+INFO:2018/08/08 <span class="m">16</span>:02:22 Starting Crypto <span class="k">for</span> client C.039f18494e6dae95
+INFO:2018/08/08 <span class="m">16</span>:02:22 Starting HTTPCommunicator: <span class="o">[</span>http://localhost:8000/<span class="o">]</span>
+INFO:2018/08/08 <span class="m">16</span>:02:22 Sending unsolicited ping.
+INFO:2018/08/08 <span class="m">16</span>:02:22 Updated server serial number in config file /etc/velociraptor.writeback.yaml to <span class="m">1</span>
+INFO:2018/08/08 <span class="m">16</span>:02:22 Received PEM <span class="k">for</span> VelociraptorServer from http://localhost:8000/
+INFO:2018/08/08 <span class="m">16</span>:02:22 Received response with status: <span class="m">406</span> Not Acceptable
+INFO:2018/08/08 <span class="m">16</span>:02:22 Enrolling
+INFO:2018/08/08 <span class="m">16</span>:02:23 Received response with status: <span class="m">406</span> Not Acceptable
+INFO:2018/08/08 <span class="m">16</span>:02:25 Sending unsolicited ping.
+INFO:2018/08/08 <span class="m">16</span>:02:25 Received response with status: <span class="m">200</span> OK
+INFO:2018/08/08 <span class="m">16</span>:02:25 Checking foreman
+INFO:2018/08/08 <span class="m">16</span>:02:26 Received response with status: <span class="m">200</span> OK
+INFO:2018/08/08 <span class="m">16</span>:02:27 Sending unsolicited ping.
+INFO:2018/08/08 <span class="m">16</span>:02:27 Received response with status: <span class="m">200</span> OK
+</pre></div>
+</div>
+<p>We can see that when a new client starts for the first time it goes
+through a number of steps:</p>
+<ol class="arabic simple">
+<li>The writeback file is created with a new client private key (and a
+client ID).</li>
+<li>The client communicates with the server but receives a 406
+status. This initiates the enrolment flow.</li>
+<li>The server schedules an Interrogate flow on the client, which
+issues a number of VQL queries.</li>
+<li>We can now search for the client using the GUI search box.</li>
+</ol>
+<img alt="../../../_images/image8.png" src="../../../_images/image8.png" />
+</div>
+<div class="section" id="id1">
+<h3>Introducing Velociraptor</h3>
+<p>This post introduces Velociraptor - a new end point monitoring and IR
+tool built upon GRR’s groundwork and experience.  To be clear, we
+reused some of GRR’s code and some design elements, but Velociraptor
+is a new project and is largely a rewrite of GRR’s codebase. Like GRR,
+Velociraptor is released under an open source license and is a
+community project hosted on <a class="reference external" href="https://gitlab.com/velocidex/velociraptor">https://gitlab.com/velocidex/velociraptor</a>.</p>
+<p>It is still very early days and we would love to receive feedback and
+suggestions. This is the first technology preview release and we hope
+to make a more stable and comprehensive release in the coming
+months. As Velociraptor becomes more battle tested we hope the
+codebase will stabilize.</p>
+<p>The near term roadmap is:</p>
+<ul class="simple">
+<li>Improve support for more operating systems. Especially Windows:</li>
+<li>Registry based VQL plugins.</li>
+<li>NTFS support for raw disk access.</li>
+<li>Memory scanning and rudimentary Memory analysis</li>
+<li>Design a more efficient client/server communication mechanism - long
+polling is problematic since clients only poll infrequently
+(e.g. every 10 minutes). We want to be able to control all clients
+quickly.</li>
+<li>Develop a library of VQL expressions which may be reusable. This
+should be similar to GRR’s idea of Artifacts but be more geared
+towards VQL.</li>
+</ul>
+<p>Please play with it and send feedback to <a class="reference external" href="mailto:velociraptor-discuss&#37;&#52;&#48;googlegroups&#46;com">velociraptor-discuss<span>&#64;</span>googlegroups<span>&#46;</span>com</a></p>
+<img alt="../../../_images/image11.png" class="align-center" src="../../../_images/image11.png" />
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/08/10/introducing_velociraptor";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="the_velocidex_query_language.html">Velocidex Query Language (VQL)</a></li>
+            <li class="right"></li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+    
+    $('.section a').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true, 
+    });
+});
+</script></section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

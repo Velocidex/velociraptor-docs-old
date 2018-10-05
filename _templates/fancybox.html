@@ -1,0 +1,16 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+    
+    $('.section a').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true, 
+    });
+});
+</script>

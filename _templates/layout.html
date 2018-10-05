@@ -1,0 +1,36 @@
+
+{%- extends "dark/layout.html" -%}
+
+
+{%- block header -%}
+
+<div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="{{ pathto(pages[0][0]) }}">{{ shorttitle|e }}</a></h1>
+      <h4>{{ tagline|e }}</h4>
+    </div>
+    <div class="logo">
+      <img src="{{ pathto('_static/' + logo, 1) }}"
+	   alt="Log" class="logo"/>
+    
+    </div>
+    <nav {%- if pages|count > 2 %} class="big_nav"{%- endif %} role="navigation">
+      <ul>
+	{% for page in pages -%}
+	<li class="main-nav">
+	  <a href="{{ pathto(page[0]) }}">{{ page[1]|e }}</a>
+	</li>
+	{% endfor -%}
+	{%- block quicklinks -%}
+	{%- if rss_in_page_nav -%}
+	<li class="quicklink">{{ rss_link() }}</li>
+	{%- endif -%}
+	{%- endblock -%}
+      </ul>
+    </nav>
+  </header>
+</div>
+
+{% endblock -%}
+
