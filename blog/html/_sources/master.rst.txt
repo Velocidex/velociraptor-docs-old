@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2018/11/09/event_queries_and_endpoint_monitoring
    2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara
    2018/09/30/velorciraptor_s_filesystem_s_accessors
    2018/09/03/velociraptor_walk_through_and_demo

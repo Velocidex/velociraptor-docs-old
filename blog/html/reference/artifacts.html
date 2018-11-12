@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
         <meta name="viewport" content="width=device-width">
-        <title>Linux.Applications.Chrome.Extensions &mdash; Velociraptor</title>
+        <title>Generic.Client.Stats &mdash; Velociraptor</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -94,9 +94,32 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article">
     <p>This page displays information about the Velociraptor built in
-artifacts. There are 34 artifacts in total. Use the navigation menu
+artifacts. There are 38 artifacts in total. Use the navigation menu
 to the right to quickly skip to the right artifact
 definition. Definitions may be expanded to view the VQL source.</p>
+<div class="section" id="generic-client-stats">
+<h1>Generic.Client.Stats</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Generic_Client_StatsDetails" role="button"
+   aria-expanded="false" aria-controls="Generic_Client_StatsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> An Event artifact which generates client’s CPU and memory statistics.</p>
+<div class="collapse" id="Generic_Client_StatsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Generic.Client.Stats</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">An Event artifact which generates client&#39;s CPU and memory statistics.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Frequency</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Return stats every this many seconds.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&quot;10&quot;</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT UnixNano FROM clock(period=atoi(string=Frequency))</span>
+</pre></div>
+</div>
+</div></div></div>
 <div class="section" id="linux-applications-chrome-extensions">
 <h1>Linux.Applications.Chrome.Extensions</h1>
 <p><a data-toggle="collapse" class='details-opener'
@@ -937,9 +960,9 @@ cores spent in different parts of the system.</p>
             <span class="no">SELECT FullPath from glob(globs=split(string=wtmpGlobs, sep=&quot;,&quot;))</span>
           <span class="no">},</span>
           <span class="no">query={</span>
-            <span class="no">SELECT ut_type, ut_id, ut_host as Host,</span>
-                   <span class="no">ut_user as User,</span>
-                  <span class="no">timestamp(epoch=ut_tv.tv_sec) as login_time</span>
+            <span class="no">SELECT ut_type, ut_id, ut_host.AsString as Host,</span>
+                   <span class="no">ut_user.AsString as User,</span>
+                   <span class="no">timestamp(epoch=ut_tv.tv_sec.AsInteger) as login_time</span>
             <span class="no">FROM binary_parse(</span>
                    <span class="no">file=FullPath,</span>
                    <span class="no">profile=wtmpProfile,</span>
@@ -1196,6 +1219,92 @@ description from there.</p>
 </pre></div>
 </div>
 </div></div></div>
+<div class="section" id="windows-events-processcreation">
+<h1>Windows.Events.ProcessCreation</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Events_ProcessCreationDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Events_ProcessCreationDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Collect all process creation events.</p>
+<div class="collapse" id="Windows_Events_ProcessCreationDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.ProcessCreation</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Collect all process creation events.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wmiQuery</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE</span>
+      <span class="l l-Scalar l-Scalar-Plain">TargetInstance ISA &#39;Win32_Process&#39;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">eventQuery</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * FROM Win32_ProcessStartTrace</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// Convert the timestamp from WinFileTime to Epoch.</span>
+        <span class="no">SELECT timestamp(epoch=atoi(string=Parse.TIME_CREATED) / 10000000 - 11644473600 ) as Timestamp,</span>
+               <span class="no">Parse.ParentProcessID as PPID,</span>
+               <span class="no">Parse.ProcessID as PID,</span>
+               <span class="no">Parse.ProcessName as Name, {</span>
+                 <span class="no">SELECT CommandLine</span>
+                 <span class="no">FROM wmi(</span>
+                   <span class="no">query=&quot;SELECT * FROM Win32_Process WHERE ProcessID = &quot; +</span>
+                    <span class="no">format(format=&quot;%v&quot;, args=Parse.ProcessID),</span>
+                   <span class="no">namespace=&quot;ROOT/CIMV2&quot;)</span>
+               <span class="no">} AS CommandLine</span>
+        <span class="no">FROM wmi_events(</span>
+           <span class="no">query=eventQuery,</span>
+           <span class="no">wait=5000000,   // Do not time out.</span>
+           <span class="no">namespace=&quot;ROOT/CIMV2&quot;)</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-events-servicecreation">
+<h1>Windows.Events.ServiceCreation</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Events_ServiceCreationDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Events_ServiceCreationDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Monitor for creation of new services.</p>
+<p>New services are typically created by installing new software or
+kernel drivers. Attackers will sometimes install a new service to
+either insert a malicious kernel driver or as a persistence
+mechanism.</p>
+<p>This event monitor extracts the service creation events from the
+event log and records them on the server.</p>
+<div class="collapse" id="Windows_Events_ServiceCreationDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.ServiceCreation</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Monitor for creation of new services.</span>
+
+  <span class="no">New services are typically created by installing new software or</span>
+  <span class="no">kernel drivers. Attackers will sometimes install a new service to</span>
+  <span class="no">either insert a malicious kernel driver or as a persistence</span>
+  <span class="no">mechanism.</span>
+
+  <span class="no">This event monitor extracts the service creation events from the</span>
+  <span class="no">event log and records them on the server.</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">systemLogFile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;-</span>
+      <span class="no">C:/Windows/System32/Winevt/Logs/System.evtx</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT System.TimeCreated.SystemTime as Timestamp,</span>
+               <span class="no">System.EventID.Value as EventID,</span>
+               <span class="no">EventData.ImagePath as ImagePath,</span>
+               <span class="no">EventData.ServiceName as ServiceName,</span>
+               <span class="no">EventData.ServiceType as Type,</span>
+               <span class="no">EventData as _EventData</span>
+        <span class="no">FROM watch_evtx(filename=systemLogFile) WHERE EventID = &#39;7045&#39;</span>
+</pre></div>
+</div>
+</div></div></div>
 <div class="section" id="windows-network-arpcache">
 <h1>Windows.Network.ArpCache</h1>
 <p><a data-toggle="collapse" class='details-opener'
@@ -1320,7 +1429,7 @@ description from there.</p>
             <span class="no">SELECT Pid AS PortPid, Laddr.Port AS Port,</span>
                    <span class="no">TypeString as Protocol, FamilyString as Family,</span>
                    <span class="no">Laddr.IP as Address</span>
-            <span class="no">FROM netstat()</span>
+            <span class="no">FROM netstat() where Status = &#39;LISTEN&#39;</span>
           <span class="no">},</span>
           <span class="no">query={</span>
             <span class="no">SELECT Pid, Name, Port, Protocol, Family, Address</span>
@@ -1386,6 +1495,64 @@ services, scheduled_tasks, startup_items and more.</p>
             <span class="no">SELECT Name, Command AS Path, &quot;StartupItems&quot; as Source</span>
             <span class="no">FROM Artifact.Windows.Sys.StartupItems()</span>
           <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-persistence-permanentwmievents">
+<h1>Windows.Persistence.PermanentWMIEvents</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Persistence_PermanentWMIEventsDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Persistence_PermanentWMIEventsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Malware often registers a permanent event listener within WMI. When
+the event fires, the WMI system itself will invoke the consumer to
+handle the event. The malware does not need to be running at the
+time the event fires. Malware can use this mechanism to re-infect
+the machine for example.</p>
+<div class="collapse" id="Windows_Persistence_PermanentWMIEventsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Persistence.PermanentWMIEvents</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">Malware often registers a permanent event listener within WMI. When</span>
+   <span class="no">the event fires, the WMI system itself will invoke the consumer to</span>
+   <span class="no">handle the event. The malware does not need to be running at the</span>
+   <span class="no">time the event fires. Malware can use this mechanism to re-infect</span>
+   <span class="no">the machine for example.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">namespace</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">root/subscription</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+ <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">SELECT OS from info() where OS = &quot;windows&quot;</span>
+   <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+   <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+     <span class="no">LET FilterToConsumerBinding = SELECT parse_string_with_regex(</span>
+        <span class="no">string=Consumer,</span>
+        <span class="no">regex=[&#39;((?P&lt;namespace&gt;^[^:]+):)?(?P&lt;Type&gt;.+?)\\.Name=&quot;(?P&lt;Name&gt;.+)&quot;&#39;]) as Consumer,</span>
+          <span class="no">parse_string_with_regex(</span>
+        <span class="no">string=Filter,</span>
+        <span class="no">regex=[&#39;((?P&lt;namespace&gt;^[^:]+):)?(?P&lt;Type&gt;.+?)\\.Name=&quot;(?P&lt;Name&gt;.+)&quot;&#39;]) as Filter</span>
+     <span class="no">FROM wmi(</span>
+         <span class="no">query=&quot;SELECT * FROM __FilterToConsumerBinding&quot;,</span>
+         <span class="no">namespace=namespace)</span>
+   <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+     <span class="no">SELECT {</span>
+       <span class="no">SELECT * FROM wmi(</span>
+          <span class="no">query=&quot;SELECT * FROM &quot; + Consumer.Type,</span>
+          <span class="no">namespace=if(condition=Consumer.namespace,</span>
+              <span class="no">then=Consumer.namespace,</span>
+              <span class="no">else=namespace)) WHERE Name = Consumer.Name</span>
+     <span class="no">} AS ConsumerDetails,</span>
+     <span class="no">{</span>
+       <span class="no">SELECT * FROM wmi(</span>
+          <span class="no">query=&quot;SELECT * FROM &quot; + Filter.Type,</span>
+          <span class="no">namespace=if(condition=Filter.namespace,</span>
+              <span class="no">then=Filter.namespace,</span>
+              <span class="no">else=namespace)) WHERE Name = Filter.Name</span>
+     <span class="no">} AS FilterDetails</span>
+     <span class="no">FROM FilterToConsumerBinding</span>
 </pre></div>
 </div>
 </div></div></div>
@@ -1699,7 +1866,7 @@ nice format.</p>
            <span class="no">&quot;ShareDisposition&quot;: [1, [&quot;char&quot;]],</span>
            <span class="no">&quot;Flags&quot;: [2, [&quot;uint16&quot;]],</span>
            <span class="no">&quot;Start&quot;: [4, [&quot;int64&quot;]],</span>
-           <span class="no">&quot;Length&quot;: [12, [&quot;int32&quot;]]</span>
+           <span class="no">&quot;Length&quot;: [12, [&quot;uint32&quot;]]</span>
          <span class="no">}]</span>
       <span class="no">}</span>
 
@@ -1708,7 +1875,7 @@ nice format.</p>
       <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
     <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
-        <span class="no">SELECT Type,</span>
+        <span class="no">SELECT Type.AsInteger as Type,</span>
                <span class="no">format(format=&quot;%#0x&quot;, args=Start.AsInteger) as Start,</span>
                <span class="no">format(format=&quot;%#0x&quot;, args=Length.AsInteger) as Length</span>
         <span class="no">FROM foreach(</span>
@@ -1717,8 +1884,8 @@ nice format.</p>
               <span class="no">FROM stat(filename=physicalMemoryKey, accessor=&#39;reg&#39;)</span>
           <span class="no">},</span>
           <span class="no">query={</span>
-            <span class="no">SELECT * FROM binary_parse(</span>
-              <span class="no">string=Data,</span>
+            <span class="no">SELECT Type, Start, Length, Data FROM binary_parse(</span>
+              <span class="no">string=Data.value,</span>
               <span class="no">profile=Profile,</span>
               <span class="no">target=&quot;CM_RESOURCE_LIST&quot;,</span>
               <span class="no">start=&quot;List.PartialResourceList.PartialDescriptors&quot;)</span>
@@ -1878,7 +2045,7 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
                  <span class="no">sid=basename(path=Key.FullPath)</span>
                <span class="no">) as Name,</span>
                <span class="no">Key.FullPath as Description,</span>
-               <span class="no">ProfileImagePath.value as Directory,</span>
+               <span class="no">ProfileImagePath as Directory,</span>
                <span class="no">basename(path=Key.FullPath) as UUID, &quot;roaming&quot; as Type</span>
            <span class="no">FROM read_reg_key(globs=remoteRegKey, accessor=&quot;reg&quot;)</span>
       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
@@ -1912,7 +2079,8 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 
   <div class='toc sidebar'>
     <ul>
-<li><a class="reference internal" href="#">Linux.Applications.Chrome.Extensions</a></li>
+<li><a class="reference internal" href="#">Generic.Client.Stats</a></li>
+<li><a class="reference internal" href="#linux-applications-chrome-extensions">Linux.Applications.Chrome.Extensions</a></li>
 <li><a class="reference internal" href="#linux-applications-chrome-extensions-upload">Linux.Applications.Chrome.Extensions.Upload</a></li>
 <li><a class="reference internal" href="#linux-applications-docker-info">Linux.Applications.Docker.Info</a></li>
 <li><a class="reference internal" href="#linux-applications-docker-version">Linux.Applications.Docker.Version</a></li>
@@ -1931,11 +2099,14 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 <li><a class="reference internal" href="#network-externalipaddress">Network.ExternalIpAddress</a></li>
 <li><a class="reference internal" href="#windows-applications-chocolateypackages">Windows.Applications.ChocolateyPackages</a></li>
 <li><a class="reference internal" href="#windows-applications-chrome-extensions">Windows.Applications.Chrome.Extensions</a></li>
+<li><a class="reference internal" href="#windows-events-processcreation">Windows.Events.ProcessCreation</a></li>
+<li><a class="reference internal" href="#windows-events-servicecreation">Windows.Events.ServiceCreation</a></li>
 <li><a class="reference internal" href="#windows-network-arpcache">Windows.Network.ArpCache</a></li>
 <li><a class="reference internal" href="#windows-network-interfaceaddresses">Windows.Network.InterfaceAddresses</a></li>
 <li><a class="reference internal" href="#windows-network-listeningports">Windows.Network.ListeningPorts</a></li>
 <li><a class="reference internal" href="#windows-network-netstat">Windows.Network.Netstat</a></li>
 <li><a class="reference internal" href="#windows-packs-autoexec">Windows.Packs.Autoexec</a></li>
+<li><a class="reference internal" href="#windows-persistence-permanentwmievents">Windows.Persistence.PermanentWMIEvents</a></li>
 <li><a class="reference internal" href="#windows-persistence-powershellregistry">Windows.Persistence.PowershellRegistry</a></li>
 <li><a class="reference internal" href="#windows-sys-appcompatshims">Windows.Sys.AppcompatShims</a></li>
 <li><a class="reference internal" href="#windows-sys-certificateauthorities">Windows.Sys.CertificateAuthorities</a></li>

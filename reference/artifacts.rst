@@ -1,7 +1,44 @@
 This page displays information about the Velociraptor built in
-artifacts. There are 34 artifacts in total. Use the navigation menu
+artifacts. There are 38 artifacts in total. Use the navigation menu
 to the right to quickly skip to the right artifact
 definition. Definitions may be expanded to view the VQL source.
+
+.. |Generic_Client_StatsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Generic_Client_StatsDetails" role="button"
+     aria-expanded="false" aria-controls="Generic_Client_StatsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Generic.Client.Stats
+********************
+|Generic_Client_StatsDetails| An Event artifact which generates client's CPU and memory statistics.
+
+.. raw:: html
+
+  <div class="collapse" id="Generic_Client_StatsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Generic.Client.Stats
+   description: An Event artifact which generates client's CPU and memory statistics.
+   parameters:
+     - name: Frequency
+       description: Return stats every this many seconds.
+       default: "10"
+   
+   sources:
+     - queries:
+         - |
+           SELECT UnixNano FROM clock(period=atoi(string=Frequency))
+
+.. raw:: html
+
+   </div></div>
+
 
 .. |Linux_Applications_Chrome_ExtensionsDetails| raw:: html
 
@@ -1062,9 +1099,9 @@ Linux.Sys.LastUserLogin
                SELECT FullPath from glob(globs=split(string=wtmpGlobs, sep=","))
              },
              query={
-               SELECT ut_type, ut_id, ut_host as Host,
-                      ut_user as User,
-                     timestamp(epoch=ut_tv.tv_sec) as login_time
+               SELECT ut_type, ut_id, ut_host.AsString as Host,
+                      ut_user.AsString as User,
+                      timestamp(epoch=ut_tv.tv_sec.AsInteger) as login_time
                FROM binary_parse(
                       file=FullPath,
                       profile=wtmpProfile,
@@ -1383,6 +1420,124 @@ description from there.
    </div></div>
 
 
+.. |Windows_Events_ProcessCreationDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Events_ProcessCreationDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Events_ProcessCreationDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Events.ProcessCreation
+******************************
+|Windows_Events_ProcessCreationDetails| Collect all process creation events.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Events_ProcessCreationDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Events.ProcessCreation
+   description: |
+     Collect all process creation events.
+   parameters:
+     - name: wmiQuery
+       default: SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE
+         TargetInstance ISA 'Win32_Process'
+     - name: eventQuery
+       default: SELECT * FROM Win32_ProcessStartTrace
+   
+   sources:
+     - precondition:
+         SELECT OS From info() where OS = 'windows'
+       queries:
+         - |
+           // Convert the timestamp from WinFileTime to Epoch.
+           SELECT timestamp(epoch=atoi(string=Parse.TIME_CREATED) / 10000000 - 11644473600 ) as Timestamp,
+                  Parse.ParentProcessID as PPID,
+                  Parse.ProcessID as PID,
+                  Parse.ProcessName as Name, {
+                    SELECT CommandLine
+                    FROM wmi(
+                      query="SELECT * FROM Win32_Process WHERE ProcessID = " +
+                       format(format="%v", args=Parse.ProcessID),
+                      namespace="ROOT/CIMV2")
+                  } AS CommandLine
+           FROM wmi_events(
+              query=eventQuery,
+              wait=5000000,   // Do not time out.
+              namespace="ROOT/CIMV2")
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Events_ServiceCreationDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Events_ServiceCreationDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Events_ServiceCreationDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Events.ServiceCreation
+******************************
+|Windows_Events_ServiceCreationDetails| Monitor for creation of new services.
+
+New services are typically created by installing new software or
+kernel drivers. Attackers will sometimes install a new service to
+either insert a malicious kernel driver or as a persistence
+mechanism.
+
+This event monitor extracts the service creation events from the
+event log and records them on the server.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Events_ServiceCreationDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Events.ServiceCreation
+   description: |
+     Monitor for creation of new services.
+   
+     New services are typically created by installing new software or
+     kernel drivers. Attackers will sometimes install a new service to
+     either insert a malicious kernel driver or as a persistence
+     mechanism.
+   
+     This event monitor extracts the service creation events from the
+     event log and records them on the server.
+   parameters:
+     - name: systemLogFile
+       default: >-
+         C:/Windows/System32/Winevt/Logs/System.evtx
+   
+   sources:
+     - queries:
+         - |
+           SELECT System.TimeCreated.SystemTime as Timestamp,
+                  System.EventID.Value as EventID,
+                  EventData.ImagePath as ImagePath,
+                  EventData.ServiceName as ServiceName,
+                  EventData.ServiceType as Type,
+                  EventData as _EventData
+           FROM watch_evtx(filename=systemLogFile) WHERE EventID = '7045'
+
+.. raw:: html
+
+   </div></div>
+
+
 .. |Windows_Network_ArpCacheDetails| raw:: html
 
   <a data-toggle="collapse" class='details-opener'
@@ -1546,7 +1701,7 @@ Windows.Network.ListeningPorts
                SELECT Pid AS PortPid, Laddr.Port AS Port,
                       TypeString as Protocol, FamilyString as Family,
                       Laddr.IP as Address
-               FROM netstat()
+               FROM netstat() where Status = 'LISTEN'
              },
              query={
                SELECT Pid, Name, Port, Protocol, Family, Address
@@ -1642,6 +1797,79 @@ services, scheduled_tasks, startup_items and more.
                SELECT Name, Command AS Path, "StartupItems" as Source
                FROM Artifact.Windows.Sys.StartupItems()
              })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Persistence_PermanentWMIEventsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Persistence_PermanentWMIEventsDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Persistence_PermanentWMIEventsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Persistence.PermanentWMIEvents
+**************************************
+|Windows_Persistence_PermanentWMIEventsDetails| Malware often registers a permanent event listener within WMI. When
+the event fires, the WMI system itself will invoke the consumer to
+handle the event. The malware does not need to be running at the
+time the event fires. Malware can use this mechanism to re-infect
+the machine for example.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Persistence_PermanentWMIEventsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Persistence.PermanentWMIEvents
+   description: |
+      Malware often registers a permanent event listener within WMI. When
+      the event fires, the WMI system itself will invoke the consumer to
+      handle the event. The malware does not need to be running at the
+      time the event fires. Malware can use this mechanism to re-infect
+      the machine for example.
+   
+   parameters:
+     - name: namespace
+       default: root/subscription
+   
+   sources:
+    - precondition:
+        SELECT OS from info() where OS = "windows"
+      queries:
+      - |
+        LET FilterToConsumerBinding = SELECT parse_string_with_regex(
+           string=Consumer,
+           regex=['((?P<namespace>^[^:]+):)?(?P<Type>.+?)\\.Name="(?P<Name>.+)"']) as Consumer,
+             parse_string_with_regex(
+           string=Filter,
+           regex=['((?P<namespace>^[^:]+):)?(?P<Type>.+?)\\.Name="(?P<Name>.+)"']) as Filter
+        FROM wmi(
+            query="SELECT * FROM __FilterToConsumerBinding",
+            namespace=namespace)
+      - |
+        SELECT {
+          SELECT * FROM wmi(
+             query="SELECT * FROM " + Consumer.Type,
+             namespace=if(condition=Consumer.namespace,
+                 then=Consumer.namespace,
+                 else=namespace)) WHERE Name = Consumer.Name
+        } AS ConsumerDetails,
+        {
+          SELECT * FROM wmi(
+             query="SELECT * FROM " + Filter.Type,
+             namespace=if(condition=Filter.namespace,
+                 then=Filter.namespace,
+                 else=namespace)) WHERE Name = Filter.Name
+        } AS FilterDetails
+        FROM FilterToConsumerBinding
 
 .. raw:: html
 
@@ -2056,7 +2284,7 @@ Windows.Sys.PhysicalMemoryRanges
               "ShareDisposition": [1, ["char"]],
               "Flags": [2, ["uint16"]],
               "Start": [4, ["int64"]],
-              "Length": [12, ["int32"]]
+              "Length": [12, ["uint32"]]
             }]
          }
    
@@ -2065,7 +2293,7 @@ Windows.Sys.PhysicalMemoryRanges
          SELECT OS From info() where OS = 'windows'
        queries:
          - |
-           SELECT Type,
+           SELECT Type.AsInteger as Type,
                   format(format="%#0x", args=Start.AsInteger) as Start,
                   format(format="%#0x", args=Length.AsInteger) as Length
            FROM foreach(
@@ -2074,8 +2302,8 @@ Windows.Sys.PhysicalMemoryRanges
                  FROM stat(filename=physicalMemoryKey, accessor='reg')
              },
              query={
-               SELECT * FROM binary_parse(
-                 string=Data,
+               SELECT Type, Start, Length, Data FROM binary_parse(
+                 string=Data.value,
                  profile=Profile,
                  target="CM_RESOURCE_LIST",
                  start="List.PartialResourceList.PartialDescriptors")
@@ -2279,7 +2507,7 @@ the NetUserEnum() call and the list of SIDs in the registry.
                     sid=basename(path=Key.FullPath)
                   ) as Name,
                   Key.FullPath as Description,
-                  ProfileImagePath.value as Directory,
+                  ProfileImagePath as Directory,
                   basename(path=Key.FullPath) as UUID, "roaming" as Type
               FROM read_reg_key(globs=remoteRegKey, accessor="reg")
          - |
