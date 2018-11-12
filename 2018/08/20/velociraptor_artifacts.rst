@@ -82,13 +82,13 @@ parsing different files. For example, consider the following VQL
 Query:
 
 .. code-block:: sql
-		
+
      SELECT User, Desc, Uid, Gid, Homedir, Shell FROM parse_records_with_regex(
            file="/etc/passwd",
            regex='(?m)^(?P<User>[^:]+):([^:]+):' +
                  '(?P<Uid>[^:]+):(?P<Gid>[^:]+):(?P<Desc>[^:]*):' +
                  '(?P<Homedir>[^:]+):(?P<Shell>[^:\\s]+)')
-		 
+
 The ``parse_records_with_regex()`` plugin simply applies one or more
 regex to a file and each match is sent as a record. In this case, each
 line is matched and parsed into its components automatically. Note how
@@ -98,14 +98,14 @@ completely generic parsers.
 The generic parser can be used to parse many other file types. Here is query which parses debian apt-source lines:
 
 .. code-block:: sql
-		
+
    SELECT * FROM parse_records_with_regex(
       file="/etc/apt/sources.list",
       regex="(?m)^ *(?P<Type>deb(-src)?) "+
             "(?:\\[arch=(?P<Arch>[^\\]]+)\\] )?" +
             "(?P<URL>https?://(?P<base_uri>[^ ]+))" +
             " +(?P<components>.+)")
-	    
+
 Having the ability to control parsing directly in the query opens up
 many possibilities. What if we need to parse new files which do not
 have an OSQuery parser yet (maybe an enterprise application
@@ -138,7 +138,7 @@ Here is an example of the the Linux.Sys.Users artifact - this is the
 equivalent artifact to OSQuery's users table:
 
 .. code-block:: yaml
-		
+
    name: Linux.Sys.Users
    description: Get User specific information like homedir, group etc from /etc/passwd.
    parameters:
@@ -147,7 +147,7 @@ equivalent artifact to OSQuery's users table:
        description: The location of the password file.
    sources:
      - precondition: |
-        SELECT OS From info() where OS = 'linux'    
+        SELECT OS From info() where OS = 'linux'
        queries:
          - SELECT User, Desc, Uid, Gid, Homedir, Shell
             FROM parse_records_with_regex(
@@ -155,7 +155,7 @@ equivalent artifact to OSQuery's users table:
               regex='(?m)^(?P<User>[^:]+):([^:]+):' +
                     '(?P<Uid>[^:]+):(?P<Gid>[^:]+):(?P<Desc>[^:]*):' +
                     '(?P<Homedir>[^:]+):(?P<Shell>[^:\\s]+)')
-		    
+
 The artifact has a specific name (Linux.Sys.Users) and a
 description. The Artifact will only run if the precondition is
 satisfied (i.e. if we are running on a linux system). Running the
@@ -232,7 +232,7 @@ artifact simply appears as another VQL plugin. Consider the following
 VQL Query that filters only user accounts which have a real shell:
 
 .. code-block:: console
-		
+
    $ velociraptor query --format text "SELECT * FROM Artifact.Linux.Sys.Users() where Shell =~ 'bash'"
    +------+------+------+------+-----------+-----------+
    | USER | DESC | UID  | GID  |  HOMEDIR  |   SHELL   |
@@ -241,7 +241,7 @@ VQL Query that filters only user accounts which have a real shell:
    | mic  |      | 1000 | 1000 | /home/mic | /bin/bash |
    +------+------+------+------+-----------+-----------+
    SELECT * FROM Artifact.Linux.Sys.Users() WHERE Shell =~ 'bash'
-   
+
 
 An artifact definition can use other artifacts by simply issuing
 queries against these artifact plugins. This forms a natural system of
@@ -278,7 +278,7 @@ Debian packages keep a manifest file with records delimited by an
 empty line. Each record consists of possible fields.
 
 .. code-block:: sql
-		
+
       - LET packages = SELECT parse_string_with_regex(
            string=Record,
            regex=['Package:\\s(?P<Package>.+)',
@@ -290,12 +290,12 @@ empty line. Each record consists of possible fields.
                   file=linuxDpkgStatus,
                   regex='(?sm)^(?P<Record>Package:.+?)\\n\\n')
      - SELECT Record.Package as Package,
-              Record.InstalledSize as InstalledSize,                  
+              Record.InstalledSize as InstalledSize,
               Record.Version as Version,
               Record.Source as Source,
               Record.Architecture as Architecture from packages
 
-	      
+
 The above query uses the parse_records_with_regex() plugin to split
 the file into records (anything between the Package: and the next
 empty line). Each record is then parsed separately using the
@@ -318,7 +318,7 @@ artifact. It implements the following algorithm:
    then return the string from the locale file, otherwise from the
    manifest file.
 
-   
+
 The full artifact is rather long so will not be listed here in full,
 but are a couple of interesting VQL plugins which make writing
 artifacts more powerful.
@@ -329,7 +329,7 @@ similar to SQL's JOIN operator but more readable. For example the
 following query executes a glob on each user's home directory (as
 obtained from the password file):
 
-.. code-block:: sql
+.. code-block:: console
 
    LET extension_manifests = SELECT * from foreach(
     row={
@@ -345,8 +345,8 @@ which can be used as an input to other queries.  The if() plugin
 evaluates a condition (or a query) and runs the "then" query if true,
 or the "else" query:
 
-.. code-block:: sql
-		
+.. code-block:: console
+
    LET maybe_read_locale_file = SELECT * from if(
         condition={
            select * from scope() where Manifest.default_locale
@@ -378,7 +378,7 @@ to instantiate an iterator over the file. Since the wtmp file is
 simply a sequence of wtmp structs, we can iterate over them in a
 query.
 
-.. code-block:: sql
+.. code-block:: console
 
    SELECT * from foreach(
             row={

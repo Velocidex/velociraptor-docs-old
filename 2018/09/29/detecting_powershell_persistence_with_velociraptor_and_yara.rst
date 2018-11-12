@@ -37,7 +37,7 @@ Our artifact will attempt to detect the persistence mechanism detailed
 in the above posts. We start by adding a value to our test user
 account under the key
 
-.. code-block:: yaml
+.. code-block:: console
 
     Key: "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run"
     Value: "C:\Windows\system32\mshta.exe"
@@ -156,28 +156,28 @@ keys with this object:
     parameters:
       - name: keyGlob
         default: "HKEY_USERS\\*\\Software\\Microsoft\\Windows\
-        \\CurrentVersion\\{Run,RunOnce}\\*"
+                 \\CurrentVersion\\{Run,RunOnce}\\*"
       - name: yaraRule
         default: |
-        rule Powershell {
+          rule Powershell {
             strings:
             $ = /ActiveXObject.{,500}eval/ nocase
             $ = /ActiveXObject.{,500}eval/ wide nocase
             condition:
             any of them
-        }
+          }
     sources:
      - precondition:
         SELECT OS from info() where OS = "windows"
        queries:
        - |
          // This is a stored query
-        LET file = SELECT FullPath from glob(
+         LET file = SELECT FullPath from glob(
            globs=keyGlob,
            accessor="reg"
-        )
-      - |
-        SELECT * FROM yara(
+         )
+       - |
+         SELECT * FROM yara(
            rules=yaraRule,
            files=file.FullPath,   // This will expand to a list of paths.
            accessor="reg")
@@ -351,7 +351,7 @@ display it as JSON to enhance readability):
 
 So we just want to YARA scan the NTUSER.DAT file in each home directory:
 
-.. code-block:: sql
+.. code-block:: console
 
      SELECT * from foreach(
      row={

@@ -54,7 +54,7 @@ and returns all events in it. We can then filter events and return
 specific events of interest. The following query returns all the
 service installation events and terminates:
 
-.. code-block: console
+.. code-block:: console
 
    F:\>velociraptor.exe query "SELECT EventData, System.TimeCreated.SystemTime from
       parse_evtx(filename='c:/windows/system32/winevt/logs/system.evtx') where
@@ -76,7 +76,7 @@ The query specifically looks at the 7045 event `"A service was installed in the 
 
 Lets turn this query into an event query:
 
-.. code-block: console
+.. code-block:: console
 
    F:\>velociraptor.exe query "SELECT EventData, System.TimeCreated.SystemTime from
       watch_evtx(filename='c:/windows/system32/winevt/logs/system.evtx') where
@@ -145,10 +145,10 @@ plugin. This allows Velociraptor to install a temporary WMI event
 listener. For example, we can install a listener for new process
 creation:
 
-.. code-block: console
+.. code-block:: console
 
-   // Convert the timestamp from WinFileTime to Epoch.
-   SELECT timestamp(epoch=atoi(
+    // Convert the timestamp from WinFileTime to Epoch.
+    SELECT timestamp(epoch=atoi(
       string=Parse.TIME_CREATED) / 10000000 - 11644473600 ) as Timestamp,
       Parse.ParentProcessID as PPID,
       Parse.ProcessID as PID,
@@ -191,7 +191,7 @@ To specify what clients should collect, users simply need to name the
 event artifacts that should be monitored. Currently this is done in
 the server configuration (in future this may be done via the GUI).
 
-.. code-block: yaml
+.. code-block:: yaml
 
    Events:
      artifacts:

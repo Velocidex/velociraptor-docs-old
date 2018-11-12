@@ -376,39 +376,39 @@ query is run (with the first row present in the scope). This is
 similar to SQL’s JOIN operator but more readable. For example the
 following query executes a glob on each user’s home directory (as
 obtained from the password file):</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>LET extension_manifests = SELECT * from foreach(
- row={
-    SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()
- },
- query={
-    SELECT FullPath, Mtime, Ctime, User, Uid from glob(
-      globs=Homedir + &#39;/&#39; + extensionGlobs)
- })
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">LET extension_manifests = SELECT * from foreach(</span>
+<span class="go"> row={</span>
+<span class="go">    SELECT Uid, User, Homedir from Artifact.Linux.Sys.Users()</span>
+<span class="go"> },</span>
+<span class="go"> query={</span>
+<span class="go">    SELECT FullPath, Mtime, Ctime, User, Uid from glob(</span>
+<span class="go">      globs=Homedir + &#39;/&#39; + extensionGlobs)</span>
+<span class="go"> })</span>
 </pre></div>
 </div>
 <p>Note how the query is assigned to the variable “extension_manifests”
 which can be used as an input to other queries.  The if() plugin
 evaluates a condition (or a query) and runs the “then” query if true,
 or the “else” query:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>LET maybe_read_locale_file = SELECT * from if(
-     condition={
-        select * from scope() where Manifest.default_locale
-     },
-     query={
-        SELECT Manifest, Uid, User, Filename as LocaleFilename,
-               ManifestFilename, parse_json(data=Data) AS LocaleManifest
-        FROM read_file(
-                -- Munge the filename to get the messages.json path.
-                filenames=regex_replace(
-                  source=ManifestFilename,
-                  replace=&quot;/_locales/&quot; + Manifest.default_locale + &quot;/messages.json&quot;,
-                  re=&quot;/manifest.json$&quot;))
-     },
-     else={
-         -- Just fill in empty Locale results.
-         SELECT Manifest, Uid, User, &quot;&quot; AS LocaleFilename, &quot;&quot; AS ManifestFilename,
-                &quot;&quot; AS LocaleManifest FROM scope()
-     })
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">LET maybe_read_locale_file = SELECT * from if(</span>
+<span class="go">     condition={</span>
+<span class="go">        select * from scope() where Manifest.default_locale</span>
+<span class="go">     },</span>
+<span class="go">     query={</span>
+<span class="go">        SELECT Manifest, Uid, User, Filename as LocaleFilename,</span>
+<span class="go">               ManifestFilename, parse_json(data=Data) AS LocaleManifest</span>
+<span class="go">        FROM read_file(</span>
+<span class="go">                -- Munge the filename to get the messages.json path.</span>
+<span class="go">                filenames=regex_replace(</span>
+<span class="go">                  source=ManifestFilename,</span>
+<span class="go">                  replace=&quot;/_locales/&quot; + Manifest.default_locale + &quot;/messages.json&quot;,</span>
+<span class="go">                  re=&quot;/manifest.json$&quot;))</span>
+<span class="go">     },</span>
+<span class="go">     else={</span>
+<span class="go">         -- Just fill in empty Locale results.</span>
+<span class="go">         SELECT Manifest, Uid, User, &quot;&quot; AS LocaleFilename, &quot;&quot; AS ManifestFilename,</span>
+<span class="go">                &quot;&quot; AS LocaleManifest FROM scope()</span>
+<span class="go">     })</span>
 </pre></div>
 </div>
 </div>
@@ -421,20 +421,20 @@ binary_parser() VQL plugin which accepts a Rekall style profile string
 to instantiate an iterator over the file. Since the wtmp file is
 simply a sequence of wtmp structs, we can iterate over them in a
 query.</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>SELECT * from foreach(
-         row={
-           SELECT FullPath from glob(globs=split(string=wtmpGlobs, sep=&quot;,&quot;))
-         },
-         query={
-           SELECT ut_type, ut_id, ut_host as Host, ut_user as User,
-                 timestamp(epoch=ut_tv.tv_sec) as login_time
-           FROM binary_parse(
-                  file=FullPath,
-                  profile=wtmpProfile,
-                  iterator=&quot;Array&quot;,
-                  Target=&quot;wtmp&quot;
-                )
-         })
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">SELECT * from foreach(</span>
+<span class="go">         row={</span>
+<span class="go">           SELECT FullPath from glob(globs=split(string=wtmpGlobs, sep=&quot;,&quot;))</span>
+<span class="go">         },</span>
+<span class="go">         query={</span>
+<span class="go">           SELECT ut_type, ut_id, ut_host as Host, ut_user as User,</span>
+<span class="go">                 timestamp(epoch=ut_tv.tv_sec) as login_time</span>
+<span class="go">           FROM binary_parse(</span>
+<span class="go">                  file=FullPath,</span>
+<span class="go">                  profile=wtmpProfile,</span>
+<span class="go">                  iterator=&quot;Array&quot;,</span>
+<span class="go">                  Target=&quot;wtmp&quot;</span>
+<span class="go">                )</span>
+<span class="go">         })</span>
 </pre></div>
 </div>
 </div>

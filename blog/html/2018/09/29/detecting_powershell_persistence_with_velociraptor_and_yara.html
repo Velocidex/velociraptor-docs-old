@@ -127,12 +127,12 @@ developing the artifact interactively on a Windows system.</p>
 <p>Our artifact will attempt to detect the persistence mechanism detailed
 in the above posts. We start by adding a value to our test user
 account under the key</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>Key: &quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run&quot;
-Value: &quot;C:\Windows\system32\mshta.exe&quot;
-Data:
-  about:&lt;script&gt;c1hop=&quot;X642N10&quot;;R3I=new%20ActiveXObject(&quot;WScript.Shell&quot;);
-  QR3iroUf=&quot;I7pL7&quot;;k9To7P=R3I.RegRead(&quot;HKCU\\software\\bkzlq\\zsdnhepyzs&quot;);
-  J7UuF1n=&quot;Q2LnLxas&quot;;eval(k9To7P);JUe5wz3O=&quot;zSfmLod&quot;;&lt;/script&gt;
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Key: &quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run&quot;</span>
+<span class="go">Value: &quot;C:\Windows\system32\mshta.exe&quot;</span>
+<span class="go">Data:</span>
+<span class="go">  about:&lt;script&gt;c1hop=&quot;X642N10&quot;;R3I=new%20ActiveXObject(&quot;WScript.Shell&quot;);</span>
+<span class="go">  QR3iroUf=&quot;I7pL7&quot;;k9To7P=R3I.RegRead(&quot;HKCU\\software\\bkzlq\\zsdnhepyzs&quot;);</span>
+<span class="go">  J7UuF1n=&quot;Q2LnLxas&quot;;eval(k9To7P);JUe5wz3O=&quot;zSfmLod&quot;;&lt;/script&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -224,35 +224,35 @@ yara signature, but for now let’s just detect uses of the eval()
 powershell command within 500 characters of an ActiveXObject
 instantiation. We will try to match each value returned from the Run
 keys with this object:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>name: Windows.Persistence.Powershell
-parameters:
-  - name: keyGlob
-    default: &quot;HKEY_USERS\\*\\Software\\Microsoft\\Windows\
-    \\CurrentVersion\\{Run,RunOnce}\\*&quot;
-  - name: yaraRule
-    default: |
-    rule Powershell {
-        strings:
-        $ = /ActiveXObject.{,500}eval/ nocase
-        $ = /ActiveXObject.{,500}eval/ wide nocase
-        condition:
-        any of them
-    }
-sources:
- - precondition:
-    SELECT OS from info() where OS = &quot;windows&quot;
-   queries:
-   - |
-     // This is a stored query
-    LET file = SELECT FullPath from glob(
-       globs=keyGlob,
-       accessor=&quot;reg&quot;
-    )
-  - |
-    SELECT * FROM yara(
-       rules=yaraRule,
-       files=file.FullPath,   // This will expand to a list of paths.
-       accessor=&quot;reg&quot;)
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Persistence.Powershell</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">keyGlob</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&quot;HKEY_USERS\\*\\Software\\Microsoft\\Windows\</span>
+             <span class="s">\\CurrentVersion\\{Run,RunOnce}\\*&quot;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">yaraRule</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">rule Powershell {</span>
+        <span class="no">strings:</span>
+        <span class="no">$ = /ActiveXObject.{,500}eval/ nocase</span>
+        <span class="no">$ = /ActiveXObject.{,500}eval/ wide nocase</span>
+        <span class="no">condition:</span>
+        <span class="no">any of them</span>
+      <span class="no">}</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+ <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">SELECT OS from info() where OS = &quot;windows&quot;</span>
+   <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+   <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+     <span class="no">// This is a stored query</span>
+     <span class="no">LET file = SELECT FullPath from glob(</span>
+       <span class="no">globs=keyGlob,</span>
+       <span class="no">accessor=&quot;reg&quot;</span>
+     <span class="no">)</span>
+   <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+     <span class="no">SELECT * FROM yara(</span>
+       <span class="no">rules=yaraRule,</span>
+       <span class="no">files=file.FullPath,   // This will expand to a list of paths.</span>
+       <span class="no">accessor=&quot;reg&quot;)</span>
 </pre></div>
 </div>
 <p>This version recovers the FullPath of all the Run/RunOnce values and
@@ -397,22 +397,22 @@ display it as JSON to enhance readability):</p>
 </pre></div>
 </div>
 <p>So we just want to YARA scan the NTUSER.DAT file in each home directory:</p>
-<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span>SELECT * from foreach(
-row={
-   SELECT Name, Directory as HomeDir
-     FROM Artifact.Windows.Sys.Users()
-    WHERE Directory.value and Gid
-},
-query={
-  SELECT File.FullPath As FullPath,
-         Strings.Offset AS Off,
-         Strings.HexData As Hex,
-          upload(file=File.FullPath, accessor=&quot;ntfs&quot;) AS Upload
-      FROM yara(
-            files=&quot;\\\\.\\&quot; + HomeDir + &quot;\\ntuser.dat&quot;,
-            accessor=&quot;ntfs&quot;,
-            rules=yaraRule, context=10)
-      })
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">SELECT * from foreach(</span>
+<span class="go">row={</span>
+<span class="go">   SELECT Name, Directory as HomeDir</span>
+<span class="go">     FROM Artifact.Windows.Sys.Users()</span>
+<span class="go">    WHERE Directory.value and Gid</span>
+<span class="go">},</span>
+<span class="go">query={</span>
+<span class="go">  SELECT File.FullPath As FullPath,</span>
+<span class="go">         Strings.Offset AS Off,</span>
+<span class="go">         Strings.HexData As Hex,</span>
+<span class="go">          upload(file=File.FullPath, accessor=&quot;ntfs&quot;) AS Upload</span>
+<span class="go">      FROM yara(</span>
+<span class="go">            files=&quot;\\\\.\\&quot; + HomeDir + &quot;\\ntuser.dat&quot;,</span>
+<span class="go">            accessor=&quot;ntfs&quot;,</span>
+<span class="go">            rules=yaraRule, context=10)</span>
+<span class="go">      })</span>
 </pre></div>
 </div>
 <p>This query:</p>

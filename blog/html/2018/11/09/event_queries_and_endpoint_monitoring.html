@@ -28,7 +28,7 @@
 <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Detecting powershell persistence with Velociraptor and Yara" href="../../09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Detecting powershell persistence with Velociraptor and Yara" href="../../09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html" /><link rel="prev" title="Velociraptor training at NZITF" href="../13/velociraptor_training_at_nzitf.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.1',
@@ -93,7 +93,7 @@
 </div>
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../13/velociraptor_training_at_nzitf.html">Velociraptor training at NZITF</a></li>
             <li class="right"><a href="../../09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
             <span>November 09, 2018</span>
@@ -138,8 +138,41 @@ continue to run and pass events in partial results to the VQL caller.</p>
 and returns all events in it. We can then filter events and return
 specific events of interest. The following query returns all the
 service installation events and terminates:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">F:\&gt;velociraptor.exe query &quot;SELECT EventData, System.TimeCreated.SystemTime from</span>
+<span class="go">   parse_evtx(filename=&#39;c:/windows/system32/winevt/logs/system.evtx&#39;) where</span>
+<span class="go">   System.EventId.value = &#39;7045&#39;&quot;</span>
+<span class="go">[</span>
+<span class="go"> {</span>
+<span class="go">  &quot;EventData&quot;: {</span>
+<span class="go">   &quot;AccountName&quot;: &quot;&quot;,</span>
+<span class="go">   &quot;ImagePath&quot;: &quot;system32\\DRIVERS\\VBoxGuest.sys&quot;,</span>
+<span class="go">   &quot;ServiceName&quot;: &quot;VirtualBox Guest Driver&quot;,</span>
+<span class="go">   &quot;ServiceType&quot;: &quot;kernel mode driver&quot;,</span>
+<span class="go">   &quot;StartType&quot;: &quot;boot start&quot;</span>
+<span class="go">  },</span>
+<span class="go">  &quot;System.TimeCreated.SystemTime&quot;: &quot;2018-11-10T06:32:34Z&quot;</span>
+<span class="go"> }</span>
+<span class="go">]</span>
+</pre></div>
+</div>
 <p>The query specifically looks at the 7045 event <a class="reference external" href="http://www.eventid.net/display.asp?eventid=7045&amp;source=service+control+manager">“A service was installed in the system”</a></p>
 <p>Lets turn this query into an event query:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">F:\&gt;velociraptor.exe query &quot;SELECT EventData, System.TimeCreated.SystemTime from</span>
+<span class="go">   watch_evtx(filename=&#39;c:/windows/system32/winevt/logs/system.evtx&#39;) where</span>
+<span class="go">   System.EventId.value = &#39;7045&#39;&quot; --max_wait 1</span>
+<span class="go">[</span>
+<span class="go">  &quot;EventData&quot;: {</span>
+<span class="go">    &quot;AccountName&quot;: &quot;&quot;,</span>
+<span class="go">    &quot;ImagePath&quot;: &quot;C:\\Users\\test\\AppData\\Local\\Temp\\pmeFF0E.tmp&quot;,</span>
+<span class="go">    &quot;ServiceName&quot;: &quot;pmem&quot;,</span>
+<span class="go">    &quot;ServiceType&quot;: &quot;kernel mode driver&quot;,</span>
+<span class="go">    &quot;StartType&quot;: &quot;demand start&quot;</span>
+<span class="go">  },</span>
+<span class="go">  &quot;System.TimeCreated.SystemTime&quot;: &quot;2018-11-10T04:57:35Z&quot;</span>
+<span class="go">  }</span>
+<span class="go">]</span>
+</pre></div>
+</div>
 <p>The watch_evtx() plugin is the event watcher equivalent of the
 parse_evtx() plugin. If you ran the above query, you will notice that
 Velociraptor does not terminate. Instead it will show all existing
@@ -183,6 +216,25 @@ produce alerts based on these.</p>
 plugin. This allows Velociraptor to install a temporary WMI event
 listener. For example, we can install a listener for new process
 creation:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">// Convert the timestamp from WinFileTime to Epoch.</span>
+<span class="go">SELECT timestamp(epoch=atoi(</span>
+<span class="go">  string=Parse.TIME_CREATED) / 10000000 - 11644473600 ) as Timestamp,</span>
+<span class="go">  Parse.ParentProcessID as PPID,</span>
+<span class="go">  Parse.ProcessID as PID,</span>
+<span class="go">  Parse.ProcessName as Name, {</span>
+<span class="go">    SELECT CommandLine</span>
+<span class="go">    FROM wmi(</span>
+<span class="go">      query=&quot;SELECT * FROM Win32_Process WHERE ProcessID = &quot; +</span>
+<span class="go">          format(format=&quot;%v&quot;, args=Parse.ProcessID),</span>
+<span class="go">      namespace=&quot;ROOT/CIMV2&quot;)</span>
+<span class="go">  } AS CommandLine</span>
+<span class="go">  FROM wmi_events(</span>
+<span class="go">       query=&quot;SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE</span>
+<span class="go">              TargetInstance ISA &#39;Win32_Process&#39;&quot;,</span>
+<span class="go">       wait=5000000,   // Do not time out.</span>
+<span class="go">       namespace=&quot;ROOT/CIMV2&quot;)</span>
+</pre></div>
+</div>
 <p>The wmi_events() plugin installs an event listener into WMI and
 therefore receives events from the OS about new process creation
 events. Unfortunately these events, do not contain a lot of
@@ -204,6 +256,13 @@ the above query in one easy to remember name.</p>
 <p>To specify what clients should collect, users simply need to name the
 event artifacts that should be monitored. Currently this is done in
 the server configuration (in future this may be done via the GUI).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Events</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">artifacts</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.ServiceCreation</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.ProcessCreation</span>
+  <span class="l l-Scalar l-Scalar-Plain">version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
 <p>The event table version should be incremented each time the monitored
 event list is updated. This forces all clients to refresh their event
 tables.</p>
@@ -235,7 +294,7 @@ requests.</p>
         
         </div>
     <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/11/09/event_queries_and_endpoint_monitoring";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../13/velociraptor_training_at_nzitf.html">Velociraptor training at NZITF</a></li>
             <li class="right"><a href="../../09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
 
