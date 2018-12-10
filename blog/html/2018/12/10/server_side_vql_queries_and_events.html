@@ -1,0 +1,490 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Server side VQL queries and Escalation Events &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="More on client event collection" href="../09/more_on_client_event_collection.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../09/more_on_client_event_collection.html">More on client event collection</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>December 10, 2018</span>
+        </div>
+    <div class="section" id="server-side-vql-queries-and-escalation-events">
+<h1>Server side VQL queries and Escalation Events</h1>
+<p>Previously we have seen how Velociraptor collects information from end
+points using Velociraptor artifacts. These artifacts encapsulate user
+created queries using the Velociraptor Query Language (VQL). The power
+of VQL is that it provides for a very flexible way of specifying
+exactly what should be collected from the client and how - without
+needing to modify client code or deploy new clients!</p>
+<p>This is not the whole story though! It is also possible to run VQL
+queries on the server side! Similarly server side Velociraptor
+artifacts can be used to customize the operation of the server -
+without modifying any code or redeploying the server components.</p>
+<div id="more"> </div><div class="section" id="server-side-vql-queries">
+<h2>Server Side VQL Queries.</h2>
+<p>By now you are probably familiar with Velociraptor and VQL. We have
+seen that it is possible to run a VQL query interactively from the
+commandline. For example to find all processes matching the ‘gimp’:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="se">\</span>
+   <span class="s2">&quot;SELECT Pid, Exe, Cmdline FROM pslist() WHERE Exe =~ &#39;gimp&#39;&quot;</span>
+<span class="o">[</span>
+ <span class="o">{</span>
+  <span class="s2">&quot;Cmdline&quot;</span>: <span class="s2">&quot;gimp-2.10&quot;</span>,
+  <span class="s2">&quot;Exe&quot;</span>: <span class="s2">&quot;/usr/bin/gimp-2.10&quot;</span>,
+  <span class="s2">&quot;Pid&quot;</span>: <span class="m">13207</span>
+ <span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>We have used this feature previously in order to perfect and test our
+queries by interactively building the query as we go along.</p>
+<p>However it is also possible to run queries on the server itself in
+order to collect information about the server. There is nothing
+special about this as such - it is simply that some VQL plugins are
+able to operate on the server’s internal data store and therefore
+provide a way to interact with the server via VQL queries.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Other endpoint monitoring tools export a rich API and even an API
+client library to enable users to customize and control their
+installation. For example, GRR expects users write python scripts
+using the GRR client API library.</p>
+<p class="last">Velociraptor’s approach is different - the functionality typically
+available via APIs is made available to VQL queries via VQL plugins
+(e.g. client information, flow information and results
+collected). In this way the VQL itself forms an API with which one
+controls the server and deployment. There is no need to write any
+code - simply use existing VQL plugins in any combination that
+makes sense to create new functionality - then encapsulates these
+queries inside Velociraptor artifacts for reuse and sharing.</p>
+</div>
+<p>For example, to see all the clients and their hostnames:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="se">\</span>
+   <span class="s2">&quot;SELECT os_info.fqdn as Hostname, client_id from clients()&quot;</span> --format text
++-----------------+--------------------+
+<span class="p">|</span>    Hostname     <span class="p">|</span>     client_id      <span class="p">|</span>
++-----------------+--------------------+
+<span class="p">|</span> mic-Inspiron    <span class="p">|</span> C.772d16449719317f <span class="p">|</span>
+<span class="p">|</span> TestComputer    <span class="p">|</span> C.11a3013cca8f826e <span class="p">|</span>
+<span class="p">|</span> trek            <span class="p">|</span> C.952156a4b022ddee <span class="p">|</span>
+<span class="p">|</span> DESKTOP-IOME2K5 <span class="p">|</span> C.c916a7e445eb0868 <span class="p">|</span>
++-----------------+--------------------+
+SELECT os_info.fqdn AS Hostname,
+client_id FROM clients<span class="o">()</span>
+</pre></div>
+</div>
+<p>To inspect what flows were run on a client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="se">\</span>
+   <span class="s2">&quot;SELECT runner_args.creator, runner_args.flow_name, \</span>
+<span class="s2">    runner_args.start_time FROM \</span>
+<span class="s2">    flows(client_id=&#39;C.772d16449719317f&#39;)&quot;</span>
+<span class="o">[</span>
+<span class="o">{</span>
+  <span class="s2">&quot;runner_args.creator&quot;</span>: <span class="s2">&quot;&quot;</span>,
+  <span class="s2">&quot;runner_args.flow_name&quot;</span>: <span class="s2">&quot;MonitoringFlow&quot;</span>,
+  <span class="s2">&quot;runner_args.start_time&quot;</span>: <span class="m">1544338661236625</span>
+<span class="o">}</span>,
+<span class="o">{</span>
+  <span class="s2">&quot;runner_args.creator&quot;</span>: <span class="s2">&quot;mic&quot;</span>,
+  <span class="s2">&quot;runner_args.flow_name&quot;</span>: <span class="s2">&quot;VFSDownloadFile&quot;</span>,
+  <span class="s2">&quot;runner_args.start_time&quot;</span>: <span class="m">1544087705756469</span>
+<span class="o">}</span>,
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="client-event-monitoring">
+<h2>Client Event Monitoring</h2>
+<p>We have also previously seen that Velociraptor can collect event
+streams from clients. For example, the client’s process execution logs
+can be streamed to the server. Clients can also receive event queries
+which forward selected events from the windows event logs.</p>
+<p>When we covered those features in earlier blog posts, we stressed that
+the Velociraptor server does not actually do anything with the client
+events, other than save them to a file. The server just writes the
+client’s events in simple Comma Separated files (CSV files) on the
+server.</p>
+<p>We mentioned that it is possible to import this file into another tool
+(e.g. a spreadsheet or database) for post-processing. An alternative
+is to perform post-processing with Velociraptor itself using server
+side VQL queries.</p>
+<p>For example, we can filter a client’s process execution log using a
+VQL query:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="s2">&quot;SELECT * from monitoring(</span>
+<span class="s2">      client_id=&#39;C.87b19dba006fcddb&#39;,</span>
+<span class="s2">      artifact=&#39;Windows.Events.ProcessCreation&#39;)</span>
+<span class="s2">    WHERE Name =~ &#39;(?i)psexesvc&#39; &quot;</span>
+<span class="o">[</span>
+ <span class="o">{</span>
+  <span class="s2">&quot;CommandLine&quot;</span>: <span class="s2">&quot;\&quot;C:\\\\Windows\\\\PSEXESVC.exe\&quot;&quot;</span>,
+  <span class="s2">&quot;Name&quot;</span>: <span class="s2">&quot;\&quot;PSEXESVC.exe\&quot;&quot;</span>,
+  <span class="s2">&quot;PID&quot;</span>: <span class="s2">&quot;452&quot;</span>,
+  <span class="s2">&quot;PPID&quot;</span>: <span class="s2">&quot;512&quot;</span>,
+  <span class="s2">&quot;Timestamp&quot;</span>: <span class="s2">&quot;\&quot;2018-12-09T23:30:42-08:00\&quot;&quot;</span>,
+  <span class="s2">&quot;artifact&quot;</span>: <span class="s2">&quot;Windows.Events.ProcessCreation&quot;</span>,
+  <span class="s2">&quot;client_id&quot;</span>: <span class="s2">&quot;C.87b19dba006fcddb&quot;</span>
+ <span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>The above query finds running instances of psexec’s service
+component - a popular method of lateral movement and privilege
+escalation.</p>
+<p>This query uses the <cite>monitoring()</cite> VQL plugin which opens each of the
+CSV event monitoring logs for the specified artifact on the server,
+decodes the CSV file and emits all the rows within it into the VQL
+Query. The rows are then filtered by applying the regular expression
+to the name.</p>
+</div>
+<div class="section" id="server-side-event-queries">
+<h2>Server side event queries</h2>
+<p>VQL queries do not have to terminate at all. Some VQL plugins can run
+indefinitely, emitting rows at random times - usually in response to
+some events. These are called Event Queries since they never
+terminate. We saw this property when monitoring the client - the above
+<cite>Windows.Events.ProcessCreation</cite> artifact uses an event query which
+emits a single row for each process execution on the end point.</p>
+<p>However, we can also have Event Queries on the server. When used in
+this way the query triggers in response to data collected by the
+server of various clients.</p>
+<p>For example, consider the above query to detect instances of <cite>psexec</cite>
+executions. While we can detect this by filtering existing monitoring
+event logs, it would be nice to be able to respond to such an event
+dynamically.</p>
+<p>One way is to repeatedly run the same query (say every minute) and
+look for newly reported instances of <cite>psexec</cite> executions. But this
+approach is not terribly efficient. A better approach is to install
+a watcher on the monitoring event log:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="s2">&quot;SELECT * from watch_monitoring(</span>
+<span class="s2">     client_id=&#39;C.87b19dba006fcddb&#39;,</span>
+<span class="s2">     artifact=&#39;Windows.Events.ProcessCreation&#39;) where Name =~ &#39;(?i)psexesvc&#39; &quot;</span>
+<span class="o">[</span>
+ <span class="o">{</span>
+  <span class="s2">&quot;CommandLine&quot;</span>: <span class="s2">&quot;\&quot;C:\\\\Windows\\\\PSEXESVC.exe\&quot;&quot;</span>,
+  <span class="s2">&quot;Name&quot;</span>: <span class="s2">&quot;\&quot;PSEXESVC.exe\&quot;&quot;</span>,
+  <span class="s2">&quot;PID&quot;</span>: <span class="s2">&quot;4592&quot;</span>,
+  <span class="s2">&quot;PPID&quot;</span>: <span class="s2">&quot;512&quot;</span>,
+  <span class="s2">&quot;Timestamp&quot;</span>: <span class="s2">&quot;\&quot;2018-12-10T01:18:06-08:00\&quot;&quot;</span>,
+  <span class="s2">&quot;artifact&quot;</span>: <span class="s2">&quot;Windows.Events.ProcessCreation&quot;</span>,
+  <span class="s2">&quot;client_id&quot;</span>: <span class="s2">&quot;C.87b19dba006fcddb&quot;</span>
+ <span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>The watcher efficiently follows the monitoring CSV file to detect new
+events. These events are then emitted into the VQL query and
+subsequently filtered. When the query processes all rows in the file,
+the plugin just sleeps and waits for the file to grow again. The
+<cite>watch_monitoring()</cite> plugin essentially tails the CSV file as it is
+being written. Note that due to the fact that log files are never
+truncated and always grow, and that CSV file format is a simple, one
+row per line format it is possible to both read and write to the same
+file without locking. This makes following a growing log file
+extremely efficient and safe - even from another process.</p>
+</div>
+<div class="section" id="responding-to-server-side-events">
+<h2>Responding to server side events</h2>
+<p>The previous query will return a row when psexec is run on the
+client. This is a very suspicious event in our environment and we
+would like to escalate this by sending us an email.</p>
+<p>We can modify the above query to send an email for each event:</p>
+<div class="highlight-psql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">foreach</span><span class="p">(</span>
+   <span class="k">row</span><span class="o">=</span><span class="p">{</span>
+     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="n">watch_monitoring</span><span class="p">(</span>
+       <span class="n">client_id</span><span class="o">=</span><span class="s1">&#39;C.87b19dba006fcddb&#39;</span><span class="p">,</span>
+       <span class="n">artifact</span><span class="o">=</span><span class="s1">&#39;Windows.Events.ProcessCreation&#39;</span><span class="p">)</span>
+    <span class="k">WHERE</span> <span class="k">Name</span> <span class="o">=~</span> <span class="s1">&#39;(?i)psexesvc&#39;</span>
+   <span class="p">},</span>
+   <span class="n">query</span><span class="o">=</span><span class="p">{</span>
+     <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">mail</span><span class="p">(</span>
+       <span class="k">to</span><span class="o">=</span><span class="s1">&#39;admin@example.com&#39;</span><span class="p">,</span>
+       <span class="n">subject</span><span class="o">=</span><span class="s1">&#39;PsExec launched on host&#39;</span><span class="p">,</span>
+       <span class="n">period</span><span class="o">=</span><span class="mf">60</span><span class="p">,</span>
+       <span class="n">body</span><span class="o">=</span><span class="n">format</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;PsExec execution detected at %v: %v&#39;</span><span class="p">,</span>
+                   <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="nb">Timestamp</span><span class="p">,</span> <span class="n">Commandline</span><span class="p">])</span>
+     <span class="p">)</span>
+   <span class="p">})</span>
+</pre></div>
+</div>
+<p>The query sends an email from each event emitted. The message body is
+formatted using the <cite>format()</cite> VQL function and this includes
+important information from the generated event. Note that the <cite>mail()</cite>
+plugin restricts the frequency of mails to prevent triggering the mail
+server’s spam filters. So if two psexec executions occur within 60
+seconds we will only get one email.</p>
+<p>In order for Velociraptor to be able to send mail you must configure
+SMTP parameters in the server’s configuration file. The following
+example uses gmail to send mails (other mail providers will have
+similar authentication requirements).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Mail</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">server</span><span class="p p-Indicator">:</span> <span class="s">&quot;smtp.gmail.com&quot;</span>
+  <span class="l l-Scalar l-Scalar-Plain">auth_username</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">someuser@gmail.com</span>
+  <span class="l l-Scalar l-Scalar-Plain">auth_password</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">zldifhjsdflkjfsdlie</span>
+</pre></div>
+</div>
+<p>The password in the configuration is an application specific password
+obtained from
+<a class="reference external" href="https://security.google.com/settings/security/apppasswords">https://security.google.com/settings/security/apppasswords</a></p>
+<img alt="../../../_images/app_password.png" src="../../../_images/app_password.png" />
+</div>
+<div class="section" id="tying-it-all-together-server-side-event-artifacts">
+<h2>Tying it all together: Server Side Event Artifacts</h2>
+<p>As always we really want to encapsulate VQL queries in artifact
+definitions. This way we can design specific alerts, document them and
+invoke them by name. Let us encapsulate the above queries in a new
+artifact:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Server.Alerts.PsExec</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span>  <span class="p p-Indicator">|</span>
+   <span class="no">Send an email if execution of the psexec service was detected on any client.</span>
+
+   <span class="no">Note this requires that the Windows.Event.ProcessCreation</span>
+   <span class="no">monitoring artifact be collected.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">EmailAddress</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">admin@example.com</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">MessageTemplate</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">PsExec execution detected at %v: %v for client %v</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+     <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+       <span class="no">SELECT * FROM foreach(</span>
+         <span class="no">row={</span>
+           <span class="no">SELECT * from watch_monitoring(</span>
+             <span class="no">artifact=&#39;Windows.Events.ProcessCreation&#39;)</span>
+           <span class="no">WHERE Name =~ &#39;(?i)psexesvc&#39;</span>
+         <span class="no">},</span>
+         <span class="no">query={</span>
+           <span class="no">SELECT * FROM mail(</span>
+             <span class="no">to=EmailAddress,</span>
+             <span class="no">subject=&#39;PsExec launched on host&#39;,</span>
+             <span class="no">period=60,</span>
+             <span class="no">body=format(</span>
+               <span class="no">format=MessageTemplate,</span>
+               <span class="no">args=[Timestamp, CommandLine, ClientId])</span>
+          <span class="no">)</span>
+       <span class="no">})</span>
+</pre></div>
+</div>
+<p>We create a new directory called <cite>my_artifact_directory</cite> and store
+that file inside as <cite>psexesvc.yaml</cite>. Now, on the server we invoke the
+artifact collector and instruct it to also add our private artifacts:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor --definitions my_artifact_directory/ <span class="se">\</span>
+    --config ~/server.config.yaml <span class="se">\</span>
+    --format json <span class="se">\</span>
+    artifacts collect Server.Alerts.PsExec
+INFO:2018/12/10 <span class="m">21</span>:36:27 Loaded <span class="m">40</span> built in artifacts
+INFO:2018/12/10 <span class="m">21</span>:36:27 Loading artifacts my_artifact_directory/
+<span class="o">[][</span>
+ <span class="o">{</span>
+  <span class="s2">&quot;To&quot;</span>: <span class="o">[</span>
+    <span class="s2">&quot;admin@example.com&quot;</span>
+  <span class="o">]</span>,
+  <span class="s2">&quot;CC&quot;</span>: null,
+  <span class="s2">&quot;Subject&quot;</span>: <span class="s2">&quot;PsExec launched on host&quot;</span>,
+  <span class="s2">&quot;Body&quot;</span>: <span class="s2">&quot;PsExec execution detected at \&quot;2018-12-10T03:36:49-08:00\&quot;: \&quot;C:\\\\Windows\\\\PSEXESVC.exe\&quot;&quot;</span>,
+  <span class="s2">&quot;Period&quot;</span>: <span class="m">60</span>
+ <span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>This blog post demonstrates how VQL can be used on the server to
+create a full featured incident response framework. Velociraptor does
+not dictate a particular workflow, since all its actions are governed
+by VQL queries and artifacts. Using the same basic building blocks,
+users can fashion their own highly customized incident response
+workflow. Here is a brainstorm of possible actions:</p>
+<ol class="arabic simple">
+<li>An artifact can be written to automatically collect a memory
+capture if a certain event is detected.</li>
+<li>Using the <cite>http_client()</cite> VQL plugin, when certain events are
+detected on the server open a ticket automatically (using a SOAP or
+JSON API).</li>
+<li>If a particular event is detected, immediately shut the machine
+down or quarantine it (by running shell commands on the compromised
+host).</li>
+</ol>
+<p>The possibilities are truly endless. Comment below if you have more
+interesting ideas and do not hesitate to contribute artifact
+definitions to address your real world use cases.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/10/server_side_vql_queries_and_events";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../09/more_on_client_event_collection.html">More on client event collection</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+
+    $('.section a.img').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true,
+    });
+});
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Server side VQL queries and Escalation Events</a><ul>
+<li><a class="reference internal" href="#server-side-vql-queries">Server Side VQL Queries.</a></li>
+<li><a class="reference internal" href="#client-event-monitoring">Client Event Monitoring</a></li>
+<li><a class="reference internal" href="#server-side-event-queries">Server side event queries</a></li>
+<li><a class="reference internal" href="#responding-to-server-side-events">Responding to server side events</a></li>
+<li><a class="reference internal" href="#tying-it-all-together-server-side-event-artifacts">Tying it all together: Server Side Event Artifacts</a></li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
