@@ -1,0 +1,302 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>More on client event collection &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velociraptor training at NZITF" href="../../11/13/velociraptor_training_at_nzitf.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../11/13/velociraptor_training_at_nzitf.html">Velociraptor training at NZITF</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>December 09, 2018</span>
+        </div>
+    <div class="section" id="more-on-client-event-collection">
+<h1>More on client event collection</h1>
+<p>Previously we have seen that Velociraptor can monitor client events
+using Event Artifacts. To recap, Event Artifacts are simply artifacts
+which contain event VQL queries. Velociraptor’s VQL queries do not
+have to terminate by themselves - instead VQL queries may run
+indefinitely, trickling results over time.</p>
+<p>This post takes another look at event queries and demonstrates how
+these can be used to implement some interesting features.</p>
+<div id="more"> </div><div class="section" id="periodic-event-queries">
+<h2>Periodic Event queries</h2>
+<p>The simplest kind of events are periodically generated events. These
+are created using the <cite>clock()</cite> VQL plugin. This is a simple event
+plugin which just emits a new row periodically.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor query <span class="s2">&quot;select Unix from clock(period=5)&quot;</span> --max_wait <span class="m">1</span>
+<span class="o">[</span>
+ <span class="o">{</span>
+   <span class="s2">&quot;Unix&quot;</span>: <span class="m">1544339715</span>
+ <span class="o">}</span>
+<span class="o">][</span>
+ <span class="o">{</span>
+   <span class="s2">&quot;Unix&quot;</span>: <span class="m">1544339720</span>
+ <span class="o">}</span>
+<span class="o">]</span>^C
+</pre></div>
+</div>
+<p>The query will never terminate, instead the <cite>clock()</cite> plugin will emit
+a new timestamp every 5 seconds. Note the <cite>–max_wait</cite> flag which
+tells Velociraptor to wait at least for 1 second in order to batch
+rows before reporting them.</p>
+<p>This query is not very interesting! Let’s do something more
+interesting. GRR has a feature where each client sends its own CPU use
+and memory footprint sampled every minutes to the server. This is a
+really useful feature because it can be used to make sure the client’s
+impact on the host’s performance is minimal.</p>
+<p>Let us implement the same feature with a VQL query. What we want is to
+measure the client’s footprint every minute and send that to the
+server:</p>
+<div class="highlight-psql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="n">foreach</span><span class="p">(</span>
+ <span class="k">row</span><span class="o">=</span><span class="p">{</span>
+   <span class="k">SELECT</span> <span class="n">UnixNano</span> <span class="k">FROM</span> <span class="n">clock</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mf">60</span><span class="p">)</span>
+ <span class="p">},</span>
+ <span class="n">query</span><span class="o">=</span><span class="p">{</span>
+   <span class="k">SELECT</span> <span class="n">UnixNano</span> <span class="o">/</span> <span class="mf">1000000000</span> <span class="k">as</span> <span class="nb">Timestamp</span><span class="p">,</span>
+          <span class="n">Times</span><span class="mf">.</span><span class="k">user</span> <span class="o">+</span> <span class="n">Times</span><span class="mf">.</span><span class="k">system</span> <span class="k">as</span> <span class="n">CPU</span><span class="p">,</span>
+          <span class="n">MemoryInfo</span><span class="mf">.</span><span class="n">RSS</span> <span class="k">as</span> <span class="n">RSS</span>
+   <span class="k">FROM</span> <span class="n">pslist</span><span class="p">(</span><span class="n">pid</span><span class="o">=</span><span class="n">getpid</span><span class="p">())</span>
+ <span class="p">})</span>
+</pre></div>
+</div>
+<p>This query runs the <cite>clock()</cite> VQL plugin and for each row it emits, we
+run the <cite>pslist()</cite> plugin, extracting the total CPU time (system +
+user) used by our own pid (i.e. the Velociraptor client).</p>
+<p>We can now encapsulate this query in an <a class="reference external" href="/blog/html/reference/artifacts.html#generic-client-stats">artifact</a> and collect it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor artifacts collect Generic.Client.Stats --max_wait <span class="m">1</span> --format json
+<span class="o">[][</span>
+  <span class="o">{</span>
+  <span class="s2">&quot;CPU&quot;</span>: <span class="m">0</span>.06999999999999999,
+  <span class="s2">&quot;RSS&quot;</span>: <span class="m">18866176</span>,
+  <span class="s2">&quot;Timestamp&quot;</span>: <span class="m">1544340582</span>.9939497
+  <span class="o">}</span>
+<span class="o">][</span>
+  <span class="o">{</span>
+  <span class="s2">&quot;CPU&quot;</span>: <span class="m">0</span>.09,
+  <span class="s2">&quot;RSS&quot;</span>: <span class="m">18866176</span>,
+  <span class="s2">&quot;Timestamp&quot;</span>: <span class="m">1544340602</span>.9944408
+  <span class="o">}</span>
+<span class="o">]</span>^C
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must specify the –format json to be able to see the results
+from event queries on the command line. Otherwise Velociraptor will
+try to get all the results so it can format them in a table and
+never return any results.</p>
+</div>
+</div>
+<div class="section" id="installing-the-event-collector">
+<h2>Installing the event collector.</h2>
+<p>In order to have clients collect this event, we need to add the
+artifact to the server. Simply add the YAML file into a directory on
+the server and start the server with the –definitions flag. Then
+simply add the event name to the Events clause of the server
+configuration. When clients connect to the server they will
+automatically start collecting these events and sending them to the
+server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor --definitions path/to/my/artifacts/ frontend
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Events</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">artifacts</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Generic.Client.Stats</span>
+  <span class="l l-Scalar l-Scalar-Plain">version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+</div>
+<p>Note that we do not need to redeploy any clients, modify any code or
+recompile anything. We simply add the new artifact definition and
+clients will automatically start monitoring and feeding back our
+information.</p>
+<p>The data is sent to the server where it is stored in a file (Events are stored in a unique file for each day).</p>
+<p>For example, the path
+<cite>/var/lib/velociraptor/clients/C.772d16449719317f/monitoring/Artifact%20Generic.Client.Stats/2018-12-10</cite>
+stores all events collected from client id <cite>C.772d16449719317f</cite> for
+the <cite>Generic.Client.Stats</cite> artifact on the day of <cite>2018-12-10</cite>.</p>
+<p>In the next blog post we will demonstrate how these events can be post
+processed and acted on. It is important to note that the Velociraptor
+server does not interpret the collected monitoring events at all -
+they are simply appended to the daily log file (which is a CSV file).</p>
+<p>The CSV file can then be imported into basically any tool designed to
+work with tabular data (e.g. spreadsheets, databases, BigQuery
+etc). CSV is almost universally supported by all major systems.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Timestamp,CPU,RSS
+1544363561.8001275,14.91,18284544
+1544363571.8002906,14.91,18284544
+1544363581.8004665,14.920000000000002,18284544
+1544363591.8007126,14.920000000000002,18284544
+1544363601.8008528,14.920000000000002,18284544
+</pre></div>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/09/more_on_client_event_collection";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../../11/13/velociraptor_training_at_nzitf.html">Velociraptor training at NZITF</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+
+    $('.section a.img').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true,
+    });
+});
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">More on client event collection</a><ul>
+<li><a class="reference internal" href="#periodic-event-queries">Periodic Event queries</a></li>
+<li><a class="reference internal" href="#installing-the-event-collector">Installing the event collector.</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

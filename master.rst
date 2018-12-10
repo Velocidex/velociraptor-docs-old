@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2018/12/09/more_on_client_event_collection
    2018/11/13/velociraptor_training_at_nzitf
    2018/11/09/event_queries_and_endpoint_monitoring
    2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara
