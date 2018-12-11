@@ -6,7 +6,7 @@ Zealand Internet Engineering Task Force (NZITF) conference.
 
 .. more::
 
-The training material can be downloaded here `"Velociraptor NZITF training" <nzitf_velociraptor.pdf>`_.
+The training material can be downloaded here `"Velociraptor NZITF training" </resources/nzitf_velociraptor.pdf>`_.
 
 
 .. author:: default

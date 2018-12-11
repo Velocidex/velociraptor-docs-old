@@ -37,7 +37,7 @@
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="_static/disqus.js"></script>
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -96,6 +96,33 @@
             <li class="left"></li>
             <li class="right"><a href="page2.html">Older</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
+            <span>December 11, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/12/11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a></h1>
+<p>One of the interesting new features in the latest release of
+Velociraptor is an interactive shell. One can interact with the end
+point over the standard Velociraptor communication mechanism - an
+encrypted and authenticated channel.</p>
+<p>This feature is implemented by utilizing the Velociraptor event
+monitoring, server side VQL queries. This post explores how these
+components come together to deliver a responsive, interactive
+workflow.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/12/11/velociraptor_interactive_shell.html#more">Read more...</a></p> 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/12/11/velociraptor_interactive_shell.html#disqus_thread" data-disqus-identifier="2018/12/11/velociraptor_interactive_shell">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>December 10, 2018</span>
         </div>
         <div class="section">
@@ -352,35 +379,6 @@ how can you use them.</p>
         
         <div class="comments">
             <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/20/velociraptor_artifacts.html#disqus_thread" data-disqus-identifier="2018/08/20/velociraptor_artifacts">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 10, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/08/10/files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a></h1>
-<p>GRR’s original design abstracted the data storage to a simple
-key/value store originally based around Bigtable. For open source
-deployments various key value stores were used starting from MongoDB,
-to SQLite and finally MySQL. Although the original idea was to use a
-simple key/value implementation, due to locking requirements the data
-store implementation became very complex.</p>
-<p>As Velociraptor introduced a major redesign of the underlying data
-store architecture, we are now able to relax our demands of the
-datastore and use a true key/value model (since we have no
-requirements for locking and synchronization). The default data store
-is now the FileBasedDataStore which stores all data in flat files.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/08/10/files_files_everything_is_just_a_file.html#more">Read more...</a></p> 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        <div class="comments">
-            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/files_files_everything_is_just_a_file.html#disqus_thread" data-disqus-identifier="2018/08/10/files_files_everything_is_just_a_file">Leave a comment</a>
         </div></div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -389,6 +387,8 @@ is now the FileBasedDataStore which stores all data in flat files.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2018/12/11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a>
+        </li><li>
             <a href="2018/12/10/server_side_vql_queries_and_events.html">Server side VQL queries and Escalation Events</a>
         </li><li>
             <a href="2018/12/09/more_on_client_event_collection.html">More on client event collection</a>
@@ -406,8 +406,6 @@ is now the FileBasedDataStore which stores all data in flat files.</p>
             <a href="2018/09/03/velociraptor_s_client_communications.html">Velociraptor’s client communications</a>
         </li><li>
             <a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a>
-        </li><li>
-            <a href="2018/08/10/files_files_everything_is_just_a_file.html">Files, files everything is just a file!</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">

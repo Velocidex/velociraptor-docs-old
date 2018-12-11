@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2018/12/11/velociraptor_interactive_shell
    2018/12/10/server_side_vql_queries_and_events
    2018/12/09/more_on_client_event_collection
    2018/11/13/velociraptor_training_at_nzitf
