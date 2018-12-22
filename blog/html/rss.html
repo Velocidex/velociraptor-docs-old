@@ -5,8 +5,41 @@
         <link>https://docs.velociraptor.velocidex.com/blog/html/</link>
         <description>Hunting for evil - what Velociraptors do best!</description>
         <language>en-us</language>
-        <pubDate>Tue, 11 Dec 2018 00:00:00 +1000</pubDate>
+        <pubDate>Sat, 22 Dec 2018 00:00:00 +1000</pubDate>
         
+        <item>
+            <link>https://docs.velociraptor.velocidex.com/blog/html/2018/12/22/configuring_velociraptor_for_ssl.html</link>
+            <guid>https://docs.velociraptor.velocidex.com/blog/html/2018/12/22/configuring_velociraptor_for_ssl.html</guid>
+            <title><![CDATA[Configuring Velociraptor for SSL]]></title>
+            <description><![CDATA[<h1>Configuring Velociraptor for SSL</h1>
+<p>We have previously seen how to deploy a new Velociraptor server. For a
+simple deployment we can have Velociraptor server and clients
+provisioned in minutes.</p>
+<p>Usually we deploy a specific Velociraptor deployment on our DFIR
+engagements. We use cloud resources to provision the server and have
+the clients connect to this cloud VM. A proper secure deployment of
+Velociraptor will use SSL for securing both client communication and
+protecting the web GUI.</p>
+<p>In the past provisioning an SSL enabled web application was complex
+and expensive - you had to create certificate signing requests,
+interact with a CA. Pay for the certificates, then configure the
+server. In particular you had to remember to renew the cert in 2 years
+or your website suddenly broke!</p>
+<p>Those days are over with the emergence of Lets Encrypt! and
+autocert. These days applications can automatically provision their
+own certificates. Velociraptor can manage its own certificates, fully
+automatically - and then renew its certificates when the time comes
+with no user intervention required.</p>
+<p>In this blog post we will see how to configure a new Velociraptor
+server in a cloud VM.</p>
+<p class="readmorewrapper"><a class="readmore" href="https://docs.velociraptor.velocidex.com/blog/html/2018/12/22/configuring_velociraptor_for_ssl.html#more">Read more...</a></p> 
+ 
+ 
+ 
+]]></description>
+             <pubDate>Sat, 22 Dec 2018 00:00:00 +1000</pubDate>
+        </item>
+    
         <item>
             <link>https://docs.velociraptor.velocidex.com/blog/html/2018/12/11/velociraptor_interactive_shell.html</link>
             <guid>https://docs.velociraptor.velocidex.com/blog/html/2018/12/11/velociraptor_interactive_shell.html</guid>

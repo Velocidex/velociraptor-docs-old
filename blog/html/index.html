@@ -96,6 +96,45 @@
             <li class="left"></li>
             <li class="right"><a href="page2.html">Older</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
+            <span>December 22, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/12/22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a></h1>
+<p>We have previously seen how to deploy a new Velociraptor server. For a
+simple deployment we can have Velociraptor server and clients
+provisioned in minutes.</p>
+<p>Usually we deploy a specific Velociraptor deployment on our DFIR
+engagements. We use cloud resources to provision the server and have
+the clients connect to this cloud VM. A proper secure deployment of
+Velociraptor will use SSL for securing both client communication and
+protecting the web GUI.</p>
+<p>In the past provisioning an SSL enabled web application was complex
+and expensive - you had to create certificate signing requests,
+interact with a CA. Pay for the certificates, then configure the
+server. In particular you had to remember to renew the cert in 2 years
+or your website suddenly broke!</p>
+<p>Those days are over with the emergence of Lets Encrypt! and
+autocert. These days applications can automatically provision their
+own certificates. Velociraptor can manage its own certificates, fully
+automatically - and then renew its certificates when the time comes
+with no user intervention required.</p>
+<p>In this blog post we will see how to configure a new Velociraptor
+server in a cloud VM.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/12/22/configuring_velociraptor_for_ssl.html#more">Read more...</a></p> 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/12/22/configuring_velociraptor_for_ssl.html#disqus_thread" data-disqus-identifier="2018/12/22/configuring_velociraptor_for_ssl">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>December 11, 2018</span>
         </div>
         <div class="section">
@@ -342,43 +381,6 @@ communication.</p>
         
         <div class="comments">
             <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/03/velociraptor_s_client_communications.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_s_client_communications">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 20, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a></h1>
-<p>We are super excited to introduce this point release of Velociraptor
-(0.2.2) which introduces the concept of Velociraptor Artifacts for the
-first time. This post is about what artifacts are, what they do and
-how can you use them.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/08/20/velociraptor_artifacts.html#more">Read more...</a></p> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        <div class="comments">
-            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/20/velociraptor_artifacts.html#disqus_thread" data-disqus-identifier="2018/08/20/velociraptor_artifacts">Leave a comment</a>
         </div></div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -387,6 +389,8 @@ how can you use them.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2018/12/22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a>
+        </li><li>
             <a href="2018/12/11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a>
         </li><li>
             <a href="2018/12/10/server_side_vql_queries_and_events.html">Server side VQL queries and Escalation Events</a>
@@ -404,8 +408,6 @@ how can you use them.</p>
             <a href="2018/09/03/velociraptor_walk_through_and_demo.html">Velociraptor walk through and demo</a>
         </li><li>
             <a href="2018/09/03/velociraptor_s_client_communications.html">Velociraptor’s client communications</a>
-        </li><li>
-            <a href="2018/08/20/velociraptor_artifacts.html">Velociraptor Artifacts</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">

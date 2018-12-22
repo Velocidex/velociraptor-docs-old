@@ -1,0 +1,328 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Configuring Velociraptor for SSL &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velociraptor Interactive Shell" href="../11/velociraptor_interactive_shell.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>December 22, 2018</span>
+        </div>
+    <div class="section" id="configuring-velociraptor-for-ssl">
+<h1>Configuring Velociraptor for SSL</h1>
+<p>We have previously seen how to deploy a new Velociraptor server. For a
+simple deployment we can have Velociraptor server and clients
+provisioned in minutes.</p>
+<p>Usually we deploy a specific Velociraptor deployment on our DFIR
+engagements. We use cloud resources to provision the server and have
+the clients connect to this cloud VM. A proper secure deployment of
+Velociraptor will use SSL for securing both client communication and
+protecting the web GUI.</p>
+<p>In the past provisioning an SSL enabled web application was complex
+and expensive - you had to create certificate signing requests,
+interact with a CA. Pay for the certificates, then configure the
+server. In particular you had to remember to renew the cert in 2 years
+or your website suddenly broke!</p>
+<p>Those days are over with the emergence of Lets Encrypt! and
+autocert. These days applications can automatically provision their
+own certificates. Velociraptor can manage its own certificates, fully
+automatically - and then renew its certificates when the time comes
+with no user intervention required.</p>
+<p>In this blog post we will see how to configure a new Velociraptor
+server in a cloud VM.</p>
+<div id="more"> </div><div class="section" id="setting-up-a-domain">
+<h2>Setting up a domain</h2>
+<p>The first step in deploying an SSL enabled web application is to have
+a domain name. SSL verifies the authenticity of a web site by its DNS
+name.</p>
+<p>We go over to Google Domains and buy a domain. In this post I will be
+using the domain <cite>rekall-innovations.com</cite>.</p>
+</div>
+<div class="section" id="provisioning-a-virtual-machine">
+<h2>Provisioning a Virtual Machine</h2>
+<p>Next we provision an Ubuntu VM from any cloud provider. Depending on
+your deployment size your VM should be large enough. An 8 or 16Gb VM
+should be sufficient for around 5-10k clients. Additionally we will
+need sufficient disk space to hold the data we will collect. We
+recommend to start with a modest amount of storage and then either
+backup data as it gets collected or increase the storage volumne as
+needed.</p>
+<p>Our virtual machine will receive connections over ports 80
+and 443.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When using SSL both the client communication <em>and</em> the GUI
+are served over the same ports to benefit from SSL transport
+encryption.</p>
+</div>
+<p>When we deploy our Virtual Machine we may choose either a static IP
+addree or allow the cloud provider to assign a dynamic IP address. We
+typically choose a dynamic IP address and so we need to configure
+Dynamic DNS.</p>
+<p>Go to the Google Domains dashboard and create a new dynamic DNS for
+your domain. In our example we will use
+<cite>velociraptor.rekall-innovations.com</cite> as our endpoint address.</p>
+<img alt="../../../_images/11.png" src="../../../_images/11.png" />
+<p>After the dynamic address is created, we can get the credentials for
+updating the IP address.</p>
+<img alt="../../../_images/21.png" src="../../../_images/21.png" />
+<p>Next we install ddclient on our VM. This will update our dynamic IP
+address whenever the external interface changes. Configure the file
+<cite>/etc/ddclient.conf</cite>:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>protocol=dyndns2
+use=web
+server=domains.google.com
+ssl=yes
+login=X13342342XYZ
+password=&#39;slk43521kj&#39;
+velociraptor.rekall-innovations.com
+</pre></div>
+</div>
+<p>Next configure the service to start:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span># Configuration for ddclient scripts
+# generated from debconf on Tue Oct 23 20:25:23 AEST 2018
+#
+# /etc/default/ddclient
+
+# Set to &quot;true&quot; if ddclient should be run every time DHCP client (&#39;dhclient&#39;
+# from package isc-dhcp-client) updates the systems IP address.
+run_dhclient=&quot;false&quot;
+
+# Set to &quot;true&quot; if ddclient should be run every time a new ppp connection is
+# established. This might be useful, if you are using dial-on-demand.
+run_ipup=&quot;false&quot;
+
+# Set to &quot;true&quot; if ddclient should run in daemon mode
+# If this is changed to true, run_ipup and run_dhclient must be set to false.
+run_daemon=&quot;true&quot;
+
+# Set the time interval between the updates of the dynamic DNS name in seconds.
+# This option only takes effect if the ddclient runs in daemon mode.
+daemon_interval=&quot;300&quot;
+</pre></div>
+</div>
+<p>Run dhclient and check that it updates the address correctly.</p>
+</div>
+<div class="section" id="id1">
+<h2>Configuring Velociraptor for SSL</h2>
+<p>Now comes the hard part! We need to configure Velociraptor to use
+SSL. Edit the following in your <cite>server.config.yaml</cite> file (if you do
+not have one yet you can generate one using <cite>velociraptor config
+generate &gt; server.config.yaml</cite>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Client</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">server_urls</span><span class="p p-Indicator">:</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://velociraptor.rekall-innovations.com/</span>
+
+<span class="l l-Scalar l-Scalar-Plain">autocert_domain</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">velociraptor.rekall-innovations.com</span>
+<span class="l l-Scalar l-Scalar-Plain">autocert_cert_cache</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/etc/velociraptor_cache/</span>
+</pre></div>
+</div>
+<p>The <cite>autocert_domain</cite> parameter tells Velociraptor to provision its
+own cert for this domain automatically. The certificates will be
+stored in the directory specified by <cite>autocert_cert_cache</cite>.  You dont
+have to worry about rotating the certs, Velociraptor will
+automatically renew them.</p>
+<p>Obviously now the clients need to connect to the control channel over
+SSL so we also need to direct the client’s <cite>server_urls</cite> parameter to
+the SSL port.</p>
+<p>If all goes well we now can point our browser to
+<cite>https://velociraptor.rekall-innovations.com/</cite> and it should just
+work. Don’t forget to provision a user and password using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config server.config.yaml user add mic
+</pre></div>
+</div>
+</div>
+<div class="section" id="notes">
+<h2>Notes</h2>
+<p>The autocert configuration is very easy to do but there are a few caveats:</p>
+<ol class="arabic simple">
+<li>Both ports 80 and 443 must be accessible over the web. This is
+needed because Letsencrypt’s servers need to connect to our domain
+name in order to verify our domain ownership.</li>
+<li>It is not possible to change the ports from port 80 and 443 due to
+limitations in Letsencrypt’s ACME protocol. This is why we can not
+have more than one Velociraptor deployment on the same IP
+currently.</li>
+</ol>
+<p>We have seen how easy it is to deploy secure Velociraptor servers. In
+the next post we will discuss how to enhance security further by
+deploying two factor authentication with Google’s Single Sign On (SSO).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This feature will be available in the upcoming 0.27
+release. You can try it now by building from git head.</p>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/22/configuring_velociraptor_for_ssl";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+
+    $('.section a.img').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true,
+    });
+});
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Configuring Velociraptor for SSL</a><ul>
+<li><a class="reference internal" href="#setting-up-a-domain">Setting up a domain</a></li>
+<li><a class="reference internal" href="#provisioning-a-virtual-machine">Provisioning a Virtual Machine</a></li>
+<li><a class="reference internal" href="#id1">Configuring Velociraptor for SSL</a></li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

@@ -46,3 +46,7 @@ aside.fixed {
 [aria-expanded="true"] i.to_open {
     display: none;
 }
+
+pre a span {
+    color: cyan;
+}
