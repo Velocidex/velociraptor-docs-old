@@ -28,7 +28,7 @@
 <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
 <script src="../../../_static/plugins.js"></script>
 <script src="../../../_static/main.js"></script>
-<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velociraptor Interactive Shell" href="../11/velociraptor_interactive_shell.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velociraptor Interactive Shell" href="../11/velociraptor_interactive_shell.html" /><link rel="prev" title="Deploying Velociraptor with OAuth SSO" href="../23/deploying_velociraptor_with_oauth_sso.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.1',
@@ -93,7 +93,7 @@
 </div>
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../23/deploying_velociraptor_with_oauth_sso.html">Deploying Velociraptor with OAuth SSO</a></li>
             <li class="right"><a href="../11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
             <span>December 22, 2018</span>
@@ -135,7 +135,7 @@ your deployment size your VM should be large enough. An 8 or 16Gb VM
 should be sufficient for around 5-10k clients. Additionally we will
 need sufficient disk space to hold the data we will collect. We
 recommend to start with a modest amount of storage and then either
-backup data as it gets collected or increase the storage volumne as
+backup data as it gets collected or increase the storage volume as
 needed.</p>
 <p>Our virtual machine will receive connections over ports 80
 and 443.</p>
@@ -146,7 +146,7 @@ are served over the same ports to benefit from SSL transport
 encryption.</p>
 </div>
 <p>When we deploy our Virtual Machine we may choose either a static IP
-addree or allow the cloud provider to assign a dynamic IP address. We
+address or allow the cloud provider to assign a dynamic IP address. We
 typically choose a dynamic IP address and so we need to configure
 Dynamic DNS.</p>
 <p>Go to the Google Domains dashboard and create a new dynamic DNS for
@@ -198,7 +198,7 @@ daemon_interval=&quot;300&quot;
 <p>Now comes the hard part! We need to configure Velociraptor to use
 SSL. Edit the following in your <cite>server.config.yaml</cite> file (if you do
 not have one yet you can generate one using <cite>velociraptor config
-generate &gt; server.config.yaml</cite>:</p>
+generate &gt; server.config.yaml</cite> ):</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Client</span><span class="p p-Indicator">:</span>
    <span class="l l-Scalar l-Scalar-Plain">server_urls</span><span class="p p-Indicator">:</span>
    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://velociraptor.rekall-innovations.com/</span>
@@ -209,12 +209,24 @@ generate &gt; server.config.yaml</cite>:</p>
 </div>
 <p>The <cite>autocert_domain</cite> parameter tells Velociraptor to provision its
 own cert for this domain automatically. The certificates will be
-stored in the directory specified by <cite>autocert_cert_cache</cite>.  You dont
+stored in the directory specified by <cite>autocert_cert_cache</cite>.  You don’t
 have to worry about rotating the certs, Velociraptor will
 automatically renew them.</p>
 <p>Obviously now the clients need to connect to the control channel over
 SSL so we also need to direct the client’s <cite>server_urls</cite> parameter to
 the SSL port.</p>
+<p>Lets start the frontend (We need to start Velociraptor as root because
+it must be able to bind to port 80 and 443):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sudo velociraptor --config server.config.yaml frontend -v
+
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Loaded <span class="m">43</span> built in artifacts
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Increased open file limit to <span class="m">999999</span>
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Launched gRPC API server on <span class="m">127</span>.0.0.1:8888
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Autocert specified - will listen on ports <span class="m">443</span> and <span class="m">80</span>. I will ignore specified GUI port at <span class="m">8889</span>
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Autocert specified - will listen on ports <span class="m">443</span> and <span class="m">80</span>. I will ignore specified Frontend port at <span class="m">8889</span>
+<span class="o">[</span>INFO<span class="o">]</span> <span class="m">2018</span>-12-22T17:12:42+10:00 Frontend is ready to handle client requests using HTTPS
+</pre></div>
+</div>
 <p>If all goes well we now can point our browser to
 <cite>https://velociraptor.rekall-innovations.com/</cite> and it should just
 work. Don’t forget to provision a user and password using:</p>
@@ -253,7 +265,7 @@ release. You can try it now by building from git head.</p>
         
         </div>
     <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/22/configuring_velociraptor_for_ssl";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
-            <li class="left"></li>
+            <li class="left"> &laquo; <a href="../23/deploying_velociraptor_with_oauth_sso.html">Deploying Velociraptor with OAuth SSO</a></li>
             <li class="right"><a href="../11/velociraptor_interactive_shell.html">Velociraptor Interactive Shell</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
 

@@ -1,0 +1,337 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Deploying Velociraptor with OAuth SSO &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Configuring Velociraptor for SSL" href="../22/configuring_velociraptor_for_ssl.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../index.html">Home</a>
+        </li>
+        <li class="main-nav">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a> &raquo; </li>
+        </ul><div class="timestamp postmeta">
+            <span>December 23, 2018</span>
+        </div>
+    <div class="section" id="deploying-velociraptor-with-oauth-sso">
+<h1>Deploying Velociraptor with OAuth SSO</h1>
+<p>In the previous post we saw how to set up Velociraptor’s GUI over
+SSL. This is great, but we still need to create users and assign them
+passwords manually. The trouble with user account management is that
+we can not enforce 2 factor authentication, or any password policies
+or any of the usual enterprise requirements for user account
+management. It is also difficult for users to remember yet another
+password for a separate system, and so might make the password easily
+guessable.</p>
+<p>Most enterprise systems require an SSO mechanism to manage user
+accounts and passwords. Manual user account management simply does not
+scale!</p>
+<p>In this post we discuss how to enable Google’s SSO authentication for
+Velociraptor identity management.</p>
+<div id="more"> </div><div class="section" id="oauth-identity-management">
+<h2>OAuth Identity management</h2>
+<p>Velociraptor can use Google’s oauth mechanism to verify a user’s
+identity. This requires a user to authenticate to Google via their
+usual mechanism - if their account requires 2 factor authentication,
+then users need to log in this way.</p>
+<p>Once the user authenticates to Google, they are redirected back into
+the Velociraptor application with a token that allows the application
+to request information about the user (for example, the username or
+email address).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">OAuth is an authentication protocol. This means Velociraptor
+can be pretty confident the user is who they claim they
+are. This does not automatically grant them access to the
+application! A Velociraptor administrator must still
+manually grant them access before a user may log in.</p>
+</div>
+<p>Before we can use Google for Authentication, we need to register our
+Velociraptor deployment as an OAuth App with Google. Unfortunately
+Google is not known for having intuitive and easy to follow processes
+so actually doing this is complicated and bounces through many
+seemingly unrelated Google products and services. This post attempts
+to document this process at it exists in this time.</p>
+<p>For our example we assume that our server is located at
+<a class="reference external" href="https://velociraptor.rekall-innovations.com">https://velociraptor.rekall-innovations.com</a> as we continue on from our
+example in the last post (i.e. it is already configured to use SSL).</p>
+</div>
+<div class="section" id="registering-velociraptor-as-an-oauth-application">
+<h2>Registering Velociraptor as an OAuth application</h2>
+<p>The first step is to register Velociraptor as an OAuth app. We do this
+by accessing the Google cloud console at
+<a class="reference external" href="https://console.cloud.google.com">https://console.cloud.google.com</a> . You will need to set up a cloud
+account first and create a cloud project. Although in this example we
+do not necessarily need to host our application on Google cloud or
+have anything to do with Google cloud, OAuth seems to exist within the
+Google cloud product.</p>
+<p>Our ultimate goal is to obtain OAuth credentials to give our
+Velociraptor app, but we have to have a few things set up first. The
+cloud console is fairly confusing so I usually use the search feature
+to find exactly what I need. Searching for “oauth” at the search bar
+indicates that it is under “APIs and Services”.</p>
+<p>We need to set up the OAuth consent screen first - in which we give
+our application a name to be presented to the user by the OAuth flow:</p>
+<img alt="../../../_images/12.png" src="../../../_images/12.png" />
+<p>Further down we need to provide an authorized domain</p>
+<img alt="../../../_images/22.png" src="../../../_images/22.png" />
+<p>In order to add an Authorized domain we need to <em>verify it</em>. Google’s
+help pages explain it further:</p>
+<div class="admonition-authorized-domains admonition">
+<p class="first admonition-title">Authorized domains</p>
+<p class="last">To protect you and your users, Google restricts your OAuth 2.0
+application to using Authorized Domains. If you have verified the
+domain with Google, you can use any Top Private Domain as an
+Authorized Domain.</p>
+</div>
+<p>And this links to <a class="reference external" href="https://www.google.com/webmasters/tools/home">https://www.google.com/webmasters/tools/home</a> which
+again seems completely unrelated to OAuth, Velociraptor or even a web
+app (the web masters product is supposed to help sites increase their
+search presence).</p>
+<p>Within this product we now need to “Add a property”:</p>
+<img alt="../../../_images/31.png" src="../../../_images/31.png" />
+<p>Hidden within the settings menu there is an option “Verification
+Details” which allows you to verify that you own the domain. If you
+purchased your domain from Google Domains then it should already be
+verified - otherwise you can set some TXT records to prove you own the
+domain.</p>
+<img alt="../../../_images/4.png" src="../../../_images/4.png" />
+<p>After all this we can go back to the cloud console and Create
+Credentials/OAuth client ID:</p>
+<img alt="../../../_images/5.png" src="../../../_images/5.png" />
+<p>Now select “Web App” and we must set the “Authorized redirect URIs” to
+<a class="reference external" href="https://velociraptor.rekall-innovations.com/auth/google/callback">https://velociraptor.rekall-innovations.com/auth/google/callback</a> -
+This is the URL that successful OAuth authentication will direct
+to. Velociraptor accepts this redirect and uses it to log the user on.</p>
+<img alt="../../../_images/6.png" src="../../../_images/6.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The UI is a bit confusing here - you must press enter after
+typing the redirect URL to have it registered <strong>before</strong> you
+hit <em>Create</em> otherwise it misses that you typed it
+completely. I spent some time stumped on this UI bug.</p>
+</div>
+<p>If all goes well the Google cloud console will give us a client ID and
+a client secret. We can then copy those into the Velociraptor
+configuration file under the GUI section:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">GUI</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">google_oauth_client_id</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1234xxxxxx.apps.googleusercontent.com</span>
+  <span class="l l-Scalar l-Scalar-Plain">google_oauth_client_secret</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">qsadlkjhdaslkjasd</span>
+  <span class="l l-Scalar l-Scalar-Plain">public_url</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">https://velociraptor.rekall-innovations.com/</span>
+
+<span class="l l-Scalar l-Scalar-Plain">logging</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">output_directory</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/var/log/velociraptor/</span>
+  <span class="l l-Scalar l-Scalar-Plain">separate_logs_per_component</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>In the above config we also enabled logging (which is important for a
+secure application!). The <cite>separate_logs_per_component</cite> option will
+create a separate log file for the GUI, Frontend as well as important
+Audit related events.</p>
+<p>Now we can start the Velociraptor frontend:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config server.config.yaml frontend
+</pre></div>
+</div>
+<p>Connecting using the browser goes through the familiar OAuth flow and
+arrives at this Velociraptor screen:</p>
+<img alt="../../../_images/7.png" src="../../../_images/7.png" />
+<p>The OAuth flow ensures the user’s identity is correct but does not
+give them permission to log into Velociraptor. Note that having an
+OAuth enabled application on the web allows anyone with a Google
+identity to authenticate to the application but the user is still
+required to be authorized. We can see the following in the Audit logs:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;msg&quot;</span><span class="p">:</span> <span class="s2">&quot;User rejected by GUI&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;remote&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.0.10:40570&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="s2">&quot;2018-12-21T18:17:47+10:00&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;mike@velocidex.com&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In order to authorize the user we must explicitly add them using the
+velociraptor admin tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ velociraptor --config ~/server.config.yaml user add mike@velocidex.com
+Authentication will occur via Google - therefore no password needs to be set.
+</pre></div>
+</div>
+<p>Note that this time, Velociraptor does not ask for a password at all,
+since authentication occurs using Google’s SSO. If we hit refresh in
+the browser we can now see the Velociraptor application:</p>
+<img alt="../../../_images/8.png" src="../../../_images/8.png" />
+<p>We can see that the logged in user is authenticated by Google, and we
+can also see their Google avatar at the top right for some more eye
+candy :-).</p>
+<div class="admonition-thanks admonition">
+<p class="first admonition-title">Thanks</p>
+<p class="last">Shouts to the folks from <a class="reference external" href="https://www.kleinco.com.au/">Klein &amp; Co</a> who sponsored this exciting
+feature!.</p>
+</div>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        </div>
+    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/23/deploying_velociraptor_with_oauth_sso";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+
+    $('.section a.img').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true,
+    });
+});
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Deploying Velociraptor with OAuth SSO</a><ul>
+<li><a class="reference internal" href="#oauth-identity-management">OAuth Identity management</a></li>
+<li><a class="reference internal" href="#registering-velociraptor-as-an-oauth-application">Registering Velociraptor as an OAuth application</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+<script>
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = item.offset();
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

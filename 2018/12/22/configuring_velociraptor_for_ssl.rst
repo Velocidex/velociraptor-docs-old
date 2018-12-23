@@ -46,7 +46,7 @@ your deployment size your VM should be large enough. An 8 or 16Gb VM
 should be sufficient for around 5-10k clients. Additionally we will
 need sufficient disk space to hold the data we will collect. We
 recommend to start with a modest amount of storage and then either
-backup data as it gets collected or increase the storage volumne as
+backup data as it gets collected or increase the storage volume as
 needed.
 
 Our virtual machine will receive connections over ports 80
@@ -57,7 +57,7 @@ and 443.
           encryption.
 
 When we deploy our Virtual Machine we may choose either a static IP
-addree or allow the cloud provider to assign a dynamic IP address. We
+address or allow the cloud provider to assign a dynamic IP address. We
 typically choose a dynamic IP address and so we need to configure
 Dynamic DNS.
 
@@ -120,7 +120,7 @@ Configuring Velociraptor for SSL
 Now comes the hard part! We need to configure Velociraptor to use
 SSL. Edit the following in your `server.config.yaml` file (if you do
 not have one yet you can generate one using `velociraptor config
-generate > server.config.yaml`:
+generate > server.config.yaml` ):
 
 .. code-block:: yaml
 
@@ -133,13 +133,28 @@ generate > server.config.yaml`:
 
 The `autocert_domain` parameter tells Velociraptor to provision its
 own cert for this domain automatically. The certificates will be
-stored in the directory specified by `autocert_cert_cache`.  You dont
+stored in the directory specified by `autocert_cert_cache`.  You don't
 have to worry about rotating the certs, Velociraptor will
 automatically renew them.
 
 Obviously now the clients need to connect to the control channel over
 SSL so we also need to direct the client's `server_urls` parameter to
 the SSL port.
+
+Lets start the frontend (We need to start Velociraptor as root because
+it must be able to bind to port 80 and 443):
+
+.. code-block:: bash
+
+   $ sudo velociraptor --config server.config.yaml frontend -v
+
+   [INFO] 2018-12-22T17:12:42+10:00 Loaded 43 built in artifacts
+   [INFO] 2018-12-22T17:12:42+10:00 Increased open file limit to 999999
+   [INFO] 2018-12-22T17:12:42+10:00 Launched gRPC API server on 127.0.0.1:8888
+   [INFO] 2018-12-22T17:12:42+10:00 Autocert specified - will listen on ports 443 and 80. I will ignore specified GUI port at 8889
+   [INFO] 2018-12-22T17:12:42+10:00 Autocert specified - will listen on ports 443 and 80. I will ignore specified Frontend port at 8889
+   [INFO] 2018-12-22T17:12:42+10:00 Frontend is ready to handle client requests using HTTPS
+
 
 If all goes well we now can point our browser to
 `https://velociraptor.rekall-innovations.com/` and it should just
