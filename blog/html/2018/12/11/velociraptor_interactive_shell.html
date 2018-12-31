@@ -37,7 +37,7 @@
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script><script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -76,8 +76,9 @@
     <nav class="big_nav" role="navigation">
       <ul>
         <li class="main-nav">
-          <a href="../../../index.html">Home</a>
+          <a href="../../../pages/overview.html">Overview</a>
         </li>
+
         <li class="main-nav">
           <a href="../../../reference/artifacts.html">Artifacts</a>
         </li><li class="quicklink"><div class="rss">
@@ -95,10 +96,9 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
             <li class="left"> &laquo; <a href="../22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a></li>
             <li class="right"><a href="../10/server_side_vql_queries_and_events.html">Server side VQL queries and Escalation Events</a> &raquo; </li>
-        </ul><div class="timestamp postmeta">
-            <span>December 11, 2018</span>
-        </div>
-    <div class="section" id="velociraptor-interactive-shell">
+        </ul>
+  
+     <div class="section" id="velociraptor-interactive-shell">
 <h1>Velociraptor Interactive Shell</h1>
 <p>One of the interesting new features in the latest release of
 Velociraptor is an interactive shell. One can interact with the end
@@ -253,14 +253,8 @@ for long term auditing of any interactive shell use.</p>
 </div>
 </div>
 
-    <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        </div>
-    <div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2018/12/11/velociraptor_interactive_shell";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><ul class="related clearfix">
+   
+<ul class="related clearfix">
             <li class="left"> &laquo; <a href="../22/configuring_velociraptor_for_ssl.html">Configuring Velociraptor for SSL</a></li>
             <li class="right"><a href="../10/server_side_vql_queries_and_events.html">Server side VQL queries and Escalation Events</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
@@ -297,13 +291,27 @@ for long term auditing of any interactive shell use.</p>
   </div>
 
 
-<script>
+  <script>
+    var cumulativeOffset = function(element) {
+      var top = 0, left = 0;
+      do {
+       top += element.offsetTop  || 0;
+       left += element.offsetLeft || 0;
+       element = element.offsetParent;
+      } while(element);
+
+      return {
+        top: top,
+        left: left
+      };
+    };
+
   $(window).scroll(function() {
     var scroll = document.documentElement.scrollTop;
 
   if (scroll > 150) {
       var item = $("aside");
-      var offset = item.offset();
+      var offset = cumulativeOffset(item[0]);
 
       // If the scrollbar overlaps the article do not obscure it.
       if (offset.left < $("article").width()) {

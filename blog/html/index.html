@@ -37,7 +37,7 @@
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script>
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script><script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="_static/disqus.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -76,8 +76,9 @@
     <nav class="big_nav" role="navigation">
       <ul>
         <li class="main-nav">
-          <a href="#">Home</a>
+          <a href="pages/overview.html">Overview</a>
         </li>
+
         <li class="main-nav">
           <a href="reference/artifacts.html">Artifacts</a>
         </li><li class="quicklink"><div class="rss">
@@ -422,7 +423,58 @@ and play with it, and please provide feedback at
         <input type="text" name="q" />
         <button type="submit"><span class="fa fa-search"></span></button>
     </form>
-</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+</div></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    
+  </div>
+
+
+  <script>
+    var cumulativeOffset = function(element) {
+      var top = 0, left = 0;
+      do {
+       top += element.offsetTop  || 0;
+       left += element.offsetLeft || 0;
+       element = element.offsetParent;
+      } while(element);
+
+      return {
+        top: top,
+        left: left
+      };
+    };
+
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = cumulativeOffset(item[0]);
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

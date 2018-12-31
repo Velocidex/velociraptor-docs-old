@@ -35,7 +35,7 @@ pre {
 }
 
 aside.fixed {
-    position: fixed;
+    position: sticky;
     top: 0;
 }
 
@@ -49,4 +49,94 @@ aside.fixed {
 
 pre a span {
     color: cyan;
+}
+
+
+article.fullwidth {
+    width: 100%;
+}
+
+img.screenshot {
+    height: 200px;
+}
+
+.carousel-inner img {
+    margin: auto;
+}
+
+
+.carousel-item .carousel-caption {
+    color: black;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    height: 100px;
+    width: 100px;
+    border: 0px;
+}
+
+.carousel-control-next-icon:after
+{
+    content: '>';
+    font-size: 55px;
+    color: black;
+}
+
+.carousel-control-prev-icon:after {
+    content: '<';
+    font-size: 55px;
+    color: black;
+}
+
+
+h2.ov-title {
+    font-size: 37px;
+    line-height: 50px;
+    font-weight: 700;
+    color: #3a3a3a;
+    text-decoration: none;
+    text-align: center;
+}
+
+
+h3.ov-title {
+    color: #1e73be;
+    margin-top: 0;
+    font-size: 20px;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 400;
+    font-style: normal;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-family: montserrat,Helvetica,Arial,sans-serif;
+}
+
+.icon-wrapper img {
+    width: 50px;
+    height: 50px;
+}
+
+
+div.carousel .item {
+    height: 800px;
+}
+
+div.carousel-html-content {
+    width:100%;
+    overflow:hidden;
+    display:block;
+}
+
+div.ov-section {
+    margin-top: 30px;
+}
+
+.platform-icon {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 20px;
 }

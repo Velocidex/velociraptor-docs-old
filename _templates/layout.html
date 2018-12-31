@@ -27,11 +27,9 @@
     </div>
     <nav class="big_nav" role="navigation">
       <ul>
-        {% for page in pages -%}
         <li class="main-nav">
-          <a href="{{ pathto(page[0]) }}">{{ page[1]|e }}</a>
+          <a href="{{ pathto('pages/overview') }}">Overview</a>
         </li>
-        {% endfor -%}
 
         <li class="main-nav">
           <a href="{{ pathto('reference/artifacts') }}">Artifacts</a>

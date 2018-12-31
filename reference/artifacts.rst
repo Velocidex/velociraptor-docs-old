@@ -1,5 +1,5 @@
 This page displays information about the Velociraptor built in
-artifacts. There are 38 artifacts in total. Use the navigation menu
+artifacts. There are 43 artifacts in total. Use the navigation menu
 to the right to quickly skip to the right artifact
 definition. Definitions may be expanded to view the VQL source.
 
@@ -33,7 +33,16 @@ Generic.Client.Stats
    sources:
      - queries:
          - |
-           SELECT UnixNano FROM clock(period=atoi(string=Frequency))
+           SELECT * from foreach(
+            row={
+              SELECT UnixNano FROM clock(period=atoi(string=Frequency))
+            },
+            query={
+              SELECT UnixNano / 1000000000 as Timestamp,
+                     Times.user + Times.system as CPU,
+                     MemoryInfo.RSS as RSS
+              FROM pslist(pid=getpid())
+            })
 
 .. raw:: html
 
@@ -1194,6 +1203,195 @@ Network.ExternalIpAddress
    </div></div>
 
 
+.. |Server_Alerts_InteractiveShellDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Server_Alerts_InteractiveShellDetails" role="button"
+     aria-expanded="false" aria-controls="Server_Alerts_InteractiveShellDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Server.Alerts.InteractiveShell
+******************************
+|Server_Alerts_InteractiveShellDetails| Velociraptor's interactive shell is a powerful feature. If you want
+to monitor use of the shell on any clients, simply collect this
+artifact.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Server_Alerts_InteractiveShellDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Server.Alerts.InteractiveShell
+   description: |
+     Velociraptor's interactive shell is a powerful feature. If you want
+     to monitor use of the shell on any clients, simply collect this
+     artifact.
+   
+   sources:
+     - queries:
+         - |
+           SELECT * from watch_monitoring(artifact='Shell')
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Server_Alerts_PsExecDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Server_Alerts_PsExecDetails" role="button"
+     aria-expanded="false" aria-controls="Server_Alerts_PsExecDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Server.Alerts.PsExec
+********************
+|Server_Alerts_PsExecDetails| Send an email if execution of the psexec service was detected on
+any client. This is a server side artifact.
+
+Note this requires that the Windows.Event.ProcessCreation
+monitoring artifact be collected from clients.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Server_Alerts_PsExecDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Server.Alerts.PsExec
+   description: |
+      Send an email if execution of the psexec service was detected on
+      any client. This is a server side artifact.
+   
+      Note this requires that the Windows.Event.ProcessCreation
+      monitoring artifact be collected from clients.
+   
+   parameters:
+     - name: EmailAddress
+       default: admin@example.com
+     - name: MessageTemplate
+       default: |
+         PsExec execution detected at %v: %v for client %v
+   
+   sources:
+     - queries:
+         - |
+           SELECT * FROM foreach(
+             row={
+               SELECT * from watch_monitoring(
+                 artifact='Windows.Events.ProcessCreation')
+               WHERE Name =~ '(?i)psexesvc'
+             },
+             query={
+               SELECT * FROM mail(
+                 to=EmailAddress,
+                 subject='PsExec launched on host',
+                 period=60,
+                 body=format(
+                 format=MessageTemplate,
+                 args=[Timestamp, CommandLine, ClientId])
+             )
+           })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Server_Hunts_ListDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Server_Hunts_ListDetails" role="button"
+     aria-expanded="false" aria-controls="Server_Hunts_ListDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Server.Hunts.List
+*****************
+|Server_Hunts_ListDetails| List Hunts currently scheduled on the server.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Server_Hunts_ListDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Server.Hunts.List
+   description: |
+     List Hunts currently scheduled on the server.
+   
+   sources:
+     - precondition:
+         SELECT * from server_config
+   
+       queries:
+         - |
+           SELECT HuntId, timestamp(epoch=create_time/1000000) as Created,
+                  start_request.Args.artifacts.names  as Artifact,
+                  State
+           FROM hunts()
+           WHERE start_request.flow_name = 'ArtifactCollector'
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Server_Hunts_ResultsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Server_Hunts_ResultsDetails" role="button"
+     aria-expanded="false" aria-controls="Server_Hunts_ResultsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Server.Hunts.Results
+********************
+|Server_Hunts_ResultsDetails| Show the results from each artifact collection hunt.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Server_Hunts_ResultsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Server.Hunts.Results
+   description: |
+     Show the results from each artifact collection hunt.
+   parameters:
+     - name: huntId
+       default: H.d05b2482
+     - name: ArtifactName
+       default: Linux.Mounts
+   
+   sources:
+     - precondition:
+         SELECT * from server_config
+   
+       queries:
+         - |
+           SELECT * FROM hunt_results(hunt_id=huntId, artifact=ArtifactName)
+
+.. raw:: html
+
+   </div></div>
+
+
 .. |Windows_Applications_ChocolateyPackagesDetails| raw:: html
 
   <a data-toggle="collapse" class='details-opener'
@@ -1523,7 +1721,10 @@ event log and records them on the server.
          C:/Windows/System32/Winevt/Logs/System.evtx
    
    sources:
-     - queries:
+    - precondition:
+        SELECT OS from info() where OS = "windows"
+   
+      queries:
          - |
            SELECT System.TimeCreated.SystemTime as Timestamp,
                   System.EventID.Value as EventID,
@@ -2225,6 +2426,65 @@ Windows.Sys.FirewallRules
                      else=Record.LPort) as LPort,
                   Record.Name as Name
            FROM rules
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Sys_InterfacesDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Sys_InterfacesDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Sys_InterfacesDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Sys.Interfaces
+**********************
+|Windows_Sys_InterfacesDetails| Report information about the systems interfaces. This artifact
+simply parses the output from ipconfig /all.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Sys_InterfacesDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Sys.Interfaces
+   description: |
+     Report information about the systems interfaces. This artifact
+     simply parses the output from ipconfig /all.
+   
+   sources:
+    - precondition:
+        SELECT OS from info() where OS = "windows"
+      queries:
+      - |
+        // Run ipconfig to get all information about interfaces.
+        LET ipconfig = SELECT * FROM execve(argv=['ipconfig', '/all'])
+      - |
+        // This produces a single row per interface.
+        LET interfaces = SELECT Name, Data FROM parse_records_with_regex(
+           file=ipconfig.Stdout,
+           accessor='data',      // This makes the data appear as a file.
+           regex='(?s)Ethernet adapter (?P<Name>[^:]+?):\r\n\r\n(?P<Data>.+?)\r\n(\r\n|$)')
+      - |
+        // Now extract interesting things from each interface definition.
+        SELECT Name, parse_string_with_regex(
+           string=Data,
+           regex=[
+             "Description[^:]+: (?P<Description>.+)\r\n",
+             "Physical Address[^:]+: (?P<MAC>.+)\r\n",
+             "IPv4 Address[^:]+: (?P<IP>[0-9.]+)",
+             "Default Gateway[^:]+: (?P<Gateway>.+)\r\n",
+             "DNS Servers[^:]+: (?P<DNS>.+)\r\n",
+             "DHCP Server[^:]+: (?P<DHCP>.+)\r\n"
+           ]
+        ) As Details FROM interfaces
 
 .. raw:: html
 

@@ -16,13 +16,27 @@
   </div>
 
 
-<script>
+  <script>
+    var cumulativeOffset = function(element) {
+      var top = 0, left = 0;
+      do {
+       top += element.offsetTop  || 0;
+       left += element.offsetLeft || 0;
+       element = element.offsetParent;
+      } while(element);
+
+      return {
+        top: top,
+        left: left
+      };
+    };
+
   $(window).scroll(function() {
     var scroll = document.documentElement.scrollTop;
 
   if (scroll > 150) {
       var item = $("aside");
-      var offset = item.offset();
+      var offset = cumulativeOffset(item[0]);
 
       // If the scrollbar overlaps the article do not obscure it.
       if (offset.left < $("article").width()) {

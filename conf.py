@@ -48,7 +48,7 @@ html_theme_options = {}
 rss_service = None
 
 # Generate full posts for RSS feed even when using "read more"
-rss_generate_full_posts = False
+rss_generate_full_posts = True
 
 # Number of blog posts per page
 posts_per_page = 10
@@ -57,7 +57,7 @@ posts_per_page = 10
 slug_word_separator = '_'
 
 # Set to page under /pages (eg. "about" for "pages/about.html")
-landing_page = None
+#landing_page = "overview"
 
 # Set to override the default name of the first page ("Home")
 first_page_title = None
@@ -80,11 +80,6 @@ html_theme_path = ['_themes', tinkerer.paths.themes]
 
 # Add file patterns to exclude from build
 exclude_patterns = ['drafts/*', '_templates/*']
-
-# Add templates to be rendered in sidebar here
-html_sidebars = {
-    '**': ['recent.html', 'searchbox.html']
-}
 
 # Add an index to the HTML documents.
 html_use_index = False
@@ -115,7 +110,12 @@ html_css_files = [
 
 html_sidebars = {
     '20**': ['fancybox.html', "localtoc.html"],
-    'index': ['recent.html', 'searchbox.html'],
-    'page**': ['recent.html', 'searchbox.html'],
+    'index': ['recent.html', 'searchbox.html', 'localtoc.html'],
+    'page**': [],
     'reference/artifacts': ['localtoc.html'],
 }
+
+
+def setup(app):
+    app.add_javascript('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js')
+    app.add_javascript('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
