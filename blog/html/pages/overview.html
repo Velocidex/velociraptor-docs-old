@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
         <meta name="viewport" content="width=device-width">
-        <title>&lt;no title&gt; &mdash; Velociraptor</title>
+        <title>Features and Highlights &mdash; Velociraptor</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -491,8 +491,7 @@
       <p class="kl-iconbox__desc">
         Velociraptor is distributed as a single, statically linked
         binary tested to work on even very old versions of your
-        OS. Deployment is a breeze, since you demanded a fully
-        functional deployment in minutes!
+        OS.
       </p>
       <p>
         Velociraptor is extremely fast and resource efficient. Most
@@ -516,6 +515,43 @@
     </div>
   </div>
 </article>
+<div class="section" id="features-and-highlights">
+<h1>Features and Highlights</h1>
+<p>The following list is a summary of some of the most significant
+features. As Velociraptor gains more features, this list will be
+expanded.</p>
+<ul class="simple">
+<li>Find files on endpoints using glob expressions, file metadata and
+even Yara signatures.</li>
+<li>Search through registry using glob expressions, metadata and even
+Yara signatures.</li>
+<li>Apply Yara signatures to process memory.</li>
+<li>Acquire process memory based on various conditions for further
+examination by Windbg.</li>
+<li>Upload entire files from endpoints automatically and on demand.</li>
+<li>Raw NTFS parsing for access to locked files like the pagefile and
+registry hives.</li>
+<li>Full WMI support - Artifacts can express WMI queries and combine
+these with other queries (e.g. download files mentioned in the WMI
+results).</li>
+<li>Velociraptor supports streaming even queries - data can be collected
+automatically from endpoints and stored on the server. For example
+all these may be streamed to the server:<ul>
+<li>Process execution logs.</li>
+<li>High value events parsed from the event logs.</li>
+<li>DNS Queries and answers</li>
+</ul>
+</li>
+<li>Escalations can be automatically actioned server side upon
+collection of client events..</li>
+<li>Interactive shell is available for those unexpected times when you
+need to get hands on!</li>
+<li>Advanced GUI making many tasks easy.</li>
+<li>Server side VQL allows for automating the server using VQL - launch
+further collection automatically when certain conditions are
+detected.</li>
+</ul>
+</div>
 
 
 <script>
