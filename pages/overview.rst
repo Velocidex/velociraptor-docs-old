@@ -25,7 +25,7 @@ expanded.
 * Full WMI support - Artifacts can express WMI queries and combine
   these with other queries (e.g. download files mentioned in the WMI
   results).
-* Velociraptor supports streaming even queries - data can be collected
+* Velociraptor supports streaming event queries - data can be collected
   automatically from endpoints and stored on the server. For example
   all these may be streamed to the server:
 
@@ -34,10 +34,14 @@ expanded.
   - DNS Queries and answers
 
 * Escalations can be automatically actioned server side upon
-  collection of client events..
+  collection of client events.
 * Interactive shell is available for those unexpected times when you
   need to get hands on!
-* Advanced GUI making many tasks easy.
+* Advanced GUI making many tasks easy. GUI supports SSL and SSO for
+  strong identity management.
 * Server side VQL allows for automating the server using VQL - launch
   further collection automatically when certain conditions are
   detected.
+* Client supports throttling - you can run very intensive operations
+  on the client at a controlled rate to limit impact on endpoint
+  performance.
