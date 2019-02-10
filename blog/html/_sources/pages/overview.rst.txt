@@ -45,3 +45,5 @@ expanded.
 * Client supports throttling - you can run very intensive operations
   on the client at a controlled rate to limit impact on endpoint
   performance.
+* A python API allows for full control of the server from python
+  including post processing acquired data.

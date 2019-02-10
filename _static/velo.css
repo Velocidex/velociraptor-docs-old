@@ -140,3 +140,7 @@ div.ov-section {
     margin-right: 5px;
     margin-bottom: 20px;
 }
+
+article a {
+    color: #0056b3;
+}

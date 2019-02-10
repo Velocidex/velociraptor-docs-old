@@ -28,7 +28,7 @@
 <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
 <script src="_static/plugins.js"></script>
 <script src="_static/main.js"></script>
-<link rel="search" title="Search" href="search.html" /><link rel="prev" title="Newer" href="index.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+<link rel="search" title="Search" href="search.html" /><link rel="next" title="Older" href="page3.html" /><link rel="prev" title="Newer" href="index.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.7.1',
@@ -95,8 +95,69 @@
 
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
             <li class="left"> &laquo; <a href="index.html">Newer</a></li>
-            <li class="right"></li>
+            <li class="right"><a href="page3.html">Older</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
+            <span>September 30, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/30/velorciraptor_s_filesystem_s_accessors.html">Velorciraptor’s filesystem’s accessors</a></h1>
+<p>The latest release of Velociraptor introduces the ability to access
+raw NTFS volumes, allowing users to read files which are normally
+locked by the operating system such as registry hives, pagefile and
+other locked files. In addition, Velociraptor can now also read
+<a class="reference external" href="https://docs.microsoft.com/en-us/windows/desktop/vss/volume-shadow-copy-service-portal">Volume Shadow Copy</a>
+snapshots. The gives a kind of time-machine ability to allow the
+investigator to look through the drive content at a previous point in
+the past.</p>
+<p>This blog post introduces the new features and describe how
+Velociraptor’s filesystem accessors work to provide data from multiple
+sources to VQL queries.</p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/30/velorciraptor_s_filesystem_s_accessors.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/30/velorciraptor_s_filesystem_s_accessors.html#disqus_thread" data-disqus-identifier="2018/09/30/velorciraptor_s_filesystem_s_accessors">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 03, 2018</span>
+        </div>
+        <div class="section">
+            <h1><a href="2018/09/03/velociraptor_walk_through_and_demo.html">Velociraptor walk through and demo</a></h1>
+<p>I just uploaded a screencast of the latest Velociraptor - check it out
+and play with it, and please provide feedback at
+<a class="reference external" href="mailto:velociraptor-discuss%40googlegroups.com">velociraptor-discuss<span>@</span>googlegroups<span>.</span>com</a></p>
+<p class="readmorewrapper"><a class="readmore" href="2018/09/03/velociraptor_walk_through_and_demo.html#more">Read more...</a></p>
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/03/velociraptor_walk_through_and_demo.html#disqus_thread" data-disqus-identifier="2018/09/03/velociraptor_walk_through_and_demo">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 03, 2018</span>
         </div>
         <div class="section">
@@ -309,42 +370,11 @@ overview of VQL.</p>
         
         <div class="comments">
             <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/the_velocidex_query_language.html#disqus_thread" data-disqus-identifier="2018/08/10/the_velocidex_query_language">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 10, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/08/10/introducing_velociraptor.html">Introducing Velociraptor</a></h1>
-<div class="section" id="hunting-and-responding-like-a-raptor">
-<h2>Hunting and responding like a raptor!</h2>
-<p>At Velocidex we have been running open source endpoint monitoring
-tools for our clients in order to detect and respond to incidents.
-One of our favorite tools is GRR, developed by Google internally and
-then released as open source. GRR is a very powerful tool, with a
-polished UI and good documentation.</p>
-<p>Unfortunately the open source version released by Google suffers from
-some shortcomings and so we have decided to develop a new project,
-built on the shoulders of giants called Velociraptor.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/08/10/introducing_velociraptor.html#more">Read more...</a></p> 
- 
- 
- 
-</div>
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        <div class="comments">
-            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/08/10/introducing_velociraptor.html#disqus_thread" data-disqus-identifier="2018/08/10/introducing_velociraptor">Leave a comment</a>
         </div></div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="index.html">Newer</a></li>
-            <li class="right"></li>
+            <li class="right"><a href="page3.html">Older</a> &raquo; </li>
         </ul></article></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->

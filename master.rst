@@ -4,6 +4,8 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2019/02/10/velociraptor_performance
+   2019/02/09/velociraptor_python_api
    2018/12/23/deploying_velociraptor_with_oauth_sso
    2018/12/22/configuring_velociraptor_for_ssl
    2018/12/11/velociraptor_interactive_shell

@@ -5,8 +5,521 @@
         <link>https://docs.velociraptor.velocidex.com/blog/html/</link>
         <description>Hunting for evil - what Velociraptors do best!</description>
         <language>en-us</language>
-        <pubDate>Sun, 23 Dec 2018 00:00:00 +1000</pubDate>
+        <pubDate>Sun, 10 Feb 2019 00:00:00 +1000</pubDate>
         
+        <item>
+            <link>https://docs.velociraptor.velocidex.com/blog/html/2019/02/10/velociraptor_performance.html</link>
+            <guid>https://docs.velociraptor.velocidex.com/blog/html/2019/02/10/velociraptor_performance.html</guid>
+            <title><![CDATA[Velociraptor Performance]]></title>
+            <description><![CDATA[<h1>Velociraptor Performance</h1>
+<p>We are often asked how much resources does a Velociraptor deployment
+use? How should one spec a machine for a Velociraptor deployment? We
+have previously said that one of the reasons we developed Velociraptor
+was to improve on the performance of GRR which was not scalable for
+our use case.</p>
+<p>We’ve been working with the team at Klein &amp; Co. on several intrusions
+over the past several months, which are providing valuable
+opportunities to deploy and test Velociraptor in a range of real world
+investigation scenarios. Through this process, we’ve been able to
+extend Velociraptor’s functionality and prove its performance on real
+client networks.</p>
+<p>I thought I would write a short blog post to show how Velociraptor
+performed on such a recent engagement. In this engagement we deployed
+Velociraptor on AWS and selectively pushed the client to around 600
+machines running a mix of MacOS and Windows.</p>
+<p>This post will hopefully give readers some idea of how scalable the
+tool is and the typical workloads we run with it.</p>
+<div id="more"> </div><div class="section" id="the-server">
+<h2>The Server</h2>
+<p>Since this is a smallish deployment we used a single VM with 32Gb of
+RAM and 8 cores. This was definitely over speced for this job as most
+of the time the server consumed less than 10% of one core:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span/><span class="go">top - 06:26:13 up 29 days,  2:31,  5 users,  load average: 0.00, 0.01, 0.05</span>
+<span class="go">Tasks: 214 total,   1 running, 213 sleeping,   0 stopped,   0 zombie</span>
+<span class="gp">%</span>Cpu<span class="o">(</span>s<span class="o">)</span>:  <span class="m">0</span>.5 us,  <span class="m">0</span>.1 sy,  <span class="m">0</span>.0 ni, <span class="m">99</span>.4 id,  <span class="m">0</span>.0 wa,  <span class="m">0</span>.0 hi,  <span class="m">0</span>.0 si,  <span class="m">0</span>.0 st
+<span class="go">KiB Mem:  32948060 total, 14877988 used, 18070072 free,   411192 buffers</span>
+<span class="go">KiB Swap:        0 total,        0 used,        0 free. 13381224 cached Mem</span>
+
+<span class="go">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</span>
+<span class="go">19334 root      20   0 1277924  94592  12616 S   3.0  0.3   9:11.03 ./velociraptor --config server.config.yaml frontend</span>
+<span class="go">    8 root      20   0       0      0      0 S   0.3  0.0   7:16.30 [rcuos/0]</span>
+</pre></div>
+</div>
+<p>You can see that the server consumed about 95mb when operating
+normally and CPU usage was around 3% of one core.</p>
+<p>For this engagement we knew that we would be collecting a lot of data
+and so we specified a large 500gb volume.</p>
+</div>
+<div class="section" id="hunt-performance">
+<h2>Hunt performance</h2>
+<p>Velociraptor works by collecting “Artifacts” from clients. Artifacts
+are simply encapsulated VQL queries which specify something to search
+for on the endpoint. Without going into the details of this
+engagement, we can say that we collected typical artifacts for a
+DFIR/Forensic investigation engagement. In the following I want to
+explore how well hunts performed for the following typical artifacts
+in order of complexity:</p>
+<ol class="arabic simple">
+<li>Search the filesystem for a file glob.</li>
+<li>Download the $MFT from the root filesystem.</li>
+<li>Run a Yara scan over every file on all mounted filesystems.</li>
+</ol>
+<p>We ran these artifact collections over a large number of hosts
+(between 400-500) that fell within the scope of our
+engagement. Although the number of hosts is not huge, we hope to
+demonstrate Velociraptor’s scalability.</p>
+</div>
+<div class="section" id="searching-for-a-file-glob">
+<h2>Searching for a file glob</h2>
+<p>One of the simplest and most common tasks in DFIR is to search the
+filesystem for a glob based on filename. This requires traversing
+directories and matching the filename based on the user specified
+expression - for example, find all files with the extension <cite>*.exe</cite>
+within the <cite>C:\Users</cite> directory.</p>
+<p>Velociraptor can glob over the entire filesystem or over a limited set
+of files. Typically a full filesystem glob can take some minutes on
+the endpoint (it is equivalent to running the <cite>find</cite> unix command) and
+touches every file. We typically try to limit the scope of the glob as
+much as possible (e.g. only search system directories) but sometimes
+it is nice to run a glob over all mounted filesystems to make sure we
+don’t miss anything. In this case we opted for a full filesystem scan.</p>
+<p>We searched the entire deployment using a hunt (The hunt is
+constructed using the <cite>File Finder</cite> flow in the GUI) which just
+launches the artifact collection. Therefore the horizontal distance
+between the red and blue dot, in the graph below, represents the total
+time taken by the host to collect the artifact.</p>
+<img alt="../../../_images/FileNameSearch.svg" src="https://docs.velociraptor.velocidex.com/blog/html/_images/FileNameSearch.svg"/><p>The graph shows how many hosts were recruited into this hunt on the Y
+axis. The X axis show the number of seconds since the hunt launch. The
+red points indicate the time when clients started their collection,
+while the blue dots indicate the time when the client completed the
+artifact collection and the server saved its results.</p>
+<p>The inset shows the same data but zoomed into the time origin.</p>
+<p>Velociraptor improves and builds on the initial ideas implemented
+within the GRR DFIR tool, and so it is interesting to compare this
+graph to a typical graph produced by GRR’s hunt (reproduced from <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1742287613000285">this paper</a>).</p>
+<img alt="../../../_images/grr_hunt.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/grr_hunt.png"/>
+<p>The first noticeable difference is that Velociraptor clients complete
+their collection much faster than GRR’s (the horizontal distance
+between the red and blue dots represents the time between when the
+collection is issued and the time it completes).</p>
+<p>The main reason for this is that GRR’s communication protocol relies
+on polling (by default every 10 minutes). Also, since hunting is so
+resource intensive in GRR, the clients actually poll the hunt foreman
+task every 30 minutes by default. This means that GRR clients
+typically have to wait up to 30 minutes to run a hunt!</p>
+<p>The second difference is the slope of the line around the start of the
+hunt. GRR implements a hunt client rate - clients are recruited into
+the hunt slowly (by default 20 per minute) in order to limit the load
+on the frontends.  Unlike GRR, Velociraptor does not implement a hunt
+rate since the Velociraptor frontend load is controlled by limiting
+concurrency instead (more on this below).</p>
+<p>This means that Velociraptor can deliver useful results within seconds
+of the hunt starting. We see that this particular filename search
+typically takes 25-30 seconds and we see about 200 clients completing
+the hunt within this time consistently. The remaining clients are
+probably not online and they receive the hunt as they join the
+network. This makes Velociraptor hunts far more responsive and useful.</p>
+<p>You might also notice a few outliers which spend a long time
+collecting this artifact - these machines have probably been shutdown
+or suspended while collecting this artifact.</p>
+</div>
+<div class="section" id="mft-download">
+<h2>MFT Download</h2>
+<p>A common technique is to examine the Master File Table (MFT) of an
+NTFS volume. By forensically analyzing the MFT it is possible to
+detect deleted files, time stomping and build a timeline of the system
+using tools like
+<a class="reference external" href="https://github.com/dkovar/analyzeMFT">analyseMFT.py</a> or
+<a class="reference external" href="https://dmitrybrant.com/ntfswalker">ntfswalker</a> .</p>
+<p>In this case we decided to collect the $MFT from all the Windows hosts
+and post-process them offline. Typically the MFT is around 300-400mb
+and could be larger. Therefore this artifact collection is about
+performance downloading large quantities of data from multiple hosts
+quickly.</p>
+<p>Velociraptor can read the raw NTFS partition and therefore read the
+<cite>$MFT</cite> file. We wrote the following artifact to just fetch the $MFT
+file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Artifact.NTFS.MFT_puller</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">Uses an NTFS accessor to pull the $MFT</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">path</span>
+  <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">\\.\C:\$MFT</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = 'windows'</span>
+  <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT upload(file=path, accessor="ntfs") as Upload from scope()</span>
+</pre></div>
+</div>
+<p>Here is the timing graph for this artifact collection:</p>
+<img alt="../../../_images/MFTDownload.svg" src="https://docs.velociraptor.velocidex.com/blog/html/_images/MFTDownload.svg"/><p>This collection takes a lot longer on each host as clients are
+uploading around 400mb each to the server, but our server was in the
+cloud so it had fast bandwidth. Again we see the hosts that are
+currently up being tasked within seconds, while as hosts come online
+gradually we see them receiving the hunt and a few minutes later
+uploading their $MFT file.</p>
+<p>Was the frontend loaded at the time? I took a screenshot of <cite>top</cite> on
+the server seconds after launching the hunt:</p>
+<img alt="../../../_images/UploadingMFT.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/UploadingMFT.png"/>
+<p>We can see that the CPU load is trivial (4.7%) but the major impact of
+a heavy upload collection is the memory used (about 4.7gb - up from
+about 100mb). The reason is that each client is posting a large buffer
+of data (several mb) simultaneously. The server needs to buffer the
+data before it can decrypt and process it which takes memory.</p>
+<p>In order to limit the amount of memory used, Velociraptor limits the
+total number of connections it is actively processing to 8-10
+concurrent connections. By carefully managing concurrency we are able
+to keep a limit on server memory use. We may lower the total memory
+use by reducing the concurrency (and therefore maybe fit into a
+smaller VM). Clients simply wait until the server is able to process
+their uploaded buffers. If the server takes too long, the clients
+automatically back off and retry to send the same buffer.</p>
+</div>
+<div class="section" id="yara-scan-over-the-entire-filesystem">
+<h2>Yara scan over the entire filesystem</h2>
+<p>The final example of a very intense artifact is to scan the entire
+filesystem with a YARA rule. This not only requires traversing the
+entire filesystem, but also opening each file and searching it.</p>
+<p>One of the dangers with such a scan is that users will be negatively
+impacted as their workstations start to read every file on disk! The
+main resources a YARA scan consumes is disk IO and CPU load. Users
+might complain and blame Velociraptor for their machine being slow
+(disk IO may negatively affect performance much more than CPU load!).</p>
+<p>However in this case, we don’t care how long we take to scan the
+user’s system, as long as every file was scanned, and as long as the
+endpoint is not overloaded and the user’s work is not
+affected. Luckily Velociraptor allows us to specify the trade-off
+between collection time and collection intensity.</p>
+<div class="section" id="velociraptor-rate-limiting">
+<h3>Velociraptor rate limiting</h3>
+<p>Velociraptor controls client side load by rate limiting the client’s
+VQL query. Each VQL plugin consumes an <cite>“operation”</cite> from the
+throttler. We define an “operation” as a notional unit of work - the
+heavier the VQL plugin’s work, the more operations are consumed. For
+example for yara scanning, an operation is defined as 1mb of scanned
+data, or a single file if the file is smaller.</p>
+<p>When a user issues an artifact collection task, they may limit the
+rate at which operations are performed by the client. The Velociraptor
+agent then limits the operations to the specified rate. For example,
+if the rate is 20 ops/sec then the client will scan less than 20mb per
+seconds.</p>
+<p>Other collections may run concurrently at different rates, though; The
+client is not blocked while performing a single artifact
+collection. This makes sense since we often need to collect a low
+priority artifact slowly, but we do not want this to compromise rapid
+response to that host.</p>
+<p>For example, one of our targets was a server with large attached
+storage. We ran the Yara scan over this system, scanning the first
+100Mb of each file, at a rate of 50 ops/sec. In total we scanned 1.5Tb
+of files and the scan took 14 hours (for a total scan rate of
+30Mb/sec).</p>
+<p>Velociraptor by default collects the <cite>Generic.Client.Stats</cite> artifact,
+which samples the client’s CPU utilization and memory usage every 10
+seconds. These samples are streamed to the server and form a record of
+the client’s footprint on the endpoint. We can use this data to
+visualize the effects of performing the yara scan on this host:</p>
+<img alt="../../../_images/cpu_utilization.svg" src="https://docs.velociraptor.velocidex.com/blog/html/_images/cpu_utilization.svg"/><p>Above is the CPU usage on that particular server over the course of a
+full day (24 hours). The 14 hour yara scan is clearly visible but at
+no time is CPU utilization exceeding 30% of one core. With endpoint
+disk IO limited to about 30mb/sec we have achieved a balance between
+performance and endpoint load we are happy with.</p>
+<img alt="../../../_images/YaraScanFull.svg" src="https://docs.velociraptor.velocidex.com/blog/html/_images/YaraScanFull.svg"/><p>We can see that most endpoints take approximately an hour to perform
+this yara scan, but server load is minimal since the server simply
+stores the results of the scans while doing minimal processing.</p>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>This post provides some typical numbers for Velociraptor performance
+in typical DFIR engagements. We also covered some considerations and
+trade-offs we must think about when issuing large artifact
+collections. Readers can use these as a guideline in their own
+deployments - please comment below about your
+experiences. Velociraptor is under very active development and this
+feedback is important to ensure we put in place the mechanisms to
+account for more use cases.</p>
+<div class="section" id="thanks">
+<h3>Thanks</h3>
+<p>We would like to thank the folk at <a class="reference external" href="https://www.kleinco.com.au/">Klein&amp;Con</a> for their wonderful
+support and assistance in Velociraptor development.</p>
+</div>
+</div>
+]]></description>
+             <pubDate>Sun, 10 Feb 2019 00:00:00 +1000</pubDate>
+        </item>
+    
+        <item>
+            <link>https://docs.velociraptor.velocidex.com/blog/html/2019/02/09/velociraptor_python_api.html</link>
+            <guid>https://docs.velociraptor.velocidex.com/blog/html/2019/02/09/velociraptor_python_api.html</guid>
+            <title><![CDATA[Velociraptor Python API]]></title>
+            <description><![CDATA[<h1>Velociraptor Python API</h1>
+<p>Velociraptor is very good at collecting artifacts from
+endpoints. However, in modern DFIR work, the actual collection is only
+the first step of a much more involved process. Typically we want to
+post process data using more advanced data mining tools (such as data
+stacking). Velociraptor usually is only a part of a wider solution
+which might include a SIEM and SOC integration.</p>
+<p>In order to facilitate interoperability with other tools, Velociraptor
+now offers an external API. The API is offered via gRPC so it can be
+used in any language which gRPC supports (e.g. Java, C++, Python
+etc). In this blog post we illustrate the Python API but any language
+should work.</p>
+<div id="more"> </div><div class="section" id="the-velociraptor-api-server">
+<h2>The Velociraptor API Server</h2>
+<p>The API server exposes an endpoint ready to accept gRPC
+connections. By default the API server listen only on the loopback
+interface (127.0.0.1) but it is easy to change to be externally
+accessible if you need by changing the <cite>server.config.yaml</cite> file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">API</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_address</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1</span>
+  <span class="l l-Scalar l-Scalar-Plain">bind_port</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">8001</span>
+</pre></div>
+</div>
+<p>Client programs simply connect directly to this API and call gRPC
+methods on it.</p>
+<img alt="../../../_images/api_diagram.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/api_diagram.png"/>
+<p>The connection is encrypted using TLS and authenticated using mutual
+certificates. When we initially created the Velociraptor configuration
+file, we created a CA certificate and embedded it in the
+<cite>server.config.yaml</cite> file. It is this CA certificate which is used to
+verify that the certificate each end presents was issued by the
+Velociraptor CA.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you need to have extra security in your environment you
+should keep the original <cite>server.config.yaml</cite> file generated
+in an offline location, then deploy a redacted file (without
+the CA.private_key value) on the server. This way api client
+certificates can only be issued offline.</p>
+</div>
+<p>Before the client may connect to the API server they must have a
+certificate issued by the Velociraptor CA. This is easy to generate:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span/>$ velociraptor --config server.config.yaml <span class="se">\</span>
+     config api_client --name Fred &gt; api_client.yaml
+</pre></div>
+</div>
+<p>Will generate something like:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">ca_certificate</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">-----BEGIN CERTIFICATE-----</span>
+  <span class="no">MIIDITCCAgmgAwIBAgIRAI1oswXLBFqWVSYZx1VibMkwDQYJKoZIhvcNAQELBQAw</span>
+  <span class="no">-----END CERTIFICATE-----</span>
+<span class="l l-Scalar l-Scalar-Plain">client_cert</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">-----BEGIN CERTIFICATE-----</span>
+  <span class="no">2e1ftQuzHGD2XPquqfuVzL1rtEIA1tiC82L6smYbeOe0p4pqpsHN1sEDkdfhBA==</span>
+  <span class="no">-----END CERTIFICATE-----</span>
+<span class="l l-Scalar l-Scalar-Plain">client_private_key</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">-----BEGIN RSA PRIVATE KEY-----</span>
+  <span class="no">sVr9HvR2kBzM/3yVwvb752h0qDOYDfzLRENjA7dySeOgLtBSvd2gRg==</span>
+  <span class="no">-----END RSA PRIVATE KEY-----</span>
+<span class="l l-Scalar l-Scalar-Plain">api_connection_string</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8001</span>
+<span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Fred</span>
+</pre></div>
+</div>
+<p>The certificate generated has a common name as specified by the
+<cite>–name</cite> flag. This name will be logged in the server’s audit logs so
+you can use this to keep track of which programs have access. This
+file keeps both private key and certificate as well as the CA
+certificate which must be used to authenticate the server in a single
+file for convenience.</p>
+</div>
+<div class="section" id="using-the-api-from-python">
+<h2>Using the API from Python</h2>
+<p>Although the API exposes a bunch of functions used by the GUI, the
+main function (which is not exposed through the GUI) is the <cite>Query()</cite>
+method. This function simply executes one or more VQL queries, and
+streams their results back to the caller.</p>
+<p>The function requires an argument which is a protobuf of type
+VQLCollectorArgs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">VQLCollectorArgs</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">env</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">list of VQLEnv(string key, string value)</span>
+     <span class="l l-Scalar l-Scalar-Plain">Query</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">list of VQLRequest(string Name, string VQL)</span>
+     <span class="l l-Scalar l-Scalar-Plain">max_row</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+     <span class="l l-Scalar l-Scalar-Plain">max_wait</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">int</span>
+     <span class="l l-Scalar l-Scalar-Plain">ops_per_second</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+</pre></div>
+</div>
+<p>This very simple structure allows the caller to specify one or more
+VQL queries to run. The call can set up environment variables prior to
+the query execution. The max_row and max_wait parameters indicate how
+many rows to return in a single result set and how long to wait for
+additional rows before returning a result set.</p>
+<p>The call simply executes the VQL queries and returns result sets as
+VQLResponse protobufs:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">VQLResponse</span><span class="p p-Indicator">:</span>
+   <span class="l l-Scalar l-Scalar-Plain">Response</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">json encoded string</span>
+   <span class="l l-Scalar l-Scalar-Plain">Columns</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">list of string</span>
+   <span class="l l-Scalar l-Scalar-Plain">total_rows</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">total number of rows in this packet</span>
+</pre></div>
+</div>
+<p>The VQL query may return many responses - each represents a set of
+rows. These responses may be returned over a long time, the API call
+will simply wait until new responses are available. For example, the
+VQL may represent an event query - i.e. watch for the occurrence of
+some event in the system - in this case it will never actually
+terminate, but keep streaming response packets.</p>
+</div>
+<div class="section" id="how-does-this-look-like-in-code">
+<h2>How does this look like in code?</h2>
+<p>The following will cover an example implementation in python. The
+first step is to prepare credentials for making the gRPC call. We
+parse the api_config yaml file and prepare a credential object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">"api_client.yaml"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="n">creds</span> <span class="o">=</span> <span class="n">grpc</span><span class="o">.</span><span class="n">ssl_channel_credentials</span><span class="p">(</span>
+     <span class="n">root_certificates</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"ca_certificate"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">),</span>
+     <span class="n">private_key</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"client_private_key"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">),</span>
+     <span class="n">certificate_chain</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"client_cert"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf8"</span><span class="p">))</span>
+
+<span class="n">options</span> <span class="o">=</span> <span class="p">((</span><span class="s1">'grpc.ssl_target_name_override'</span><span class="p">,</span> <span class="s2">"VelociraptorServer"</span><span class="p">,),)</span>
+</pre></div>
+</div>
+<p>Next we connect the channel to the API server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="k">with</span> <span class="n">grpc</span><span class="o">.</span><span class="n">secure_channel</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"api_connection_string"</span><span class="p">],</span>
+                         <span class="n">creds</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="k">as</span> <span class="n">channel</span><span class="p">:</span>
+    <span class="n">stub</span> <span class="o">=</span> <span class="n">api_pb2_grpc</span><span class="o">.</span><span class="n">APIStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The stub is the object we use to make calls with. We can then issue
+our call:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="n">request</span> <span class="o">=</span> <span class="n">api_pb2</span><span class="o">.</span><span class="n">VQLCollectorArgs</span><span class="p">(</span>
+         <span class="n">Query</span><span class="o">=</span><span class="p">[</span><span class="n">api_pb2</span><span class="o">.</span><span class="n">VQLRequest</span><span class="p">(</span>
+             <span class="n">VQL</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+         <span class="p">)])</span>
+
+<span class="k">for</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">stub</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We issue the query and then just wait for the call to generate
+response packets. Each packet may contain several rows which will all
+be encoded as JSON in the Response field. Each row is simply a dict
+with keys being the column names, and the values being possibly nested
+dicts or simple data depending on the query.</p>
+</div>
+<div class="section" id="what-can-we-do-with-this">
+<h2>What can we do with this?</h2>
+<p>The Velociraptor API is deliberately open ended - meaning we do not
+pose any limitations on what can be done with it. It is conceptually a
+very simple API - just issue the query and look at the results,
+however this makes it extremely powerful.</p>
+<p>We already have a number of very useful server side VQL plugins you
+can use. We also plan to add a number of other plugins in future -
+this means that the Velociraptor API can easily be extended in a
+backwards compatible way by simply adding new VQL plugins. New queries
+can do more, without breaking existing queries.</p>
+<div class="section" id="post-process-artifacts">
+<h3>Post process artifacts</h3>
+<p>This is the most common use case for the API. Velociraptor
+deliberately does not do any post processing on the server - we don’t
+want to slow the server down by making it do more work than necessary.</p>
+<p>But sometimes users need to do some more with the results - for
+example upload to an external system, check hashes against Virus
+Total, and even initiate an active response like escalation or
+disruption when something is detected.</p>
+<p>In a recent engagement we needed to collect a large number of $MFT
+files from many endpoints. We wanted to analyze these using external
+tools like <cite>analyseMFT.py</cite>.</p>
+<p>We wrote a simple artifact to collect the MFT:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Upload.MFT</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+   <span class="no">Uses an NTFS accessor to pull the $MFT</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">path</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">\\.\C:\$MFT</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = 'windows'</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">select upload(file=path, accessor="ntfs") as Upload from scope()</span>
+</pre></div>
+</div>
+<p>We then created a hunt to collect this artifact from the machines of
+interest. Once each $MFT file is uploaded we need to run
+<cite>analyseMFT.py</cite> to parse it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span/><span class="n">QUERY</span><span class="o">=</span><span class="s2">"""</span>
+<span class="s2">  SELECT Flow,</span>
+<span class="s2">         file_store(path=Flow.FlowContext.uploaded_files) as Files</span>
+<span class="s2">  FROM  watch_monitoring(artifact='System.Flow.Completion')</span>
+<span class="s2">  WHERE 'Windows.Upload.MFT' in Flow.FlowContext.artifacts</span>
+<span class="s2">"""</span>
+
+<span class="k">with</span> <span class="n">grpc</span><span class="o">.</span><span class="n">secure_channel</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"api_connection_string"</span><span class="p">],</span>
+                         <span class="n">creds</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="k">as</span> <span class="n">channel</span><span class="p">:</span>
+    <span class="n">stub</span> <span class="o">=</span> <span class="n">api_pb2_grpc</span><span class="o">.</span><span class="n">APIStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">api_pb2</span><span class="o">.</span><span class="n">VQLCollectorArgs</span><span class="p">(</span>
+        <span class="n">Query</span><span class="o">=</span><span class="p">[</span><span class="n">api_pb2</span><span class="o">.</span><span class="n">VQLRequest</span><span class="p">(</span>
+            <span class="n">VQL</span><span class="o">=</span><span class="n">QUERY</span><span class="p">,</span>
+        <span class="p">)])</span>
+
+    <span class="k">for</span> <span class="n">response</span> <span class="ow">in</span> <span class="n">stub</span><span class="o">.</span><span class="n">Query</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">row</span><span class="p">[</span><span class="s2">"Files"</span><span class="p">]:</span>
+                 <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">"analyseMFT.py"</span><span class="p">,</span> <span class="s2">"-f"</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span>
+                     <span class="s2">"-o"</span><span class="p">,</span> <span class="n">file_name</span><span class="o">+</span><span class="s2">".analyzed"</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The previous code sets up a watcher query which will receive every
+completed flow on the server which collected the artifact
+“Windows.Upload.MFT” (i.e. each completed flow will appear as a row to
+the query).</p>
+<p>We can have this program running in the background. We can then launch
+a hunt collecting the artifact, and the program will automatically
+process all the results from the hunt as soon as they occur. When new
+machines are turned on they will receive the hunt, have their $MFT
+collected and this program will immediately process that.</p>
+<p>Each flow contains a list of files that were uploaded to it. The
+<cite>file_store()</cite> VQL function reveals the server’s filesystem path where
+the files actually reside. The server simply stores the uploaded files
+on its filesystem since Velociraptor does not use a database
+(everything is a file!).</p>
+<p>The python code then proceeds to launch the <cite>analyseMFT.py</cite> script to
+parse the <cite>$MFT</cite>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The nice thing with this scheme is that the <cite>analyseMFT.py</cite> is
+running in its own process and can be managed separately to the
+main Velociraptor server (e.g. we can set its execution priority or
+even run it on a separate machine). The Velociraptor server does
+not actually need to wait for post processing nor will the post
+processing affect its performance in any way. If the
+<cite>analyseMFT.py</cite> script takes a long time, it will just fall behind
+but it eventually will catch up. In the meantime, the Velociraptor
+server will continue receiving the uploads regardless.</p>
+</div>
+<p>The above example sets up a watcher query to receive flow results in
+real time, but you can also just process the results of a specific
+hunt completely using a query like:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span/><span class="k">SELECT</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">file_store</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">Flow</span><span class="p">.</span><span class="n">FlowContext</span><span class="p">.</span><span class="n">uploaded_files</span><span class="p">)</span> <span class="k">as</span> <span class="n">Files</span>
+<span class="k">FROM</span> <span class="n">hunt_flows</span><span class="p">(</span><span class="n">hunt_id</span><span class="o">=</span><span class="n">huntId</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>The Velociraptor python API opens up enormous possibilities for
+automating Velociraptor and interfacing it with other
+systems. Combining the power of VQL and the flexibility (and user
+familiarity) of Python allows users to build upon Velociraptor in a
+flexible and creative way. I am very excited to see what the community
+will do with this feature - I can see integration with ELK, BigQuery
+and other data analytic engines being a valuable use case.</p>
+<p>Please share your experiences in the comments or on the mailing list
+at <a class="reference external" href="mailto:velociraptor-discuss%40groups.google.com">velociraptor-discuss<span>@</span>groups<span>.</span>google<span>.</span>com</a>.</p>
+</div>
+]]></description>
+             <pubDate>Sat, 09 Feb 2019 00:00:00 +1000</pubDate>
+        </item>
+    
         <item>
             <link>https://docs.velociraptor.velocidex.com/blog/html/2018/12/23/deploying_velociraptor_with_oauth_sso.html</link>
             <guid>https://docs.velociraptor.velocidex.com/blog/html/2018/12/23/deploying_velociraptor_with_oauth_sso.html</guid>
