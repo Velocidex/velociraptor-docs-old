@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
         <meta name="viewport" content="width=device-width">
-        <title>Generic.Client.Stats &mdash; Velociraptor</title>
+        <title>Admin.Client.Upgrade &mdash; Velociraptor</title>
             <link rel="stylesheet" href="../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../_static/main.css" type="text/css">
@@ -96,9 +96,332 @@
 <div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article">
   
      <p>This page displays information about the Velociraptor built in
-artifacts. There are 43 artifacts in total. Use the navigation menu
+artifacts. There are 54 artifacts in total. Use the navigation menu
 to the right to quickly skip to the right artifact
 definition. Definitions may be expanded to view the VQL source.</p>
+<div class="section" id="admin-client-upgrade">
+<h1>Admin.Client.Upgrade</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Admin_Client_UpgradeDetails" role="button"
+   aria-expanded="false" aria-controls="Admin_Client_UpgradeDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Remotely push new client updates.</p>
+<p>NOTE: The updates can be pulled from any web server. You need to
+ensure they are properly secured with SSL and at least a random
+nonce in their path. You may configure the Velociraptor server to
+serve these through the public directory.</p>
+<div class="collapse" id="Admin_Client_UpgradeDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin.Client.Upgrade</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Remotely push new client updates.</span>
+
+  <span class="no">NOTE: The updates can be pulled from any web server. You need to</span>
+  <span class="no">ensure they are properly secured with SSL and at least a random</span>
+  <span class="no">nonce in their path. You may configure the Velociraptor server to</span>
+  <span class="no">serve these through the public directory.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">clientURL</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http://127.0.0.1:8000/public/velociraptor.exe</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">configURL</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">http://127.0.0.1:8000/public/client.config.yaml</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">/* This query fetches the binary and config and stores them in</span>
+         <span class="no">temp files. Note that tempfiles will be automatically</span>
+         <span class="no">cleaned at query end.</span>
+         <span class="no">*/</span>
+        <span class="no">LET tmpfiles &lt;= SELECT tempfile(</span>
+           <span class="no">data=query(vql={</span>
+             <span class="no">SELECT Content</span>
+             <span class="no">FROM http_client(url=clientURL, chunk_size=30000000)</span>
+           <span class="no">}),</span>
+           <span class="no">extension=&quot;.exe&quot;) as Binary,</span>
+        <span class="no">tempfile(</span>
+           <span class="no">data=query(vql={</span>
+             <span class="no">SELECT Content</span>
+             <span class="no">FROM http_client(url=configURL)</span>
+           <span class="no">})) as Config from scope()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// Run the installer.</span>
+        <span class="no">SELECT * from foreach(</span>
+         <span class="no">row=tmpfiles,</span>
+         <span class="no">query={</span>
+            <span class="no">SELECT * from execve(</span>
+               <span class="no">argv=[Binary, &quot;--config&quot;, Config, &quot;-v&quot;, &quot;service&quot;, &quot;install&quot;]</span>
+            <span class="no">)</span>
+         <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="admin-events-postprocessuploads">
+<h1>Admin.Events.PostProcessUploads</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Admin_Events_PostProcessUploadsDetails" role="button"
+   aria-expanded="false" aria-controls="Admin_Events_PostProcessUploadsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Sometimes we would like to post process uploads collected as part of
+the hunt’s artifact collections</p>
+<p>Post processing means to watch the hunt for completed flows and run
+a post processing command on the files obtained from each host.</p>
+<p>The command will receive the list of paths of the files uploaded by
+the artifact. We dont actually care what the command does with those
+files - we will just relay our stdout/stderr to the artifact’s
+result set.</p>
+<div class="collapse" id="Admin_Events_PostProcessUploadsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin.Events.PostProcessUploads</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Sometimes we would like to post process uploads collected as part of</span>
+  <span class="no">the hunt&#39;s artifact collections</span>
+
+  <span class="no">Post processing means to watch the hunt for completed flows and run</span>
+  <span class="no">a post processing command on the files obtained from each host.</span>
+
+  <span class="no">The command will receive the list of paths of the files uploaded by</span>
+  <span class="no">the artifact. We dont actually care what the command does with those</span>
+  <span class="no">files - we will just relay our stdout/stderr to the artifact&#39;s</span>
+  <span class="no">result set.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">uploadPostProcessCommand</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">The command to run - must be a json array of strings! The list</span>
+      <span class="no">of files will be appended to the end of the command.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">[&quot;/bin/ls&quot;, &quot;-l&quot;]</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">uploadPostProcessArtifact</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">The name of the artifact to watch.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Registry.NTUser.Upload</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT server_config FROM scope()</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET files = SELECT Flow,</span>
+            <span class="no">array(a1=parse_json_array(data=uploadPostProcessCommand),</span>
+                  <span class="no">a2=file_store(path=Flow.FlowContext.uploaded_files)) as Argv</span>
+        <span class="no">FROM watch_monitoring(artifact=&#39;System.Flow.Completion&#39;)</span>
+        <span class="no">WHERE uploadPostProcessArtifact in Flow.FlowContext.artifacts</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from foreach(</span>
+          <span class="no">row=files,</span>
+          <span class="no">query={</span>
+             <span class="no">SELECT Flow.Urn as FlowUrn, Argv,</span>
+                    <span class="no">Stdout, Stderr, ReturnCode</span>
+             <span class="no">FROM execve(argv=Argv)</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="admin-system-compressuploads">
+<h1>Admin.System.CompressUploads</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Admin_System_CompressUploadsDetails" role="button"
+   aria-expanded="false" aria-controls="Admin_System_CompressUploadsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Compresses all uploaded files.</p>
+<p>When artifacts collect files they are normally stored on the server
+uncompressed. This artifact watches all completed flows and
+compresses the files in the file store when the flow completes. This
+is very useful for cloud based deployments with limited storage
+space or when collecting large files.</p>
+<p>In order to run this artifact you would normally run it as part of
+an artifact acquisition process:</p>
+<p><span class="docutils literal"><span class="pre">`</span>
+<span class="pre">$</span> <span class="pre">velociraptor</span> <span class="pre">--config</span> <span class="pre">/etc/server.config.yaml</span> <span class="pre">artifacts</span> <span class="pre">acquire</span> <span class="pre">Admin.System.CompressUploads</span>
+<span class="pre">`</span></span></p>
+<p>Note that there is nothing special about compressed files - you can
+also just run <cite>find</cite> and <cite>gzip</cite> in the file store. Velociraptor will
+automatically decompress the file when displaying it in the GUI
+text/hexdump etc.</p>
+<div class="collapse" id="Admin_System_CompressUploadsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Admin.System.CompressUploads</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Compresses all uploaded files.</span>
+
+  <span class="no">When artifacts collect files they are normally stored on the server</span>
+  <span class="no">uncompressed. This artifact watches all completed flows and</span>
+  <span class="no">compresses the files in the file store when the flow completes. This</span>
+  <span class="no">is very useful for cloud based deployments with limited storage</span>
+  <span class="no">space or when collecting large files.</span>
+
+  <span class="no">In order to run this artifact you would normally run it as part of</span>
+  <span class="no">an artifact acquisition process:</span>
+
+  <span class="no">```</span>
+  <span class="no">$ velociraptor --config /etc/server.config.yaml artifacts acquire Admin.System.CompressUploads</span>
+  <span class="no">```</span>
+
+  <span class="no">Note that there is nothing special about compressed files - you can</span>
+  <span class="no">also just run `find` and `gzip` in the file store. Velociraptor will</span>
+  <span class="no">automatically decompress the file when displaying it in the GUI</span>
+  <span class="no">text/hexdump etc.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">blacklistCompressionFilename</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Filenames which match this regex will be excluded from compression.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&#39;(?i).+ntuser.dat&#39;</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT server_config FROM scope()</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET files = SELECT ClientId,</span>
+            <span class="no">Flow.Urn as Flow,</span>
+            <span class="no">Flow.FlowContext.uploaded_files as Files</span>
+        <span class="no">FROM watch_monitoring(artifact=&#39;System.Flow.Completion&#39;)</span>
+        <span class="no">WHERE Files and not Files =~ blacklistCompressionFilename</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT ClientId, Flow, Files,</span>
+               <span class="no">compress(path=Files) as CompressedFiles</span>
+        <span class="no">FROM files</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="demo-plugins-fifo">
+<h1>Demo.Plugins.Fifo</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Demo_Plugins_FifoDetails" role="button"
+   aria-expanded="false" aria-controls="Demo_Plugins_FifoDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> This is a demo of the fifo() plugin. The Fifo plugin collects and
+caches rows from its inner query. Every subsequent execution of the
+query then reads from the cache. The plugin will expire old rows
+depending on its expiration policy - so we always see recent rows.</p>
+<p>You can use this to build queries which consider historical events
+together with current events at the same time. In this example, we
+check for a successful logon preceeded by a number of failed logon
+attempts.</p>
+<p>In this example, we use the clock() plugin to simulate events. We
+simulate failed logon attempts using the clock() plugin every
+second. By feeding the failed logon events to the fifo() plugin we
+ensure the fifo() plugin cache contains the last 5 failed logon
+events.</p>
+<p>We simulate a successful logon event every 3 seconds, again using
+the clock plugin. Once a successful logon event is detected, we go
+back over the last 5 login events, count them and collect the last
+failed logon times (using the GROUP BY operator we group the
+FailedTime for every unique SuccessTime).</p>
+<p>If we receive more than 3 events, we emit the row.</p>
+<p>This now represents a high value signal! It will only occur when a
+successful logon event is preceeded by at least 3 failed logon
+events in the last hour. It is now possible to escalate this on the
+server via email or other alerts.</p>
+<p>Here is sample output:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;Count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="nt">&quot;FailedTime&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="mi">1549527272</span><span class="p">,</span>
+    <span class="mi">1549527273</span><span class="p">,</span>
+    <span class="mi">1549527274</span><span class="p">,</span>
+    <span class="mi">1549527275</span><span class="p">,</span>
+    <span class="mi">1549527276</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;SuccessTime&quot;</span><span class="p">:</span> <span class="mi">1549527277</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Of course in the real artifact we would want to include more
+information than just times (i.e. who logged on to where etc).</p>
+<div class="collapse" id="Demo_Plugins_FifoDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Demo.Plugins.Fifo</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">This is a demo of the fifo() plugin. The Fifo plugin collects and</span>
+  <span class="no">caches rows from its inner query. Every subsequent execution of the</span>
+  <span class="no">query then reads from the cache. The plugin will expire old rows</span>
+  <span class="no">depending on its expiration policy - so we always see recent rows.</span>
+
+  <span class="no">You can use this to build queries which consider historical events</span>
+  <span class="no">together with current events at the same time. In this example, we</span>
+  <span class="no">check for a successful logon preceeded by a number of failed logon</span>
+  <span class="no">attempts.</span>
+
+  <span class="no">In this example, we use the clock() plugin to simulate events. We</span>
+  <span class="no">simulate failed logon attempts using the clock() plugin every</span>
+  <span class="no">second. By feeding the failed logon events to the fifo() plugin we</span>
+  <span class="no">ensure the fifo() plugin cache contains the last 5 failed logon</span>
+  <span class="no">events.</span>
+
+  <span class="no">We simulate a successful logon event every 3 seconds, again using</span>
+  <span class="no">the clock plugin. Once a successful logon event is detected, we go</span>
+  <span class="no">back over the last 5 login events, count them and collect the last</span>
+  <span class="no">failed logon times (using the GROUP BY operator we group the</span>
+  <span class="no">FailedTime for every unique SuccessTime).</span>
+
+  <span class="no">If we receive more than 3 events, we emit the row.</span>
+
+  <span class="no">This now represents a high value signal! It will only occur when a</span>
+  <span class="no">successful logon event is preceeded by at least 3 failed logon</span>
+  <span class="no">events in the last hour. It is now possible to escalate this on the</span>
+  <span class="no">server via email or other alerts.</span>
+
+  <span class="no">Here is sample output:</span>
+
+  <span class="no">.. code-block:: json</span>
+
+      <span class="no">{</span>
+        <span class="no">&quot;Count&quot;: 5,</span>
+        <span class="no">&quot;FailedTime&quot;: [</span>
+          <span class="no">1549527272,</span>
+          <span class="no">1549527273,</span>
+          <span class="no">1549527274,</span>
+          <span class="no">1549527275,</span>
+          <span class="no">1549527276</span>
+        <span class="no">],</span>
+        <span class="no">&quot;SuccessTime&quot;: 1549527277</span>
+      <span class="no">}</span>
+
+  <span class="no">Of course in the real artifact we would want to include more</span>
+  <span class="no">information than just times (i.e. who logged on to where etc).</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="c1"># This query simulates failed logon attempts.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET failed_logon = SELECT Unix as FailedTime from clock(period=1)</span>
+
+      <span class="c1"># This is the fifo which holds the last 5 failed logon attempts</span>
+      <span class="c1"># within the last hour.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET last_5_events = SELECT FailedTime</span>
+            <span class="l l-Scalar l-Scalar-Plain">FROM fifo(query=failed_logon, max_rows=5, max_age=3600)</span>
+
+      <span class="c1"># We need to get it started collecting data immediately by</span>
+      <span class="c1"># materializing the cache contents. Otherwise the fifo wont</span>
+      <span class="c1"># start until it is first called (i.e. the first successful</span>
+      <span class="c1"># login and we will miss the failed events before hand).</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET foo &lt;= SELECT * FROM last_5_events</span>
+
+      <span class="c1"># This simulates successful logon - we assume every 3 seonds.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET success_logon = SELECT Unix as SuccessTime from clock(period=3)</span>
+
+      <span class="c1"># For each successful logon, query the last failed logon</span>
+      <span class="c1"># attempts from the fifo(). We also count the total number of</span>
+      <span class="c1"># failed logons. We only actually emit results if there are more</span>
+      <span class="c1"># than 3 failed logon attempts before each successful one.</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * FROM foreach(</span>
+          <span class="no">row=success_logon,</span>
+          <span class="no">query={</span>
+           <span class="no">SELECT SuccessTime, FailedTime, count(items=FailedTime) as Count</span>
+           <span class="no">FROM last_5_events GROUP BY SuccessTime</span>
+          <span class="no">}) WHERE Count &gt; 3</span>
+</pre></div>
+</div>
+</div></div></div>
 <div class="section" id="generic-client-stats">
 <h1>Generic.Client.Stats</h1>
 <p><a data-toggle="collapse" class='details-opener'
@@ -533,9 +856,9 @@ metadata from it. If not we leave those columns empty.</p>
            <span class="no">},</span>
            <span class="no">then=add_stat_to_parsed_cache_file,</span>
            <span class="no">else={</span>
-             <span class="no">SELECT Source, dict() as Mtime, dict() as Ctime,</span>
-               <span class="no">dict() as Atime, Type,</span>
-               <span class="no">dict() as Record, Arch, URL, Name from scope()</span>
+           <span class="no">SELECT Source, Null as Mtime, Null as Ctime,</span>
+               <span class="no">Null as Atime, Type,</span>
+               <span class="no">Null as Record, Arch, URL, Name from scope()</span>
            <span class="no">})</span>
 
        <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
@@ -582,7 +905,7 @@ metadata from it. If not we leave those columns empty.</p>
                    <span class="no">regex=&#39;(?sm)^(?P&lt;Record&gt;Package:.+?)\\n\\n&#39;)</span>
       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
         <span class="no">SELECT Record.Package as Package,</span>
-               <span class="no">Record.InstalledSize as InstalledSize,</span>
+               <span class="no">atoi(string=Record.InstalledSize) as InstalledSize,</span>
                <span class="no">Record.Version as Version,</span>
                <span class="no">Record.Source as Source,</span>
                <span class="no">Record.Architecture as Architecture from packages</span>
@@ -663,7 +986,11 @@ metadata from it. If not we leave those columns empty.</p>
 
     <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
       <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
-        <span class="no">SELECT * from split_records(</span>
+        <span class="no">SELECT Name,</span>
+          <span class="no">atoi(string=Size) As Size,</span>
+          <span class="no">atoi(string=UseCount) As UseCount,</span>
+          <span class="no">Status, Address</span>
+        <span class="no">FROM split_records(</span>
            <span class="no">filenames=ProcModules,</span>
            <span class="no">regex=&#39;\\s+&#39;,</span>
            <span class="no">columns=[&#39;Name&#39;, &#39;Size&#39;, &#39;UseCount&#39;, &#39;UsedBy&#39;, &#39;Status&#39;, &#39;Address&#39;])</span>
@@ -1035,6 +1362,47 @@ cores spent in different parts of the system.</p>
 </pre></div>
 </div>
 </div></div></div>
+<div class="section" id="reporting-hunts-details">
+<h1>Reporting.Hunts.Details</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Reporting_Hunts_DetailsDetails" role="button"
+   aria-expanded="false" aria-controls="Reporting_Hunts_DetailsDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Report details about which client ran each hunt, how long it took
+and if it has completed.</p>
+<div class="collapse" id="Reporting_Hunts_DetailsDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Reporting.Hunts.Details</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Report details about which client ran each hunt, how long it took</span>
+  <span class="no">and if it has completed.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT server_config FROM scope()</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET hunts = SELECT basename(path=hunt_id) as hunt_id,</span>
+            <span class="no">create_time,</span>
+            <span class="no">hunt_description</span>
+        <span class="no">FROM hunts() order by create_time desc limit 6</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET flows = select hunt_id,</span>
+          <span class="no">hunt_description,</span>
+          <span class="no">Fqdn,</span>
+          <span class="no">ClientId,</span>
+          <span class="no">{ SELECT os_info.system FROM clients(search=ClientId) } as OS,</span>
+          <span class="no">timestamp(epoch=Flow.FlowContext.create_time/1000000) as create_time,</span>
+          <span class="no">basename(path=Flow.Urn) as flow_id,</span>
+          <span class="no">(Flow.FlowContext.active_time - Flow.FlowContext.create_time) / 1000000 as Duration,</span>
+          <span class="no">format(format=&#39;%v&#39;, args=[Flow.FlowContext.state]) as State</span>
+        <span class="no">FROM hunt_flows(hunt_id=hunt_id) order by create_time desc</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * from foreach(row=hunts, query=flows)</span>
+</pre></div>
+</div>
+</div></div></div>
 <div class="section" id="server-alerts-interactiveshell">
 <h1>Server.Alerts.InteractiveShell</h1>
 <p><a data-toggle="collapse" class='details-opener'
@@ -1358,6 +1726,200 @@ description from there.</p>
 </pre></div>
 </div>
 </div></div></div>
+<div class="section" id="windows-applications-officemacros">
+<h1>Windows.Applications.OfficeMacros</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Applications_OfficeMacrosDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Applications_OfficeMacrosDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Office macros are a favourite initial infection vector. Many users
+click through the warning dialogs.</p>
+<p>This artifact scans through the given directory glob for common
+office files. We then try to extract any embedded macros by parsing
+the OLE file structure.</p>
+<p>If a macro calls an external program (e.g. Powershell) this is very
+suspicious!</p>
+<div class="collapse" id="Windows_Applications_OfficeMacrosDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Applications.OfficeMacros</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Office macros are a favourite initial infection vector. Many users</span>
+  <span class="no">click through the warning dialogs.</span>
+
+  <span class="no">This artifact scans through the given directory glob for common</span>
+  <span class="no">office files. We then try to extract any embedded macros by parsing</span>
+  <span class="no">the OLE file structure.</span>
+
+  <span class="no">If a macro calls an external program (e.g. Powershell) this is very</span>
+  <span class="no">suspicious!</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">officeExtensions</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="s">&quot;*.{xls,xlsm,doc,docx,ppt,pptm}&quot;</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">officeFileSearchGlob</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">C:\Users\**\</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">The directory to search for office documents.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * FROM foreach(</span>
+           <span class="no">row={</span>
+              <span class="no">SELECT FullPath FROM glob(globs=officeFileSearchGlob + officeExtensions)</span>
+           <span class="no">},</span>
+           <span class="no">query={</span>
+               <span class="no">SELECT * from olevba(file=FullPath)</span>
+           <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-events-dnsqueries">
+<h1>Windows.Events.DNSQueries</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Events_DNSQueriesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Events_DNSQueriesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Monitor all DNS Queries and responses.</p>
+<p>This artifact monitors all DNS queries and their responses seen on
+the endpoint. DNS is a critical source of information for intrusion
+detection and the best place to collect it is on the endpoint itself
+(Perimeter collection can only see DNS requests while the endpoint
+or laptop is inside the enterprise network).</p>
+<p>It is recommended to collect this artifact and just archive the
+results. When threat intelligence emerges about a watering hole or a
+bad C&amp;C you can use this archive to confirm if any of your endpoints
+have contacted this C&amp;C.</p>
+<div class="collapse" id="Windows_Events_DNSQueriesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.DNSQueries</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Monitor all DNS Queries and responses.</span>
+
+  <span class="no">This artifact monitors all DNS queries and their responses seen on</span>
+  <span class="no">the endpoint. DNS is a critical source of information for intrusion</span>
+  <span class="no">detection and the best place to collect it is on the endpoint itself</span>
+  <span class="no">(Perimeter collection can only see DNS requests while the endpoint</span>
+  <span class="no">or laptop is inside the enterprise network).</span>
+
+  <span class="no">It is recommended to collect this artifact and just archive the</span>
+  <span class="no">results. When threat intelligence emerges about a watering hole or a</span>
+  <span class="no">bad C&amp;C you can use this archive to confirm if any of your endpoints</span>
+  <span class="no">have contacted this C&amp;C.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">whitelistRegex</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">We ignore DNS names that match this regex.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wpad.home</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+ <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+     <span class="l l-Scalar l-Scalar-Plain">SELECT OS from info() where OS = &quot;windows&quot;</span>
+
+   <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT timestamp(epoch=Time) As Time, EventType, Name, CNAME, Answers</span>
+        <span class="no">FROM dns()</span>
+        <span class="no">WHERE not Name =~ whitelistRegex</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-events-failedlogbeforesuccess">
+<h1>Windows.Events.FailedLogBeforeSuccess</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Events_FailedLogBeforeSuccessDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Events_FailedLogBeforeSuccessDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Sometimes attackers will brute force an local user’s account’s
+password. If the account password is strong, brute force attacks are
+not effective and might not represent a high value event in
+themselves.</p>
+<p>However, if the brute force attempt succeeds, then it is a very high
+value event (since brute forcing a password is typically a
+suspicious activity).</p>
+<p>On the endpoint this looks like a bunch of failed logon attempts in
+quick succession followed by a successful login.</p>
+<p>NOTE: In order for this artifact to work we need Windows to be
+logging failed account login. This is not on by default and should
+be enabled via group policy.</p>
+<p><a class="reference external" href="https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events">https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events</a></p>
+<p>You can set the policy in group policy managment console (gpmc):
+Computer ConfigurationWindows SettingsSecurity SettingsLocal PoliciesAudit Policy.</p>
+<div class="collapse" id="Windows_Events_FailedLogBeforeSuccessDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Events.FailedLogBeforeSuccess</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Sometimes attackers will brute force an local user&#39;s account&#39;s</span>
+  <span class="no">password. If the account password is strong, brute force attacks are</span>
+  <span class="no">not effective and might not represent a high value event in</span>
+  <span class="no">themselves.</span>
+
+  <span class="no">However, if the brute force attempt succeeds, then it is a very high</span>
+  <span class="no">value event (since brute forcing a password is typically a</span>
+  <span class="no">suspicious activity).</span>
+
+  <span class="no">On the endpoint this looks like a bunch of failed logon attempts in</span>
+  <span class="no">quick succession followed by a successful login.</span>
+
+  <span class="no">NOTE: In order for this artifact to work we need Windows to be</span>
+  <span class="no">logging failed account login. This is not on by default and should</span>
+  <span class="no">be enabled via group policy.</span>
+
+  <span class="no">https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events</span>
+
+  <span class="no">You can set the policy in group policy managment console (gpmc):</span>
+  <span class="no">Computer Configuration\Windows Settings\Security Settings\Local Policies\Audit Policy.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">securityLogFile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">&gt;-</span>
+      <span class="no">C:/Windows/System32/Winevt/Logs/Security.evtx</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">failureCount</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Alert if there are this many failures before the successful logon.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">failedLogonTimeWindow</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">3600</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span>
+      <span class="l l-Scalar l-Scalar-Plain">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET failed_logon = SELECT EventData as FailedEventData,</span>
+           <span class="no">System as FailedSystem</span>
+        <span class="no">FROM watch_evtx(filename=securityLogFile)</span>
+        <span class="no">WHERE System.EventID = &#39;4625&#39;</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET last_5_events = SELECT FailedEventData, FailedSystem</span>
+            <span class="no">FROM fifo(query=failed_logon,</span>
+                      <span class="no">max_rows=500,</span>
+                      <span class="no">max_age=atoi(string=failedLogonTimeWindow))</span>
+
+      <span class="c1"># Force the fifo to materialize.</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET foo &lt;= SELECT * FROM last_5_events</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET success_logon = SELECT EventData as SuccessEventData,</span>
+           <span class="no">System as SuccessSystem</span>
+        <span class="no">FROM watch_evtx(filename=securityLogFile)</span>
+        <span class="no">WHERE System.EventID = &#39;4624&#39;</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT * FROM foreach(</span>
+          <span class="no">row=success_logon,</span>
+          <span class="no">query={</span>
+           <span class="no">SELECT SuccessSystem.TimeCreated.SystemTime AS LogonTime,</span>
+                  <span class="no">SuccessSystem, SuccessEventData, FailedEventData,</span>
+                  <span class="no">FailedSystem, count(items=SuccessSystem) as Count</span>
+           <span class="no">FROM last_5_events</span>
+           <span class="no">WHERE FailedEventData.SubjectUserName = SuccessEventData.SubjectUserName</span>
+           <span class="no">GROUP BY LogonTime</span>
+          <span class="no">})  WHERE Count &gt; atoi(string=failureCount)</span>
+</pre></div>
+</div>
+</div></div></div>
 <div class="section" id="windows-events-processcreation">
 <h1>Windows.Events.ProcessCreation</h1>
 <p><a data-toggle="collapse" class='details-opener'
@@ -1442,8 +2004,10 @@ event log and records them on the server.</p>
                <span class="no">EventData.ImagePath as ImagePath,</span>
                <span class="no">EventData.ServiceName as ServiceName,</span>
                <span class="no">EventData.ServiceType as Type,</span>
-               <span class="no">EventData as _EventData</span>
-        <span class="no">FROM watch_evtx(filename=systemLogFile) WHERE EventID = &#39;7045&#39;</span>
+               <span class="no">System.Security.UserID as UserSID,</span>
+               <span class="no">EventData as _EventData,</span>
+               <span class="no">System as _System</span>
+        <span class="no">FROM watch_evtx(filename=systemLogFile) WHERE EventID = 7045</span>
 </pre></div>
 </div>
 </div></div></div>
@@ -1757,6 +2321,51 @@ the registry hive is locked).</p>
               <span class="no">accessor=&quot;ntfs&quot;,</span>
               <span class="no">rules=yaraRule, context=50)</span>
         <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-registry-ntuser-upload">
+<h1>Windows.Registry.NTUser.Upload</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_Registry_NTUser_UploadDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_Registry_NTUser_UploadDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> This artifact collects all the user’s NTUser.dat registry hives.</p>
+<p>When a user logs into a windows machine the system creates their own
+“profile” which consists of a registry hive mapped into the
+HKEY_USERS hive. This hive file is locked as long as the user is
+logged in.</p>
+<p>This artifact bypasses the locking mechanism by extracting the
+registry hives using raw NTFS parsing. We then just upload all hives
+to the server.</p>
+<div class="collapse" id="Windows_Registry_NTUser_UploadDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Registry.NTUser.Upload</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">This artifact collects all the user&#39;s NTUser.dat registry hives.</span>
+
+  <span class="no">When a user logs into a windows machine the system creates their own</span>
+  <span class="no">&quot;profile&quot; which consists of a registry hive mapped into the</span>
+  <span class="no">HKEY_USERS hive. This hive file is locked as long as the user is</span>
+  <span class="no">logged in.</span>
+
+  <span class="no">This artifact bypasses the locking mechanism by extracting the</span>
+  <span class="no">registry hives using raw NTFS parsing. We then just upload all hives</span>
+  <span class="no">to the server.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET users = SELECT Name, Directory as HomeDir</span>
+            <span class="no">FROM Artifact.Windows.Sys.Users()</span>
+            <span class="no">WHERE Directory</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT upload(file=&quot;\\\\.\\&quot; + HomeDir + &quot;\\ntuser.dat&quot;,</span>
+                      <span class="no">accessor=&quot;ntfs&quot;) as Upload</span>
+        <span class="no">FROM users</span>
 </pre></div>
 </div>
 </div></div></div>
@@ -2252,6 +2861,123 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 </pre></div>
 </div>
 </div></div></div>
+<div class="section" id="windows-system-svchost">
+<h1>Windows.System.SVCHost</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_System_SVCHostDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_System_SVCHostDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Typically a windows system will have many svchost.exe
+processes. Sometimes attackers name their processes svchost.exe to
+try to hide. Typically svchost.exe is spawned by services.exe.</p>
+<p>This artifact lists all the processes named svchost.exe and their
+parents if the parent is not also named services.exe.</p>
+<div class="collapse" id="Windows_System_SVCHostDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.System.SVCHost</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Typically a windows system will have many svchost.exe</span>
+  <span class="no">processes. Sometimes attackers name their processes svchost.exe to</span>
+  <span class="no">try to hide. Typically svchost.exe is spawned by services.exe.</span>
+
+  <span class="no">This artifact lists all the processes named svchost.exe and their</span>
+  <span class="no">parents if the parent is not also named services.exe.</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;windows&#39;</span>
+
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// Cache the pslist output in memory.</span>
+        <span class="no">LET processes &lt;= SELECT * FROM pslist()</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// Get the pids of all procecesses named services.exe</span>
+        <span class="no">LET services &lt;= SELECT Pid FROM processes where Name =~ &quot;services.exe&quot;</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// The interesting processes are those which are not spawned by services.exe</span>
+        <span class="no">LET suspicious = SELECT Pid As SVCHostPid,</span>
+            <span class="no">Ppid As SVCHostPpid,</span>
+            <span class="no">Exe as SVCHostExe,</span>
+            <span class="no">CommandLine as SVCHostCommandLine</span>
+        <span class="no">FROM processes</span>
+        <span class="no">WHERE Name =~ &quot;svchost&quot; AND NOT Ppid in services.Pid</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">// Now for each such process we display its actual parent.</span>
+        <span class="no">SELECT * from foreach(</span>
+           <span class="no">row=suspicious,</span>
+           <span class="no">query={</span>
+              <span class="no">SELECT SVCHostPid, SVCHostPpid, SVCHostExe,</span>
+                     <span class="no">SVCHostCommandLine, Name as ParentName,</span>
+                     <span class="no">Exe As ParentExe</span>
+              <span class="no">FROM processes</span>
+              <span class="no">WHERE Pid=SVCHostPpid</span>
+          <span class="no">})</span>
+</pre></div>
+</div>
+</div></div></div>
+<div class="section" id="windows-system-untrustedbinaries">
+<h1>Windows.System.UntrustedBinaries</h1>
+<p><a data-toggle="collapse" class='details-opener'
+   href="#Windows_System_UntrustedBinariesDetails" role="button"
+   aria-expanded="false" aria-controls="Windows_System_UntrustedBinariesDetails">
+   <i class="fa fa-lg fa-plus-square-o to_open"></i>
+   <i class="fa fa-lg fa-minus-square-o to_close"></i>
+</a> Windows runs a number of services and binaries as part of the
+operating system. Sometimes malware pretends to run as those well
+known names in order to hide itself in plain sight. For example, a
+malware service might call itself svchost.exe so it shows up in the
+process listing as a benign service.</p>
+<p>This artifact checks that the common systems binaries are
+signed. If a malware replaces these files or names itself in this
+way their signature might not be correct.</p>
+<p>Note that unfortunately Microsoft does not sign all their common
+binaries so many will not be signed (e.g. conhost.exe).</p>
+<div class="collapse" id="Windows_System_UntrustedBinariesDetails">
+<div class="card card-body"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.System.UntrustedBinaries</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+  <span class="no">Windows runs a number of services and binaries as part of the</span>
+  <span class="no">operating system. Sometimes malware pretends to run as those well</span>
+  <span class="no">known names in order to hide itself in plain sight. For example, a</span>
+  <span class="no">malware service might call itself svchost.exe so it shows up in the</span>
+  <span class="no">process listing as a benign service.</span>
+
+  <span class="no">This artifact checks that the common systems binaries are</span>
+  <span class="no">signed. If a malware replaces these files or names itself in this</span>
+  <span class="no">way their signature might not be correct.</span>
+
+  <span class="no">Note that unfortunately Microsoft does not sign all their common</span>
+  <span class="no">binaries so many will not be signed (e.g. conhost.exe).</span>
+
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">processNamesRegex</span>
+    <span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">A regex to select running processes which we consider should be trusted.</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">(?i)lsass|svchost|conhost|taskmgr|winlogon|wmiprv|dwm|csrss|velociraptor</span>
+
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">precondition</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">|</span>
+      <span class="no">SELECT OS From info() where OS = &#39;windows&#39;</span>
+    <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET binaries = SELECT lowcase(string=Exe) As Binary</span>
+          <span class="no">FROM pslist()</span>
+          <span class="no">WHERE Exe =~ processNamesRegex</span>
+          <span class="no">GROUP BY Binary</span>
+
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">LET auth = SELECT authenticode(filename=Binary) As Authenticode</span>
+        <span class="no">FROM binaries</span>
+      <span class="p p-Indicator">-</span> <span class="p p-Indicator">|</span>
+        <span class="no">SELECT Authenticode.Filename As Filename,</span>
+               <span class="no">Authenticode.IssuerName as Issuer,</span>
+               <span class="no">Authenticode.SubjectName as Subject,</span>
+               <span class="no">Authenticode.Trusted as Trusted from auth</span>
+</pre></div>
+</div>
+</div></div></div>
 
   
 
@@ -2264,7 +2990,11 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 
   <div class='toc sidebar'>
     <ul>
-<li><a class="reference internal" href="#">Generic.Client.Stats</a></li>
+<li><a class="reference internal" href="#">Admin.Client.Upgrade</a></li>
+<li><a class="reference internal" href="#admin-events-postprocessuploads">Admin.Events.PostProcessUploads</a></li>
+<li><a class="reference internal" href="#admin-system-compressuploads">Admin.System.CompressUploads</a></li>
+<li><a class="reference internal" href="#demo-plugins-fifo">Demo.Plugins.Fifo</a></li>
+<li><a class="reference internal" href="#generic-client-stats">Generic.Client.Stats</a></li>
 <li><a class="reference internal" href="#linux-applications-chrome-extensions">Linux.Applications.Chrome.Extensions</a></li>
 <li><a class="reference internal" href="#linux-applications-chrome-extensions-upload">Linux.Applications.Chrome.Extensions.Upload</a></li>
 <li><a class="reference internal" href="#linux-applications-docker-info">Linux.Applications.Docker.Info</a></li>
@@ -2282,12 +3012,16 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 <li><a class="reference internal" href="#linux-sys-lastuserlogin">Linux.Sys.LastUserLogin</a></li>
 <li><a class="reference internal" href="#linux-sys-users">Linux.Sys.Users</a></li>
 <li><a class="reference internal" href="#network-externalipaddress">Network.ExternalIpAddress</a></li>
+<li><a class="reference internal" href="#reporting-hunts-details">Reporting.Hunts.Details</a></li>
 <li><a class="reference internal" href="#server-alerts-interactiveshell">Server.Alerts.InteractiveShell</a></li>
 <li><a class="reference internal" href="#server-alerts-psexec">Server.Alerts.PsExec</a></li>
 <li><a class="reference internal" href="#server-hunts-list">Server.Hunts.List</a></li>
 <li><a class="reference internal" href="#server-hunts-results">Server.Hunts.Results</a></li>
 <li><a class="reference internal" href="#windows-applications-chocolateypackages">Windows.Applications.ChocolateyPackages</a></li>
 <li><a class="reference internal" href="#windows-applications-chrome-extensions">Windows.Applications.Chrome.Extensions</a></li>
+<li><a class="reference internal" href="#windows-applications-officemacros">Windows.Applications.OfficeMacros</a></li>
+<li><a class="reference internal" href="#windows-events-dnsqueries">Windows.Events.DNSQueries</a></li>
+<li><a class="reference internal" href="#windows-events-failedlogbeforesuccess">Windows.Events.FailedLogBeforeSuccess</a></li>
 <li><a class="reference internal" href="#windows-events-processcreation">Windows.Events.ProcessCreation</a></li>
 <li><a class="reference internal" href="#windows-events-servicecreation">Windows.Events.ServiceCreation</a></li>
 <li><a class="reference internal" href="#windows-network-arpcache">Windows.Network.ArpCache</a></li>
@@ -2297,6 +3031,7 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 <li><a class="reference internal" href="#windows-packs-autoexec">Windows.Packs.Autoexec</a></li>
 <li><a class="reference internal" href="#windows-persistence-permanentwmievents">Windows.Persistence.PermanentWMIEvents</a></li>
 <li><a class="reference internal" href="#windows-persistence-powershellregistry">Windows.Persistence.PowershellRegistry</a></li>
+<li><a class="reference internal" href="#windows-registry-ntuser-upload">Windows.Registry.NTUser.Upload</a></li>
 <li><a class="reference internal" href="#windows-sys-appcompatshims">Windows.Sys.AppcompatShims</a></li>
 <li><a class="reference internal" href="#windows-sys-certificateauthorities">Windows.Sys.CertificateAuthorities</a></li>
 <li><a class="reference internal" href="#windows-sys-diskinfo">Windows.Sys.DiskInfo</a></li>
@@ -2307,6 +3042,8 @@ the NetUserEnum() call and the list of SIDs in the registry.</p>
 <li><a class="reference internal" href="#windows-sys-programs">Windows.Sys.Programs</a></li>
 <li><a class="reference internal" href="#windows-sys-startupitems">Windows.Sys.StartupItems</a></li>
 <li><a class="reference internal" href="#windows-sys-users">Windows.Sys.Users</a></li>
+<li><a class="reference internal" href="#windows-system-svchost">Windows.System.SVCHost</a></li>
+<li><a class="reference internal" href="#windows-system-untrustedbinaries">Windows.System.UntrustedBinaries</a></li>
 </ul>
 
   </div>

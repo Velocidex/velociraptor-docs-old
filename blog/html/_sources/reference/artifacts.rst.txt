@@ -1,7 +1,405 @@
 This page displays information about the Velociraptor built in
-artifacts. There are 43 artifacts in total. Use the navigation menu
+artifacts. There are 54 artifacts in total. Use the navigation menu
 to the right to quickly skip to the right artifact
 definition. Definitions may be expanded to view the VQL source.
+
+.. |Admin_Client_UpgradeDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Admin_Client_UpgradeDetails" role="button"
+     aria-expanded="false" aria-controls="Admin_Client_UpgradeDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Admin.Client.Upgrade
+********************
+|Admin_Client_UpgradeDetails| Remotely push new client updates.
+
+NOTE: The updates can be pulled from any web server. You need to
+ensure they are properly secured with SSL and at least a random
+nonce in their path. You may configure the Velociraptor server to
+serve these through the public directory.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Admin_Client_UpgradeDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Admin.Client.Upgrade
+   description: |
+     Remotely push new client updates.
+   
+     NOTE: The updates can be pulled from any web server. You need to
+     ensure they are properly secured with SSL and at least a random
+     nonce in their path. You may configure the Velociraptor server to
+     serve these through the public directory.
+   
+   parameters:
+     - name: clientURL
+       default: http://127.0.0.1:8000/public/velociraptor.exe
+     - name: configURL
+       default: http://127.0.0.1:8000/public/client.config.yaml
+   
+   sources:
+     - precondition:
+         SELECT OS From info() where OS = 'windows'
+       queries:
+         - |
+           /* This query fetches the binary and config and stores them in
+            temp files. Note that tempfiles will be automatically
+            cleaned at query end.
+            */
+           LET tmpfiles <= SELECT tempfile(
+              data=query(vql={
+                SELECT Content
+                FROM http_client(url=clientURL, chunk_size=30000000)
+              }),
+              extension=".exe") as Binary,
+           tempfile(
+              data=query(vql={
+                SELECT Content
+                FROM http_client(url=configURL)
+              })) as Config from scope()
+   
+         - |
+           // Run the installer.
+           SELECT * from foreach(
+            row=tmpfiles,
+            query={
+               SELECT * from execve(
+                  argv=[Binary, "--config", Config, "-v", "service", "install"]
+               )
+            })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Admin_Events_PostProcessUploadsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Admin_Events_PostProcessUploadsDetails" role="button"
+     aria-expanded="false" aria-controls="Admin_Events_PostProcessUploadsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Admin.Events.PostProcessUploads
+*******************************
+|Admin_Events_PostProcessUploadsDetails| Sometimes we would like to post process uploads collected as part of
+the hunt's artifact collections
+
+Post processing means to watch the hunt for completed flows and run
+a post processing command on the files obtained from each host.
+
+The command will receive the list of paths of the files uploaded by
+the artifact. We dont actually care what the command does with those
+files - we will just relay our stdout/stderr to the artifact's
+result set.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Admin_Events_PostProcessUploadsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Admin.Events.PostProcessUploads
+   description: |
+     Sometimes we would like to post process uploads collected as part of
+     the hunt's artifact collections
+   
+     Post processing means to watch the hunt for completed flows and run
+     a post processing command on the files obtained from each host.
+   
+     The command will receive the list of paths of the files uploaded by
+     the artifact. We dont actually care what the command does with those
+     files - we will just relay our stdout/stderr to the artifact's
+     result set.
+   
+   parameters:
+     - name: uploadPostProcessCommand
+       description: |
+         The command to run - must be a json array of strings! The list
+         of files will be appended to the end of the command.
+       default: |
+         ["/bin/ls", "-l"]
+   
+     - name: uploadPostProcessArtifact
+       description: |
+         The name of the artifact to watch.
+       default: Windows.Registry.NTUser.Upload
+   
+   sources:
+     - precondition:
+         SELECT server_config FROM scope()
+       queries:
+         - |
+           LET files = SELECT Flow,
+               array(a1=parse_json_array(data=uploadPostProcessCommand),
+                     a2=file_store(path=Flow.FlowContext.uploaded_files)) as Argv
+           FROM watch_monitoring(artifact='System.Flow.Completion')
+           WHERE uploadPostProcessArtifact in Flow.FlowContext.artifacts
+   
+         - |
+           SELECT * from foreach(
+             row=files,
+             query={
+                SELECT Flow.Urn as FlowUrn, Argv,
+                       Stdout, Stderr, ReturnCode
+                FROM execve(argv=Argv)
+             })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Admin_System_CompressUploadsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Admin_System_CompressUploadsDetails" role="button"
+     aria-expanded="false" aria-controls="Admin_System_CompressUploadsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Admin.System.CompressUploads
+****************************
+|Admin_System_CompressUploadsDetails| Compresses all uploaded files.
+
+When artifacts collect files they are normally stored on the server
+uncompressed. This artifact watches all completed flows and
+compresses the files in the file store when the flow completes. This
+is very useful for cloud based deployments with limited storage
+space or when collecting large files.
+
+In order to run this artifact you would normally run it as part of
+an artifact acquisition process:
+
+```
+$ velociraptor --config /etc/server.config.yaml artifacts acquire Admin.System.CompressUploads
+```
+
+Note that there is nothing special about compressed files - you can
+also just run `find` and `gzip` in the file store. Velociraptor will
+automatically decompress the file when displaying it in the GUI
+text/hexdump etc.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Admin_System_CompressUploadsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Admin.System.CompressUploads
+   description: |
+     Compresses all uploaded files.
+   
+     When artifacts collect files they are normally stored on the server
+     uncompressed. This artifact watches all completed flows and
+     compresses the files in the file store when the flow completes. This
+     is very useful for cloud based deployments with limited storage
+     space or when collecting large files.
+   
+     In order to run this artifact you would normally run it as part of
+     an artifact acquisition process:
+   
+     ```
+     $ velociraptor --config /etc/server.config.yaml artifacts acquire Admin.System.CompressUploads
+     ```
+   
+     Note that there is nothing special about compressed files - you can
+     also just run `find` and `gzip` in the file store. Velociraptor will
+     automatically decompress the file when displaying it in the GUI
+     text/hexdump etc.
+   
+   parameters:
+     - name: blacklistCompressionFilename
+       description: Filenames which match this regex will be excluded from compression.
+       default: '(?i).+ntuser.dat'
+   
+   sources:
+     - precondition:
+         SELECT server_config FROM scope()
+       queries:
+         - |
+           LET files = SELECT ClientId,
+               Flow.Urn as Flow,
+               Flow.FlowContext.uploaded_files as Files
+           FROM watch_monitoring(artifact='System.Flow.Completion')
+           WHERE Files and not Files =~ blacklistCompressionFilename
+   
+         - |
+           SELECT ClientId, Flow, Files,
+                  compress(path=Files) as CompressedFiles
+           FROM files
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Demo_Plugins_FifoDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Demo_Plugins_FifoDetails" role="button"
+     aria-expanded="false" aria-controls="Demo_Plugins_FifoDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Demo.Plugins.Fifo
+*****************
+|Demo_Plugins_FifoDetails| This is a demo of the fifo() plugin. The Fifo plugin collects and
+caches rows from its inner query. Every subsequent execution of the
+query then reads from the cache. The plugin will expire old rows
+depending on its expiration policy - so we always see recent rows.
+
+You can use this to build queries which consider historical events
+together with current events at the same time. In this example, we
+check for a successful logon preceeded by a number of failed logon
+attempts.
+
+In this example, we use the clock() plugin to simulate events. We
+simulate failed logon attempts using the clock() plugin every
+second. By feeding the failed logon events to the fifo() plugin we
+ensure the fifo() plugin cache contains the last 5 failed logon
+events.
+
+We simulate a successful logon event every 3 seconds, again using
+the clock plugin. Once a successful logon event is detected, we go
+back over the last 5 login events, count them and collect the last
+failed logon times (using the GROUP BY operator we group the
+FailedTime for every unique SuccessTime).
+
+If we receive more than 3 events, we emit the row.
+
+This now represents a high value signal! It will only occur when a
+successful logon event is preceeded by at least 3 failed logon
+events in the last hour. It is now possible to escalate this on the
+server via email or other alerts.
+
+Here is sample output:
+
+.. code-block:: json
+
+    {
+      "Count": 5,
+      "FailedTime": [
+        1549527272,
+        1549527273,
+        1549527274,
+        1549527275,
+        1549527276
+      ],
+      "SuccessTime": 1549527277
+    }
+
+Of course in the real artifact we would want to include more
+information than just times (i.e. who logged on to where etc).
+
+
+.. raw:: html
+
+  <div class="collapse" id="Demo_Plugins_FifoDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Demo.Plugins.Fifo
+   description: |
+     This is a demo of the fifo() plugin. The Fifo plugin collects and
+     caches rows from its inner query. Every subsequent execution of the
+     query then reads from the cache. The plugin will expire old rows
+     depending on its expiration policy - so we always see recent rows.
+   
+     You can use this to build queries which consider historical events
+     together with current events at the same time. In this example, we
+     check for a successful logon preceeded by a number of failed logon
+     attempts.
+   
+     In this example, we use the clock() plugin to simulate events. We
+     simulate failed logon attempts using the clock() plugin every
+     second. By feeding the failed logon events to the fifo() plugin we
+     ensure the fifo() plugin cache contains the last 5 failed logon
+     events.
+   
+     We simulate a successful logon event every 3 seconds, again using
+     the clock plugin. Once a successful logon event is detected, we go
+     back over the last 5 login events, count them and collect the last
+     failed logon times (using the GROUP BY operator we group the
+     FailedTime for every unique SuccessTime).
+   
+     If we receive more than 3 events, we emit the row.
+   
+     This now represents a high value signal! It will only occur when a
+     successful logon event is preceeded by at least 3 failed logon
+     events in the last hour. It is now possible to escalate this on the
+     server via email or other alerts.
+   
+     Here is sample output:
+   
+     .. code-block:: json
+   
+         {
+           "Count": 5,
+           "FailedTime": [
+             1549527272,
+             1549527273,
+             1549527274,
+             1549527275,
+             1549527276
+           ],
+           "SuccessTime": 1549527277
+         }
+   
+     Of course in the real artifact we would want to include more
+     information than just times (i.e. who logged on to where etc).
+   
+   sources:
+     - queries:
+         # This query simulates failed logon attempts.
+         - LET failed_logon = SELECT Unix as FailedTime from clock(period=1)
+   
+         # This is the fifo which holds the last 5 failed logon attempts
+         # within the last hour.
+         - LET last_5_events = SELECT FailedTime
+               FROM fifo(query=failed_logon, max_rows=5, max_age=3600)
+   
+         # We need to get it started collecting data immediately by
+         # materializing the cache contents. Otherwise the fifo wont
+         # start until it is first called (i.e. the first successful
+         # login and we will miss the failed events before hand).
+         - LET foo <= SELECT * FROM last_5_events
+   
+         # This simulates successful logon - we assume every 3 seonds.
+         - LET success_logon = SELECT Unix as SuccessTime from clock(period=3)
+   
+         # For each successful logon, query the last failed logon
+         # attempts from the fifo(). We also count the total number of
+         # failed logons. We only actually emit results if there are more
+         # than 3 failed logon attempts before each successful one.
+         - |
+           SELECT * FROM foreach(
+             row=success_logon,
+             query={
+              SELECT SuccessTime, FailedTime, count(items=FailedTime) as Count
+              FROM last_5_events GROUP BY SuccessTime
+             }) WHERE Count > 3
+
+.. raw:: html
+
+   </div></div>
+
 
 .. |Generic_Client_StatsDetails| raw:: html
 
@@ -528,9 +926,9 @@ metadata from it. If not we leave those columns empty.
               },
               then=add_stat_to_parsed_cache_file,
               else={
-                SELECT Source, dict() as Mtime, dict() as Ctime,
-                  dict() as Atime, Type,
-                  dict() as Record, Arch, URL, Name from scope()
+              SELECT Source, Null as Mtime, Null as Ctime,
+                  Null as Atime, Type,
+                  Null as Record, Arch, URL, Name from scope()
               })
    
           - |
@@ -591,7 +989,7 @@ Linux.Debian.Packages
                       regex='(?sm)^(?P<Record>Package:.+?)\\n\\n')
          - |
            SELECT Record.Package as Package,
-                  Record.InstalledSize as InstalledSize,
+                  atoi(string=Record.InstalledSize) as InstalledSize,
                   Record.Version as Version,
                   Record.Source as Source,
                   Record.Architecture as Architecture from packages
@@ -714,7 +1112,11 @@ Linux.Proc.Modules
    
        queries:
          - |
-           SELECT * from split_records(
+           SELECT Name,
+             atoi(string=Size) As Size,
+             atoi(string=UseCount) As UseCount,
+             Status, Address
+           FROM split_records(
               filenames=ProcModules,
               regex='\\s+',
               columns=['Name', 'Size', 'UseCount', 'UsedBy', 'Status', 'Address'])
@@ -1203,6 +1605,62 @@ Network.ExternalIpAddress
    </div></div>
 
 
+.. |Reporting_Hunts_DetailsDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Reporting_Hunts_DetailsDetails" role="button"
+     aria-expanded="false" aria-controls="Reporting_Hunts_DetailsDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Reporting.Hunts.Details
+***********************
+|Reporting_Hunts_DetailsDetails| Report details about which client ran each hunt, how long it took
+and if it has completed.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Reporting_Hunts_DetailsDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Reporting.Hunts.Details
+   description: |
+     Report details about which client ran each hunt, how long it took
+     and if it has completed.
+   
+   sources:
+     - precondition:
+         SELECT server_config FROM scope()
+   
+       queries:
+         - |
+           LET hunts = SELECT basename(path=hunt_id) as hunt_id,
+               create_time,
+               hunt_description
+           FROM hunts() order by create_time desc limit 6
+         - |
+           LET flows = select hunt_id,
+             hunt_description,
+             Fqdn,
+             ClientId,
+             { SELECT os_info.system FROM clients(search=ClientId) } as OS,
+             timestamp(epoch=Flow.FlowContext.create_time/1000000) as create_time,
+             basename(path=Flow.Urn) as flow_id,
+             (Flow.FlowContext.active_time - Flow.FlowContext.create_time) / 1000000 as Duration,
+             format(format='%v', args=[Flow.FlowContext.state]) as State
+           FROM hunt_flows(hunt_id=hunt_id) order by create_time desc
+         - |
+           SELECT * from foreach(row=hunts, query=flows)
+
+.. raw:: html
+
+   </div></div>
+
+
 .. |Server_Alerts_InteractiveShellDetails| raw:: html
 
   <a data-toggle="collapse" class='details-opener'
@@ -1618,6 +2076,254 @@ description from there.
    </div></div>
 
 
+.. |Windows_Applications_OfficeMacrosDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Applications_OfficeMacrosDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Applications_OfficeMacrosDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Applications.OfficeMacros
+*********************************
+|Windows_Applications_OfficeMacrosDetails| Office macros are a favourite initial infection vector. Many users
+click through the warning dialogs.
+
+This artifact scans through the given directory glob for common
+office files. We then try to extract any embedded macros by parsing
+the OLE file structure.
+
+If a macro calls an external program (e.g. Powershell) this is very
+suspicious!
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Applications_OfficeMacrosDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Applications.OfficeMacros
+   description: |
+     Office macros are a favourite initial infection vector. Many users
+     click through the warning dialogs.
+   
+     This artifact scans through the given directory glob for common
+     office files. We then try to extract any embedded macros by parsing
+     the OLE file structure.
+   
+     If a macro calls an external program (e.g. Powershell) this is very
+     suspicious!
+   
+   parameters:
+     - name: officeExtensions
+       default: "*.{xls,xlsm,doc,docx,ppt,pptm}"
+     - name: officeFileSearchGlob
+       default: C:\Users\**\
+       description: The directory to search for office documents.
+   
+   sources:
+     - queries:
+         - |
+           SELECT * FROM foreach(
+              row={
+                 SELECT FullPath FROM glob(globs=officeFileSearchGlob + officeExtensions)
+              },
+              query={
+                  SELECT * from olevba(file=FullPath)
+              })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Events_DNSQueriesDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Events_DNSQueriesDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Events_DNSQueriesDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Events.DNSQueries
+*************************
+|Windows_Events_DNSQueriesDetails| Monitor all DNS Queries and responses.
+
+This artifact monitors all DNS queries and their responses seen on
+the endpoint. DNS is a critical source of information for intrusion
+detection and the best place to collect it is on the endpoint itself
+(Perimeter collection can only see DNS requests while the endpoint
+or laptop is inside the enterprise network).
+
+It is recommended to collect this artifact and just archive the
+results. When threat intelligence emerges about a watering hole or a
+bad C&C you can use this archive to confirm if any of your endpoints
+have contacted this C&C.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Events_DNSQueriesDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Events.DNSQueries
+   description: |
+     Monitor all DNS Queries and responses.
+   
+     This artifact monitors all DNS queries and their responses seen on
+     the endpoint. DNS is a critical source of information for intrusion
+     detection and the best place to collect it is on the endpoint itself
+     (Perimeter collection can only see DNS requests while the endpoint
+     or laptop is inside the enterprise network).
+   
+     It is recommended to collect this artifact and just archive the
+     results. When threat intelligence emerges about a watering hole or a
+     bad C&C you can use this archive to confirm if any of your endpoints
+     have contacted this C&C.
+   
+   parameters:
+     - name: whitelistRegex
+       description: We ignore DNS names that match this regex.
+       default: wpad.home
+   
+   sources:
+    - precondition:
+        SELECT OS from info() where OS = "windows"
+   
+      queries:
+         - |
+           SELECT timestamp(epoch=Time) As Time, EventType, Name, CNAME, Answers
+           FROM dns()
+           WHERE not Name =~ whitelistRegex
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Events_FailedLogBeforeSuccessDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Events_FailedLogBeforeSuccessDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Events_FailedLogBeforeSuccessDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Events.FailedLogBeforeSuccess
+*************************************
+|Windows_Events_FailedLogBeforeSuccessDetails| Sometimes attackers will brute force an local user's account's
+password. If the account password is strong, brute force attacks are
+not effective and might not represent a high value event in
+themselves.
+
+However, if the brute force attempt succeeds, then it is a very high
+value event (since brute forcing a password is typically a
+suspicious activity).
+
+On the endpoint this looks like a bunch of failed logon attempts in
+quick succession followed by a successful login.
+
+NOTE: In order for this artifact to work we need Windows to be
+logging failed account login. This is not on by default and should
+be enabled via group policy.
+
+https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events
+
+You can set the policy in group policy managment console (gpmc):
+Computer Configuration\Windows Settings\Security Settings\Local Policies\Audit Policy.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Events_FailedLogBeforeSuccessDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Events.FailedLogBeforeSuccess
+   description: |
+     Sometimes attackers will brute force an local user's account's
+     password. If the account password is strong, brute force attacks are
+     not effective and might not represent a high value event in
+     themselves.
+   
+     However, if the brute force attempt succeeds, then it is a very high
+     value event (since brute forcing a password is typically a
+     suspicious activity).
+   
+     On the endpoint this looks like a bunch of failed logon attempts in
+     quick succession followed by a successful login.
+   
+     NOTE: In order for this artifact to work we need Windows to be
+     logging failed account login. This is not on by default and should
+     be enabled via group policy.
+   
+     https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/basic-audit-logon-events
+   
+     You can set the policy in group policy managment console (gpmc):
+     Computer Configuration\Windows Settings\Security Settings\Local Policies\Audit Policy.
+   
+   parameters:
+     - name: securityLogFile
+       default: >-
+         C:/Windows/System32/Winevt/Logs/Security.evtx
+   
+     - name: failureCount
+       description: Alert if there are this many failures before the successful logon.
+       default: 3
+   
+     - name: failedLogonTimeWindow
+       default: 3600
+   
+   sources:
+     - precondition:
+         SELECT OS From info() where OS = 'windows'
+       queries:
+         - |
+           LET failed_logon = SELECT EventData as FailedEventData,
+              System as FailedSystem
+           FROM watch_evtx(filename=securityLogFile)
+           WHERE System.EventID = '4625'
+   
+         - |
+           LET last_5_events = SELECT FailedEventData, FailedSystem
+               FROM fifo(query=failed_logon,
+                         max_rows=500,
+                         max_age=atoi(string=failedLogonTimeWindow))
+   
+         # Force the fifo to materialize.
+         - LET foo <= SELECT * FROM last_5_events
+   
+         - |
+           LET success_logon = SELECT EventData as SuccessEventData,
+              System as SuccessSystem
+           FROM watch_evtx(filename=securityLogFile)
+           WHERE System.EventID = '4624'
+   
+         - |
+           SELECT * FROM foreach(
+             row=success_logon,
+             query={
+              SELECT SuccessSystem.TimeCreated.SystemTime AS LogonTime,
+                     SuccessSystem, SuccessEventData, FailedEventData,
+                     FailedSystem, count(items=SuccessSystem) as Count
+              FROM last_5_events
+              WHERE FailedEventData.SubjectUserName = SuccessEventData.SubjectUserName
+              GROUP BY LogonTime
+             })  WHERE Count > atoi(string=failureCount)
+
+.. raw:: html
+
+   </div></div>
+
+
 .. |Windows_Events_ProcessCreationDetails| raw:: html
 
   <a data-toggle="collapse" class='details-opener'
@@ -1731,8 +2437,10 @@ event log and records them on the server.
                   EventData.ImagePath as ImagePath,
                   EventData.ServiceName as ServiceName,
                   EventData.ServiceType as Type,
-                  EventData as _EventData
-           FROM watch_evtx(filename=systemLogFile) WHERE EventID = '7045'
+                  System.Security.UserID as UserSID,
+                  EventData as _EventData,
+                  System as _System
+           FROM watch_evtx(filename=systemLogFile) WHERE EventID = 7045
 
 .. raw:: html
 
@@ -2149,6 +2857,68 @@ the registry hive is locked).
                  accessor="ntfs",
                  rules=yaraRule, context=50)
            })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_Registry_NTUser_UploadDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_Registry_NTUser_UploadDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_Registry_NTUser_UploadDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.Registry.NTUser.Upload
+******************************
+|Windows_Registry_NTUser_UploadDetails| This artifact collects all the user's NTUser.dat registry hives.
+
+When a user logs into a windows machine the system creates their own
+"profile" which consists of a registry hive mapped into the
+HKEY_USERS hive. This hive file is locked as long as the user is
+logged in.
+
+This artifact bypasses the locking mechanism by extracting the
+registry hives using raw NTFS parsing. We then just upload all hives
+to the server.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_Registry_NTUser_UploadDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.Registry.NTUser.Upload
+   description: |
+     This artifact collects all the user's NTUser.dat registry hives.
+   
+     When a user logs into a windows machine the system creates their own
+     "profile" which consists of a registry hive mapped into the
+     HKEY_USERS hive. This hive file is locked as long as the user is
+     logged in.
+   
+     This artifact bypasses the locking mechanism by extracting the
+     registry hives using raw NTFS parsing. We then just upload all hives
+     to the server.
+   
+   sources:
+     - precondition: |
+         SELECT OS From info() where OS = 'windows'
+       queries:
+         - |
+           LET users = SELECT Name, Directory as HomeDir
+               FROM Artifact.Windows.Sys.Users()
+               WHERE Directory
+   
+         - |
+           SELECT upload(file="\\\\.\\" + HomeDir + "\\ntuser.dat",
+                         accessor="ntfs") as Upload
+           FROM users
 
 .. raw:: html
 
@@ -2785,6 +3555,156 @@ the NetUserEnum() call and the list of SIDs in the registry.
               SELECT * from roaming_users
               where not UUID in local_users.UUID
             })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_System_SVCHostDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_System_SVCHostDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_System_SVCHostDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.System.SVCHost
+**********************
+|Windows_System_SVCHostDetails| Typically a windows system will have many svchost.exe
+processes. Sometimes attackers name their processes svchost.exe to
+try to hide. Typically svchost.exe is spawned by services.exe.
+
+This artifact lists all the processes named svchost.exe and their
+parents if the parent is not also named services.exe.
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_System_SVCHostDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.System.SVCHost
+   description: |
+     Typically a windows system will have many svchost.exe
+     processes. Sometimes attackers name their processes svchost.exe to
+     try to hide. Typically svchost.exe is spawned by services.exe.
+   
+     This artifact lists all the processes named svchost.exe and their
+     parents if the parent is not also named services.exe.
+   
+   sources:
+     - precondition: |
+         SELECT OS From info() where OS = 'windows'
+   
+       queries:
+         - |
+           // Cache the pslist output in memory.
+           LET processes <= SELECT * FROM pslist()
+   
+         - |
+           // Get the pids of all procecesses named services.exe
+           LET services <= SELECT Pid FROM processes where Name =~ "services.exe"
+   
+         - |
+           // The interesting processes are those which are not spawned by services.exe
+           LET suspicious = SELECT Pid As SVCHostPid,
+               Ppid As SVCHostPpid,
+               Exe as SVCHostExe,
+               CommandLine as SVCHostCommandLine
+           FROM processes
+           WHERE Name =~ "svchost" AND NOT Ppid in services.Pid
+   
+         - |
+           // Now for each such process we display its actual parent.
+           SELECT * from foreach(
+              row=suspicious,
+              query={
+                 SELECT SVCHostPid, SVCHostPpid, SVCHostExe,
+                        SVCHostCommandLine, Name as ParentName,
+                        Exe As ParentExe
+                 FROM processes
+                 WHERE Pid=SVCHostPpid
+             })
+
+.. raw:: html
+
+   </div></div>
+
+
+.. |Windows_System_UntrustedBinariesDetails| raw:: html
+
+  <a data-toggle="collapse" class='details-opener'
+     href="#Windows_System_UntrustedBinariesDetails" role="button"
+     aria-expanded="false" aria-controls="Windows_System_UntrustedBinariesDetails">
+     <i class="fa fa-lg fa-plus-square-o to_open"></i>
+     <i class="fa fa-lg fa-minus-square-o to_close"></i>
+  </a>
+
+Windows.System.UntrustedBinaries
+********************************
+|Windows_System_UntrustedBinariesDetails| Windows runs a number of services and binaries as part of the
+operating system. Sometimes malware pretends to run as those well
+known names in order to hide itself in plain sight. For example, a
+malware service might call itself svchost.exe so it shows up in the
+process listing as a benign service.
+
+This artifact checks that the common systems binaries are
+signed. If a malware replaces these files or names itself in this
+way their signature might not be correct.
+
+Note that unfortunately Microsoft does not sign all their common
+binaries so many will not be signed (e.g. conhost.exe).
+
+
+.. raw:: html
+
+  <div class="collapse" id="Windows_System_UntrustedBinariesDetails">
+  <div class="card card-body">
+        
+.. code-block:: yaml
+
+   name: Windows.System.UntrustedBinaries
+   description: |
+     Windows runs a number of services and binaries as part of the
+     operating system. Sometimes malware pretends to run as those well
+     known names in order to hide itself in plain sight. For example, a
+     malware service might call itself svchost.exe so it shows up in the
+     process listing as a benign service.
+   
+     This artifact checks that the common systems binaries are
+     signed. If a malware replaces these files or names itself in this
+     way their signature might not be correct.
+   
+     Note that unfortunately Microsoft does not sign all their common
+     binaries so many will not be signed (e.g. conhost.exe).
+   
+   parameters:
+     - name: processNamesRegex
+       description: A regex to select running processes which we consider should be trusted.
+       default: (?i)lsass|svchost|conhost|taskmgr|winlogon|wmiprv|dwm|csrss|velociraptor
+   
+   sources:
+     - precondition: |
+         SELECT OS From info() where OS = 'windows'
+       queries:
+         - |
+           LET binaries = SELECT lowcase(string=Exe) As Binary
+             FROM pslist()
+             WHERE Exe =~ processNamesRegex
+             GROUP BY Binary
+   
+         - |
+           LET auth = SELECT authenticode(filename=Binary) As Authenticode
+           FROM binaries
+         - |
+           SELECT Authenticode.Filename As Filename,
+                  Authenticode.IssuerName as Issuer,
+                  Authenticode.SubjectName as Subject,
+                  Authenticode.Trusted as Trusted from auth
 
 .. raw:: html
 

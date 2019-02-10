@@ -62,7 +62,7 @@ definition. Definitions may be expanded to view the VQL source.""" % len(artifac
   <div class="card card-body">
         """ % (id))
         print (".. code-block:: yaml")
-        print ()
+        print ("")
         for line in data['raw'].splitlines():
             print ("   " + line)
         print ("\n.. raw:: html\n\n   </div></div>\n")
