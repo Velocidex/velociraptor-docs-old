@@ -294,7 +294,7 @@ account for more use cases.
 Thanks
 ~~~~~~
 
-We would like to thank the folk at `Klein&Con <https://www.kleinco.com.au/>`_ for their wonderful
+We would like to thank the folk at `Klein&Co <https://www.kleinco.com.au/>`_ for their wonderful
 support and assistance in Velociraptor development.
 
 
