@@ -1,0 +1,444 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Velociraptor is a Digital Forensic and Incident Response tool.">
+        <meta name="viewport" content="width=device-width">
+        <title>Alerting on event patterns &mdash; Velociraptor</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/dark.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="../../../_static/velo.css" type="text/css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.min.css" type="text/css" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" type="text/css" /><link rel="shortcut icon" href="../../../_static/favicon.png" /><!-- Load modernizr and JQuery -->
+<script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+<script src="../../../_static/plugins.js"></script>
+<script src="../../../_static/main.js"></script>
+<link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Velociraptor Performance" href="../10/velociraptor_performance.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script><script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script type="text/javascript" src="../../../_static/disqus.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Adjusts document height if sidebar is taller
+            var documentwrapper = document.getElementsByTagName('article')[0];
+            var sidebar = document.getElementsByTagName('aside')[0];
+
+            if (sidebar.offsetHeight > documentwrapper.offsetHeight)
+            {
+                documentwrapper.style.minHeight = sidebar.offsetHeight + "px";
+            }
+
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(documentwrapper.offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><div class="header-container">
+  <header class="wrapper clearfix" role="banner">
+    <div class="title">
+      <h1><a href="../../../index.html">Velociraptor</a></h1>
+      <h4>Hunting for evil - what Velociraptors do best!</h4>
+    </div>
+    <div class="logo">
+      <img src="../../../_static/velo.png"
+           alt="Log" class="logo"/>
+
+    </div>
+    <nav class="big_nav" role="navigation">
+      <ul>
+        <li class="main-nav">
+          <a href="../../../pages/overview.html">Overview</a>
+        </li>
+
+        <li class="main-nav">
+          <a href="../../../reference/artifacts.html">Artifacts</a>
+        </li><li class="quicklink"><div class="rss">
+        <a href="../../../rss.html" title="Subscribe via RSS"><span class="fa fa-lg fa-rss"></span></a>
+    </div></li><li class="main-nav">
+            <a href="https://github.com/Velocidex/velociraptor">
+              <span class="fa fa-lg fa-github"></span>
+            </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<div class="main-container" role="main"><div class="main wrapper body clearfix"><article role="article"><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../10/velociraptor_performance.html">Velociraptor Performance</a> &raquo; </li>
+        </ul>
+  
+     <div class="section" id="alerting-on-event-patterns">
+<h1>Alerting on event patterns</h1>
+<p>We have shown in earlier posts how Velociraptor uses VQL to define
+event queries that can detect specific conditions. These conditions
+can be used to create alerts and escalation actions.</p>
+<p>One of the most useful types of alerts is detecting a pattern of
+activity. For example we can detect failed and successful login
+attempts seperately, but it is the specific pattern of events (say 5
+failed login attempts followed by a successful one) that is
+interesting from a detection point of view.</p>
+<p>This post illustrates how this kind of temporal correlation can be
+expressed in a VQL query. We then use it to create alerts for
+attack patterns commonly seen by intrusions.</p>
+<div id="more"> </div><div class="section" id="event-queries">
+<h2>Event Queries</h2>
+<p>Velociraptor executes queries written in the Velociraptor Query
+Language (VQL). The queries can be executed on the client, and their
+results streamed to the server. Alternatively the queries may be
+executed on the server and process the result of other queries which
+collected information from the client.</p>
+<p>A VQL query does not have to terminate at all. VQL queries draw their
+data from a VQL plugin which may simply return data rows at different
+times.  For example, consider the following query:</p>
+<div class="highlight-SQL notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">EventData</span> <span class="k">as</span> <span class="n">FailedEventData</span><span class="p">,</span>
+       <span class="k">System</span> <span class="k">as</span> <span class="n">FailedSystem</span>
+<span class="k">FROM</span> <span class="n">watch_evtx</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">securityLogFile</span><span class="p">)</span>
+<span class="k">WHERE</span> <span class="k">System</span><span class="p">.</span><span class="n">EventID</span> <span class="o">=</span> <span class="mi">4625</span>
+</pre></div>
+</div>
+<p>This query sets up a watcher on a windows event log file. As new
+events are written to the log file, the query will produce those
+events as new rows. The rows will then be filtered so we only see
+event id 4625 (Failed logon event).</p>
+<p>Velociraptor can implement event queries on the client or on the
+server. For example, say we wanted to collect all failed event logs
+with the query above. We would write an artifact that encapsulates
+this query:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.System.FailedLoginAttempts</span>
+<span class="l l-Scalar l-Scalar-Plain">parameters</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">securityLogFile</span>
+    <span class="l l-Scalar l-Scalar-Plain">default</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">C:/Windows/System32/Winevt/Logs/Security.evtx</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+     <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT EventData as FailedEventData,</span>
+           <span class="l l-Scalar l-Scalar-Plain">System as FailedSystem</span>
+       <span class="l l-Scalar l-Scalar-Plain">FROM watch_evtx(filename=securityLogFile)</span>
+       <span class="l l-Scalar l-Scalar-Plain">WHERE System.EventID.Value = 4625</span>
+</pre></div>
+</div>
+<p>Then we simply add that artifact to the monitored artifact list in the
+config file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Events</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">artifacts</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Generic.Client.Stats</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">Windows.System.FailedLoginAttempts</span>
+  <span class="l l-Scalar l-Scalar-Plain">version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+  <span class="l l-Scalar l-Scalar-Plain">ops_per_second</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">10</span>
+</pre></div>
+</div>
+<p>The monitored artifacts are run on all clients connected to the
+server. The output from these queries is streamed to the server and
+stored in the client’s monitoring VFS directory.</p>
+<p>Lets test this artifact by trying to run a command using the runas
+windows command. We will be prompted for a password but failing to
+give the correct password will result in a login failure event:</p>
+<img alt="../../../_images/13.png" src="../../../_images/13.png" />
+<p>After a few seconds the event will be written to the windows event log
+and the <cite>watch_evtx()</cite> VQL plugin will emit the row - which will be
+streamed to the VFS monitoring directory on the server, where it can
+be viewed in the GUI:</p>
+<img alt="../../../_images/23.png" src="../../../_images/23.png" />
+<p>The above screenshot shows that the <cite>monitoring</cite> directory now
+contains a subdirectory named after the artifact we created. Inside
+this directory are CSV files for each day and every failed logon
+attempt is detailed there.</p>
+</div>
+<div class="section" id="time-correlation">
+<h2>Time correlation</h2>
+<p>While it is interesting to see all failed logon attempts in many cases
+these events are just noise. If you put any server on the internet
+(e.g. an RDP or SSH server) you will experience thousands of brute
+force attempts to break in. This is just the nature of the
+internet. If your password policy is strong enough it should not be a
+big problem.</p>
+<p>However, what if someone guesses the password for one of your
+accounts? Then the activity pattern is more like a bunch of failed
+logons followed by a successful logon for the same account.</p>
+<p>This pattern is way more interesting than just watching for a series
+of failed logons (although that is also good to know).</p>
+<p>But how do we write a query to detect this? Essentially the query
+needs to look back in time to see how many failed logon attempts
+preceeded each successful logon.</p>
+<p>This is a typical problem which may be generalized as followed:</p>
+<div class="admonition-goal admonition">
+<p class="first admonition-title">Goal</p>
+<p class="last">We want to detect an event A preceeded by a specified number of
+events B within a defined time window.</p>
+</div>
+<p>This problem may be generalized for example:</p>
+<ol class="arabic simple">
+<li>Detect a user account created and deleted within a short time
+window.</li>
+<li>A beacon to a specific DNS followed by at least 5 beacons within
+the last 5 hours to same DNS (Event A and B are the same).</li>
+</ol>
+</div>
+<div class="section" id="the-fifo-plugin">
+<h2>The fifo() plugin</h2>
+<p>How shall we write the VQL query to achieve this? This is made
+possible by use of the fifo() plugin. As its name suggests, the FIFO
+plugin acts as a First In First Out cache for event queries.</p>
+<img alt="../../../_images/3.svg" src="../../../_images/3.svg" /><p>The plugin is given a subquery which is also a VQL query generating
+its own events. As the subquery generates events, each event is kept
+in the fifo plugin’s cache in a first in first out manner. Events are
+also expired if they are too old.</p>
+<p>We typically store the query in a variable. Each time the variable is
+queried the cache is returned at once. To illustrate how this works
+consider the following query:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LET fifo_events = SELECT * FROM fifo(
+  max_rows=5,
+  query={
+     SELECT * from watch_evtx(filename=securityLogFile)
+     WHERE System.EventID.Value = 4625
+   })
+
+SELECT * FROM foreach(
+   row={
+     SELECT * FROM clock(period=60)
+   },
+   query={
+     SELECT * from fifo_events
+   })
+</pre></div>
+</div>
+<p>The first query is stored into the fifo_events variable. When it is
+first defined, the fifo() VQL plugin launches its subquery and simply
+collects its output into its local cache in a fifo manner. This will
+essentially keep the last 5 rows in its cache.</p>
+<p>The second query runs the clock() plugin to receive a clock event
+every 60 seconds. For each of these events, we select from the
+<cite>fifo_events</cite> variable - that is we select the last 5 failed events.</p>
+<p>You can see that this allows us to query the last 5 events in the fifo
+cache for every clock event. If we now replace the clock event with a
+successful logon event this query will do exactly what we want:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># This query will generate failed logon events - one per row, as</span>
+<span class="c1"># they occur.</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET failed_logon = SELECT EventData as FailedEventData,</span>
+     <span class="l l-Scalar l-Scalar-Plain">System as FailedSystem</span>
+  <span class="l l-Scalar l-Scalar-Plain">FROM watch_evtx(filename=securityLogFile)</span>
+  <span class="l l-Scalar l-Scalar-Plain">WHERE System.EventID.Value = 4625</span>
+
+<span class="c1"># This query will create a fifo() to contain the last 5 failed</span>
+<span class="c1"># logon events.</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET last_5_events = SELECT FailedEventData, FailedSystem</span>
+      <span class="l l-Scalar l-Scalar-Plain">FROM fifo(query=failed_logon,</span>
+                <span class="l l-Scalar l-Scalar-Plain">max_rows=5,</span>
+                <span class="l l-Scalar l-Scalar-Plain">max_age=atoi(string=failedLogonTimeWindow))</span>
+
+<span class="c1"># This query simply generates successful logon events.</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">LET success_logon = SELECT EventData as SuccessEventData,</span>
+     <span class="l l-Scalar l-Scalar-Plain">System as SuccessSystem</span>
+  <span class="l l-Scalar l-Scalar-Plain">FROM watch_evtx(filename=securityLogFile)</span>
+  <span class="l l-Scalar l-Scalar-Plain">WHERE System.EventID.Value = 4624</span>
+
+<span class="c1"># For each successful event, we select the last 5 failed events</span>
+<span class="c1"># and count them (using the group by). If the count is greater</span>
+<span class="c1"># than 3 then we emit the row as an event.</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT * FROM foreach(</span>
+    <span class="l l-Scalar l-Scalar-Plain">row=success_logon,</span>
+    <span class="l l-Scalar l-Scalar-Plain">query={</span>
+     <span class="l l-Scalar l-Scalar-Plain">SELECT SuccessSystem.TimeCreated.SystemTime AS LogonTime,</span>
+            <span class="l l-Scalar l-Scalar-Plain">SuccessSystem, SuccessEventData, FailedEventData,</span>
+            <span class="l l-Scalar l-Scalar-Plain">FailedSystem, count(items=SuccessSystem) as Count</span>
+     <span class="l l-Scalar l-Scalar-Plain">FROM last_5_events</span>
+     <span class="l l-Scalar l-Scalar-Plain">WHERE FailedEventData.SubjectUserName = SuccessEventData.SubjectUserName</span>
+     <span class="l l-Scalar l-Scalar-Plain">GROUP BY LogonTime</span>
+    <span class="l l-Scalar l-Scalar-Plain">})  WHERE Count &gt; 3</span>
+</pre></div>
+</div>
+<p>The above query simply watches the event log for failed logins and
+populates a fifo() with the last 5 failed events. At the same time we
+monitor the event log for successful logon events. If we see a
+successful event, we go back and check the last 5 failed events and
+count them.</p>
+<p>If the failed events are for the same user and there are more than 3
+then we report this as an event. We now have a high value event.</p>
+<p>Let’s see what it looks like when such an event is triggered:</p>
+<img alt="../../../_images/32.png" src="../../../_images/32.png" />
+<p>Just like before, the events are written to a daily CSV log, one event
+per CSV row. It is a bit hard to see in the GUI since there is a lot
+of data, (We probably need some GUI work to improve this) but there is
+a single row emitted for each event, and the FailedEventData column
+contains a list of all the failed login attempts stored in the fifo().</p>
+</div>
+<div class="section" id="server-side-queries">
+<h2>Server side queries.</h2>
+<p>We have seen how the fifo() plugin can be used in the monitoring
+artifact itself to have the client detect its own events. However, the
+endpoint is usually only able to see its own events in isolation. It
+would be nice to be able to detect patterns only evident by seeing
+concerted behaviour from multiple endpoints at the same time.</p>
+<p>For example, consider the pattern of an attacker who compromised
+domain credentials running multiple PowerShell Remoting commands
+across the entire domain. A command like:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PS C:\WINDOWS\system32&gt; Invoke-Command –ComputerName testcomputer -ScriptBlock {Hostname}
+TestComputer
+</pre></div>
+</div>
+<p>This command will generate multiple event log entries, including event
+4624 (logon) on each host. While in isolation, on each individual
+endpoint this event is not suspicious, we might consider seeing this
+event repeated within a short time across the domain suspicious.</p>
+<p>To set that up we would run the following artifact as a monitoring
+artifact on all endpoints:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Windows.Event.SuccessfulLogon</span>
+<span class="l l-Scalar l-Scalar-Plain">sources</span><span class="p p-Indicator">:</span>
+ <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">queries</span><span class="p p-Indicator">:</span>
+   <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">SELECT EventData as SuccessEventData,</span>
+        <span class="l l-Scalar l-Scalar-Plain">System as SuccessSystem</span>
+     <span class="l l-Scalar l-Scalar-Plain">FROM watch_evtx(filename=securityLogFile)</span>
+     <span class="l l-Scalar l-Scalar-Plain">WHERE System.EventID.Value = 4624</span>
+</pre></div>
+</div>
+<p>On the server we simple install a watcher on all monitoring events
+from this artifact and feed the result to the fifo(). This fills the
+fifo() with the last 500 successful logon events from all clients
+within the last 60 seconds:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>LET last_successful_logons = SELECT * FROM fifo(
+   max_rows=500,
+   max_time=60,
+   query={
+     SELECT * FROM watch_monitoring(
+        artifact=&quot;Windows.Event.SuccessfulLogon&quot;)
+   })
+</pre></div>
+</div>
+<p>By counting the number of such unique events we can determine if there
+were too many successful logon events from different hosts within the
+last minute. This might indicate a scripted use of powershell remoting
+across the domain.</p>
+</div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>In this post we have seen how to write artifacts which capture a time
+ordered pattern of behavior. This technique is useful to codify common
+attack techniques. The technique is general and we can use the same
+idea on server side queries to correlate events from many hosts at the
+same time.</p>
+</div>
+</div>
+
+  
+
+<div id="disqus_thread"></div><script type="text/javascript">    var disqus_shortname = "velocidex-velociraptor";    var disqus_identifier = "2019/02/14/alerting_on_event_patterns";    disqus_thread();</script><noscript>Please enable JavaScript to view the    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../10/velociraptor_performance.html">Velociraptor Performance</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.1/jquery.fancybox.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $.each($(".section img"), function() {
+       var a = $("<a class='img'>").attr('href', $(this).attr('src'));
+       $(this).wrap(a);
+    });
+
+    $('.section a.img').fancybox({
+       closeExisting: true,
+       loop: true,
+       arrows: true,
+    });
+});
+</script></section><section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <div class='toc sidebar'>
+    <ul>
+<li><a class="reference internal" href="#">Alerting on event patterns</a><ul>
+<li><a class="reference internal" href="#event-queries">Event Queries</a></li>
+<li><a class="reference internal" href="#time-correlation">Time correlation</a></li>
+<li><a class="reference internal" href="#the-fifo-plugin">The fifo() plugin</a></li>
+<li><a class="reference internal" href="#server-side-queries">Server side queries.</a></li>
+<li><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+
+  <script>
+    var cumulativeOffset = function(element) {
+      var top = 0, left = 0;
+      do {
+       top += element.offsetTop  || 0;
+       left += element.offsetLeft || 0;
+       element = element.offsetParent;
+      } while(element);
+
+      return {
+        top: top,
+        left: left
+      };
+    };
+
+  $(window).scroll(function() {
+    var scroll = document.documentElement.scrollTop;
+
+  if (scroll > 150) {
+      var item = $("aside");
+      var offset = cumulativeOffset(item[0]);
+
+      // If the scrollbar overlaps the article do not obscure it.
+      if (offset.left < $("article").width()) {
+          return;
+      };
+
+      item.addClass("fixed");
+
+      if (offset) {
+        item.offset({
+          left: offset.left
+      });
+     };
+    } else {
+      $("aside").removeClass("fixed");
+    }
+  });
+
+  $(".toc ul").addClass('list-unstyled components');
+  $(".toc ul li a").addClass('nav-link nav-item');
+</script></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2018 Velocidex Innovations. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

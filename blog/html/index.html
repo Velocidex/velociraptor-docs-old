@@ -97,6 +97,37 @@
             <li class="left"></li>
             <li class="right"><a href="page2.html">Older</a> &raquo; </li>
         </ul><div class="timestamp postmeta">
+            <span>February 14, 2019</span>
+        </div>
+        <div class="section">
+            <h1><a href="2019/02/14/alerting_on_event_patterns.html">Alerting on event patterns</a></h1>
+<p>We have shown in earlier posts how Velociraptor uses VQL to define
+event queries that can detect specific conditions. These conditions
+can be used to create alerts and escalation actions.</p>
+<p>One of the most useful types of alerts is detecting a pattern of
+activity. For example we can detect failed and successful login
+attempts seperately, but it is the specific pattern of events (say 5
+failed login attempts followed by a successful one) that is
+interesting from a detection point of view.</p>
+<p>This post illustrates how this kind of temporal correlation can be
+expressed in a VQL query. We then use it to create alerts for
+attack patterns commonly seen by intrusions.</p>
+<p class="readmorewrapper"><a class="readmore" href="2019/02/14/alerting_on_event_patterns.html#more">Read more...</a></p> 
+ 
+ 
+ 
+ 
+
+        </div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by Michael Cohen</span>
+        </div>
+        
+        
+        <div class="comments">
+            <a href="https://docs.velociraptor.velocidex.com/blog/html/2019/02/14/alerting_on_event_patterns.html#disqus_thread" data-disqus-identifier="2019/02/14/alerting_on_event_patterns">Leave a comment</a>
+        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>February 10, 2019</span>
         </div>
         <div class="section">
@@ -366,36 +397,6 @@ time.</p>
         
         <div class="comments">
             <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/11/09/event_queries_and_endpoint_monitoring.html#disqus_thread" data-disqus-identifier="2018/11/09/event_queries_and_endpoint_monitoring">Leave a comment</a>
-        </div></div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 29, 2018</span>
-        </div>
-        <div class="section">
-            <h1><a href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a></h1>
-<p>I was watching the SANS DFIR Summit 2018 videos on youtube and came
-across Mari DeGrazia’s talk titled <a class="reference external" href="https://www.youtube.com/watch?v=JWC7fzhvAY8">“Finding and Decoding Malicious Powershell Scripts”</a>.
-This is an excellent talk and it really contains
-a wealth of information. It seems that Powershell is really popular
-these days, allowing attacker to “live off the land” by installing
-fully functional reverse shells and backdoors, in a few lines of
-obfuscated scripts.</p>
-<p class="readmorewrapper"><a class="readmore" href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html#more">Read more...</a></p> 
- 
- 
- 
- 
- 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by Michael Cohen</span>
-        </div>
-        
-        
-        <div class="comments">
-            <a href="https://docs.velociraptor.velocidex.com/blog/html/2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html#disqus_thread" data-disqus-identifier="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara">Leave a comment</a>
         </div></div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -404,6 +405,8 @@ obfuscated scripts.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2019/02/14/alerting_on_event_patterns.html">Alerting on event patterns</a>
+        </li><li>
             <a href="2019/02/10/velociraptor_performance.html">Velociraptor Performance</a>
         </li><li>
             <a href="2019/02/09/velociraptor_python_api.html">Velociraptor Python API</a>
@@ -421,8 +424,6 @@ obfuscated scripts.</p>
             <a href="2018/11/13/velociraptor_training_at_nzitf.html">Velociraptor training at NZITF</a>
         </li><li>
             <a href="2018/11/09/event_queries_and_endpoint_monitoring.html">Event Queries and Endpoint Monitoring</a>
-        </li><li>
-            <a href="2018/09/29/detecting_powershell_persistence_with_velociraptor_and_yara.html">Detecting powershell persistence with Velociraptor and Yara</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">

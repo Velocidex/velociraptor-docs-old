@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2019/02/14/alerting_on_event_patterns
    2019/02/10/velociraptor_performance
    2019/02/09/velociraptor_python_api
    2018/12/23/deploying_velociraptor_with_oauth_sso
