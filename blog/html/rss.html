@@ -5,8 +5,128 @@
         <link>https://docs.velociraptor.velocidex.com/blog/html/</link>
         <description>Hunting for evil - what Velociraptors do best!</description>
         <language>en-us</language>
-        <pubDate>Thu, 14 Feb 2019 00:00:00 +1000</pubDate>
+        <pubDate>Sat, 02 Mar 2019 00:00:00 +1000</pubDate>
         
+        <item>
+            <link>https://docs.velociraptor.velocidex.com/blog/html/2019/03/02/agentless_hunting_with_velociraptor.html</link>
+            <guid>https://docs.velociraptor.velocidex.com/blog/html/2019/03/02/agentless_hunting_with_velociraptor.html</guid>
+            <title><![CDATA[Agentless hunting with Velociraptor]]></title>
+            <description><![CDATA[<h1>Agentless hunting with Velociraptor</h1>
+<p>There has been a lot of interest lately in “Agentless hunting”
+especially using PowerShell. There are many reasons why Agentless
+hunting is appealing - there are already a ton of endpoint agents and
+yet another one may not be welcome. Somtimes we need to deploy
+endpoint agents as part of a DFIR engagement and we may not want to
+permanently install yet another agent on end points.</p>
+<p>This blog post explores an agentless deployment scenario, where we do
+not want to install Velociraptor permanently on the end point, but
+rather push it to end points temporarily to collect specific
+artifacts. The advantage of this method is that there are no permanent
+changes to the end point, as nothing is actually installed. However,
+we do get the full power of Velociraptor to collect artifacts, hunt
+for evil and more…</p>
+<div id="more"> </div><div class="section" id="agentless-velociraptor">
+<h2>Agentless Velociraptor</h2>
+<p>Normally when deploying Velociraptor as a service, the binary is
+copied to the system and a service is installed. The service ensures
+that the binary is restarted when the system reboots, and so
+Velociraptor is installed on a permanent basis.</p>
+<p>However in the agentless deployment scenario we simply run the binary
+from a network share using group policy settings. The downside to this
+approach is that the endpoint needs to be on the domain network to
+receive the group policy update (and have the network share
+accessible) before it can run Velociraptor. When we run in Agentless
+mode we are really after collecting a bunch of artifacts via hunts and
+then exiting - the agent will not restart after a reboot. So this
+method is suitable for quick hunts on corporate (non roaming) assets.</p>
+<p>In this post I will use Windows 2019 Server but this should also work
+on any older version.</p>
+<div class="section" id="creating-a-network-share">
+<h3>Creating a network share</h3>
+<p>The first step is to create a network share with the Velociraptor
+binary and its configuration file. We will run the binary from the
+share in this example, but for more reliability you may want to copy
+the binary into e.g. a temp folder on the end point in case the system
+becomes disconnected from the domain. For quick hunts though it should
+be fine.</p>
+<p>We create a directory on the server (I will create it on the domain
+controller but you should probably not do that - find another machine
+to host the share).</p>
+<img alt="../../../_images/14.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/14.png"/>
+<p>I created a directory <cite>C:\Users\Deployment</cite> and ensured that it is
+read only. I have shared the directory as the name Deployment.</p>
+<p>I now place the Velociraptor executable and client config file in that
+directory and verify that I can run the binary from the network
+share. The binary should be accessible via
+<cite>\\DC\Deployment\velociraptor.exe</cite>:</p>
+<img alt="../../../_images/24.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/24.png"/>
+</div>
+<div class="section" id="creating-the-group-policy-object">
+<h3>Creating the group policy object.</h3>
+<p>Next we create the group policy object which forces all domain
+connected machines to run the Velociraptor client. We use the Group
+Policy Management Console:</p>
+<img alt="../../../_images/33.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/33.png"/>
+<p>Select the OU or the entire domain and click “Create New GPO”:</p>
+<img alt="../../../_images/41.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/41.png"/>
+<p>Now right click the GPO object and select “Edit”:</p>
+<img alt="../../../_images/51.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/51.png"/>
+<p>We will create a new scheduled task. Rather than schedule it at a
+particular time, we will select to run it immediately. This will force
+the command to run as soon as the endpoint updates its group policy
+settings (i.e. we do not want to wait for the next reboot of the
+endpoint).</p>
+<img alt="../../../_images/61.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/61.png"/>
+<p>Next we give the task a name and a description. In order to allow
+Velociraptor to access raw devices (e.g. to collect memory or NTFS
+artifacts) we can specify that the client will run at
+<cite>NT_AUTHORITY\SYSTEM</cite> privileges, and run without any user being
+logged on. It is also worth ticking the “hidden” checkbox here to
+prevent a console box from appearing.</p>
+<img alt="../../../_images/71.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/71.png"/>
+<p>Next click the Actions tab and add a new action. This is where we
+launch the Velociraptor client. The program will simply be launched
+from the share (i.e. <cite>\\DC\Deployment\velociraptor.exe</cite>) and we give
+it the arguments allowing it to read the provided configuration file
+(i.e. <cite>–config \\DC\Deployment\client.config.yaml client -v</cite>).</p>
+<img alt="../../../_images/81.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/81.png"/>
+<p>In the setting tab we can control how long we want the client to
+run. For a quick hunt this may be an hour or two but maybe for a DFIR
+engagement it might be a few days. The GPO will ensure the client is
+killed after the allotted time.</p>
+<img alt="../../../_images/9.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/9.png"/>
+<p>Once the GPO is installed it becomes active for all domain
+machines. You can now schedule any hunts you wish using the
+Velociraptor GUI. When a domain machine refreshes its group policy it
+will run the client, which will enroll and immediately participate in
+any outstanding hunts - thus collecting and delivering its artifacts
+to the server. After the allotted time has passed, the client will
+shut down without having installed anything on the endpoint.</p>
+<p>You can force a group policy update by running the <cite>gpupdate</cite>
+program. Now you can verify that Velociraptor is running:</p>
+<img alt="../../../_images/10.png" src="https://docs.velociraptor.velocidex.com/blog/html/_images/10.png"/>
+</div>
+<div class="section" id="persistence">
+<h3>Persistence</h3>
+<p>Note that when running Velociraptor in agent less mode you probably
+want to configure it so that the writeback file is written to the temp
+directory. The writeback file is how the client keeps track of its key
+material (and identity). The default is to store it in the client’s
+installation folder, but you should probably change it in the client’s
+config file:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span/><span class="l l-Scalar l-Scalar-Plain">Client</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">writeback_windows</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">$TEMP\\velociraptor.writeback.yaml</span>
+</pre></div>
+</div>
+<p>The file will remain in the client’s temp directory so if you ever
+decide to run the agentless client again (by pushing another group
+policy) the client id remains the same.</p>
+</div>
+</div>
+]]></description>
+             <pubDate>Sat, 02 Mar 2019 00:00:00 +1000</pubDate>
+        </item>
+    
         <item>
             <link>https://docs.velociraptor.velocidex.com/blog/html/2019/02/14/alerting_on_event_patterns.html</link>
             <guid>https://docs.velociraptor.velocidex.com/blog/html/2019/02/14/alerting_on_event_patterns.html</guid>
